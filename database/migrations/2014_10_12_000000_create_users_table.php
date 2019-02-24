@@ -20,6 +20,9 @@ class CreateUsersTable extends Migration
 			$table->string('name')->nullable();
             $table->string('email')->unique()->nullable();
 			$table->string('steamid');
+			$table->boolean('admin');
+			$table->boolean('ignore_reports');
+			$table->boolean('ignore_targets');
             $table->rememberToken();
             $table->timestamps();
         });

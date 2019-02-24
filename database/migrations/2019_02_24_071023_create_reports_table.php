@@ -28,6 +28,9 @@ class CreateReportsTable extends Migration
 			$table->integer('reporter_id')->unsigned()->references('id')->on('users');
 			$table->integer('target_id')->unsigned()->references('id')->on('users');
 
+			$table->boolean('solved')->default(false);
+			$table->string('notes')->nullable();
+
             $table->timestamps();
         });
     }

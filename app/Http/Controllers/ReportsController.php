@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ReportCreated;
 use App\Report;
 use App\User;
 use Illuminate\Http\Request;
@@ -19,16 +20,30 @@ class ReportsController extends Controller
 
 	public function store(Request $request)
 	{
+	    // Store reporter information
 		$reporterId = $request->input('reporter_steam_id');
 		$reporterName = $request->input('reporter_name');
 
+		// Store target information
 		$targetId = $request->input('target_steam_id');
 		$targetName = $request->input('target_name');
 
+		// Check database for reporter
 		$reporter = $this->findOrCreate($reporterId, $reporterName);
+
+        if($reporter->ignore_reports) {
+            return 'false';
+        }
+
+        // Check database for targt
 		$target = $this->findOrCreate($targetId, $targetName);
 
-		$report = Report::make();
+		if($target->ignore_targets) {
+		    return 'false';
+        }
+
+		// Create report
+        $report = Report::make(); /** @var Report $report */
 
 		$report->fill($request->input());
 
@@ -36,6 +51,8 @@ class ReportsController extends Controller
 		$report->reporter()->associate($reporter);
 
 		$report->save();
+
+		event(new ReportCreated($report));
 
 		return 'true';
 	}
@@ -58,8 +75,16 @@ class ReportsController extends Controller
 		return $user;
 	}
 
-	public function delete()
+	public function delete(Report $report)
 	{
+        $deleted = $report->delete();
 
+        if($deleted) {
+            flash()->success('Report deleted successfully!');
+        } else {
+            flash()->success('Report could not be deleted!');
+        }
+
+        return back();
 	}
 }
