@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>Fixed top navbar example · Bootstrap</title>
+    <title>CallAdmin Middleware</title>
     
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -40,19 +40,19 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ route('home') }}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Reports</a>
+                <a class="nav-link" href="{{ route('reports.index') }}">Reports</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Votes</a>
+                <a class="nav-link" href="{{ route('votes.index') }}">Votes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Users</a>
+                <a class="nav-link" href="{{ route('users.index') }}">Users</a>
             </li>
         </ul>
-        <form class="form-inline mt-2 mt-md-0">
+        <form class="form-inline mt-2 mt-md-0" action="{{ route('search') }}">
             <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>

@@ -8,6 +8,13 @@ class LaravelSettingsForm extends Form
 {
     public function buildForm()
     {
+        // Home text
+        // Demo filename format
+        // Minimum reporter karma to be accepted
+        // Maximum target karma to be accepted
+        // Karma delta to admin discord
+        //
+
         $this
             ->add('site-name', 'text', [
                 'label' => 'Website Name',
