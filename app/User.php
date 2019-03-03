@@ -10,8 +10,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * App\User
  *
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Report[] $reports
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Report[] $targets
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Report[]                                                    $reports
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Report[]                                                    $targets
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
@@ -27,7 +27,7 @@ class User extends Authenticatable
 	 * @var array
 	 */
 	protected $fillable = [
-		'name', 'email', 'password',
+		'username', 'avatar', 'name', 'email', 'password',
 	];
 
 	/**
@@ -39,13 +39,43 @@ class User extends Authenticatable
 		'password', 'remember_token',
 	];
 
+	protected $casts = [
+		'admin' => 'boolean',
+	];
+
+	public function getScoreAttribute()
+	{
+		$this->load(['votes', 'votes.report']);
+
+		$score = $this->votes->reduce(function ($score, $vote) {
+			$report = $vote->report;
+
+			if ($report->pending) {
+				return $score;
+			}
+
+			if ($vote->type === (boolean)$report->decision) {
+				return $score + 1;
+			} else {
+				return $score - 1;
+			}
+		}, 0);
+
+		return $score;
+	}
+
 	public function reports()
 	{
-		return $this->hasMany(Report::class);
+		return $this->hasMany(Report::class, 'reporter_id');
 	}
 
 	public function targets()
 	{
-		return $this->hasMany(Report::class);
+		return $this->hasMany(Report::class, 'target_id');
+	}
+
+	public function votes()
+	{
+		return $this->hasMany(Vote::class);
 	}
 }

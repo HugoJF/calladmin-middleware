@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\SteamID;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -42,6 +43,13 @@ class AuthController extends Controller
 		return $this->steam->redirect();
 	}
 
+	public function logout()
+	{
+		Auth::logout();
+
+		return redirect()->route('home');
+	}
+
 	public function login()
 	{
 		if ($this->steam->validate()) {
@@ -71,7 +79,8 @@ class AuthController extends Controller
 	 */
 	protected function findOrNewUser($info)
 	{
-		$user = User::where('steamid', $info->steamID64)->first();
+		$id = SteamID::normalizeSteamID64($info->steamID64);
+		$user = User::where('steamid', $id)->first();
 
 		if (!is_null($user)) {
 			return $user;
@@ -81,7 +90,7 @@ class AuthController extends Controller
 			'username' => $info->personaname,
 			'avatar'   => $info->avatarfull,
 		]);
-		$user->steamid = $info->steamID64;
+		$user->steamid = $id;
 
 		$user->save();
 

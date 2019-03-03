@@ -6,26 +6,32 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateVotesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('votes', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-        });
-    }
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('votes', function (Blueprint $table) {
+			$table->increments('id');
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('votes');
-    }
+			$table->boolean('type');
+			$table->unsignedInteger('report_id')->references('id')->on('reports');
+			$table->unsignedInteger('user_id')->references('id')->on('users');
+			$table->unique(['report_id', 'user_id']);
+			
+			$table->timestamps();
+		});
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::dropIfExists('votes');
+	}
 }

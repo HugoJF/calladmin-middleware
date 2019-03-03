@@ -12,11 +12,13 @@
         "anlutro/l4-settings": "^0.7.3",
         "fideloper/proxy": "^4.0",
         "invisnik/laravel-steam-auth": "3.*",
+        "ixudra/curl": "^6.16",
         "kris/laravel-form-builder": "^1.16",
         "laracasts/flash": "^3.0",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
-        "laravelcollective/html": "^5.4.0"
+        "laravelcollective/html": "^5.4.0",
+        "nicolaslopezj/searchable": "1.*"
     },
     "require-dev": {
         "doctrine/dbal": "~2.3",
