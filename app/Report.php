@@ -138,7 +138,7 @@ class Report extends Model
 	{
 		$url = config('constants.demoRepositoryUrl');
 
-		$ip = preg_replace('/[^A-Za-z0-9]/', '_', $this->server_ip);
+		$ip = preg_replace('/[^A-Za-z0-9]/', '_', $this->server_ip . ':' . $this->server_port);
 
 		$name = $ip . '/' . $this->demoFilename . '.dem';
 

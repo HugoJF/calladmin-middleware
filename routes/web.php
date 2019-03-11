@@ -27,7 +27,6 @@ Route::get('search', 'ReportsController@search')->name('search');
 
 Route::prefix('reports')->name('reports.')->group(function () {
 	Route::get('/', 'ReportsController@index')->name('index');
-	Route::post('/', 'ReportsController@store')->name('store');
 
 	Route::post('{report}/vote', 'ReportsController@vote')->name('vote');
 

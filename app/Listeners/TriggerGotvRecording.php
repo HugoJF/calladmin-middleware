@@ -52,13 +52,11 @@ class TriggerGotvRecording
 
 	public function sendCommand($command, $delay = 0)
 	{
-		preg_match('/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\:(\d{1,6})/', $this->report->server_ip, $matches);
-
 		Curl::to("{$this->apiUrl}send/")
 			->withData([
 				'token'   => $this->apiKey,
-				'ip'      => $matches[1],
-				'port'    => $matches[2],
+				'ip'      => $this->report->server->server_ip,
+				'port'    => $this->report->server->server_port,
 				'command' => $command,
 				'delay'   => $delay,
 			])
