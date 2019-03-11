@@ -55,8 +55,8 @@ class TriggerGotvRecording
 		Curl::to("{$this->apiUrl}send/")
 			->withData([
 				'token'   => $this->apiKey,
-				'ip'      => $this->report->server->server_ip,
-				'port'    => $this->report->server->server_port,
+				'ip'      => $this->report->server_ip,
+				'port'    => $this->report->server_port,
 				'command' => $command,
 				'delay'   => $delay,
 			])
