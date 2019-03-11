@@ -60,7 +60,6 @@ class TriggerGotvRecording
 				'command' => $command,
 				'delay'   => $delay,
 			])
-			->enableDebug('/home/vagrant/curl_debug/logFile.txt')
 			->asJson(true)
 			->get();
 	}
