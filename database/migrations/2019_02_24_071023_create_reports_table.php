@@ -17,7 +17,9 @@ class CreateReportsTable extends Migration
 			$table->increments('id');
 
 			$table->string('server_ip');
+			$table->string('server_port');
 			$table->string('reason');
+			$table->boolean('vip')->default(false);
 
 			$table->string('reporter_name');
 			$table->string('reporter_steam_id');

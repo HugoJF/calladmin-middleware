@@ -33,8 +33,14 @@ class Report extends Model
 		],
 	];
 
+	protected $casts = [
+		'vip' => 'bool',
+	];
+
 	protected $fillable = [
 		'server_ip',
+		'server_port',
+		'vip',
 		'reason',
 		'reporter_name',
 		'reporter_steam_id',

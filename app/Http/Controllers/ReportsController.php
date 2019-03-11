@@ -45,32 +45,41 @@ class ReportsController extends Controller
 	public function store(Request $request)
 	{
 		// Store reporter information
-		$reporterId = SteamID::normalizeSteamID64($request->input('reporter_steam_id'));
+		$reporterId = SteamID::normalizeSteamID64($request->input('reporter_id'));
 		$reporterName = $request->input('reporter_name');
 
 		// Store target information
-		$targetId = SteamID::normalizeSteamID64($request->input('target_steam_id'));
+		$targetId = SteamID::normalizeSteamID64($request->input('target_id'));
 		$targetName = $request->input('target_name');
 
 		// Check database for reporter
 		$reporter = $this->findOrCreate($reporterId, $reporterName);
-
 		if ($reporter->ignore_reports) {
 			return 'false';
 		}
 
 		// Check database for targt
 		$target = $this->findOrCreate($targetId, $targetName);
-
 		if ($target->ignore_targets) {
 			return 'false';
 		}
+
+		$data = [
+			'server_ip'         => $request->input('server_ip'),
+			'server_port'       => $request->input('server_port'),
+			'vip'               => ((bool) $request->input('vip')),
+			'reason'            => $request->input('reason'),
+			'reporter_name'     => $request->input('reporter_name'),
+			'reporter_steam_id' => $request->input('reporter_id'),
+			'target_name'       => $request->input('target_name'),
+			'target_steam_id'   => $request->input('target_id'),
+		];
 
 		// Create report
 		$report = Report::make();
 		/** @var Report $report */
 
-		$report->fill($request->input());
+		$report->fill($data);
 
 		$report->target()->associate($target);
 		$report->reporter()->associate($reporter);
@@ -79,7 +88,7 @@ class ReportsController extends Controller
 
 		event(new ReportCreated($report));
 
-		return 'true';
+		return ['message' => 'Report created'];
 	}
 
 	public function decision(Request $request, Report $report)
