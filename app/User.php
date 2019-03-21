@@ -45,23 +45,58 @@ class User extends Authenticatable
 
 	public function getScoreAttribute()
 	{
-		$this->load(['votes', 'votes.report']);
+		return cache()->remember("users-$this->id-score", 60, function () {
+			$this->load(['votes', 'votes.report']);
 
-		$score = $this->votes->reduce(function ($score, $vote) {
-			$report = $vote->report;
+			$score = $this->votes->reduce(function ($score, $vote) {
+				$report = $vote->report;
 
-			if ($report->pending) {
-				return $score;
-			}
+				if ($report->pending) {
+					return $score;
+				}
 
-			if ($vote->type === (boolean)$report->decision) {
-				return $score + 1;
-			} else {
-				return $score - 1;
-			}
-		}, 0);
+				if ($vote->type === (boolean)$report->decision) {
+					return $score + 1;
+				} else {
+					return $score - 1;
+				}
+			}, 0);
 
-		return $score;
+			return $score;
+		});
+	}
+
+	public function getKarmaAttribute()
+	{
+		return cache()->remember("users-$this->id-karma", 60, function () {
+			$this->load(['reports', 'targets']);
+
+			$karma = $this->reports->reduce(function ($karma, $report) {
+				if ($report->pending) {
+					return $karma;
+				}
+
+				if ($report->incorrect) {
+					return $karma - 1;
+				} else {
+					return $karma + 1;
+				}
+			}, 0);
+
+			$karma = $this->targets->reduce(function ($karma, $target) {
+				if ($target->pending) {
+					return $karma;
+				}
+
+				if ($target->incorrect) {
+					return $karma + 1;
+				} else {
+					return $karma - 1;
+				}
+			}, $karma);
+
+			return $karma;
+		});
 	}
 
 	public function reports()

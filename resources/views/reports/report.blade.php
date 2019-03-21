@@ -28,10 +28,17 @@
             </a>
         </h1>
     </div>
+    @php
+        $badges = [
+            -1 => 'danger',
+            0 => 'dark',
+            1 => 'success',
+        ];
+    @endphp
     <div class="col d-flex" style="flex-grow: 20; flex-flow: column;">
         <div class="row flex-grow-1">
             <div class="col">
-                <h5 class="mb-2">Reporter</h5>
+                <h5 class="mb-2">Reporter: <span class="badge badge-{{ $badges[$report->reporter->karma <=> 0] }}">{{ $report->reporter->karma }}</span></h5>
                 <p class="mb-0">{{ $report->reporter_name }}</p>
                 <pre class="text-muted ml-2">{{ $report->reporter_steam_id }}</pre>
                 <p>
@@ -39,9 +46,12 @@
                 </p>
             </div>
             <div class="col">
-                <h5 class="mb-2">Target</h5>
+                <h5 class="mb-2">Target: <span class="badge badge-{{ $badges[$report->target->karma <=> 0] }}">{{ $report->target->karma }}</span></h5>
                 <p class="mb-0">{{ $report->target_name }}</p>
                 <pre class="text-muted ml-2">{{ $report->target_steam_id }}</pre>
+                <p>
+                    Server: <code>{{ $report->server_ip }}:{{ $report->server_port }}</code>
+                </p>
             </div>
         </div>
         <div class="row mt-3">

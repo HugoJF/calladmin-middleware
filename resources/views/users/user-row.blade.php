@@ -10,16 +10,19 @@
     </td>
     
     <!-- Score -->
-    <td>{{ $user->score }}</td>
+    <td title="Score">{{ $user->score }}</td>
+    
+    <!-- Karma -->
+    <td title="Karma">{{ $user->karma }}</td>
     
     <!-- Votes -->
-    <td>{{ $user->votes()->count() }}</td>
+    <td title="Votes">{{ $user->votes()->count() }}</td>
     
     <!-- Reports -->
-    <td>{{ $user->reports()->count() }}</td>
+    <td title="Reports">{{ $user->reports()->count() }}</td>
     
     <!-- Targets -->
-    <td>{{ $user->targets()->count() }}</td>
+    <td title="Targets">{{ $user->targets()->count() }}</td>
     
     <!-- Ignore reports -->
     <td>

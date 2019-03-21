@@ -8,6 +8,7 @@
             <th>Username</th>
             <th>Steam2ID</th>
             <th>Score</th>
+            <th>Karma</th>
             <th>Votes</th>
             <th>Reports</th>
             <th>Targets</th>
