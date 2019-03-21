@@ -25,6 +25,7 @@ class Report extends Model
 	protected $searchable = [
 		'columns' => [
 			'server_ip'         => 10,
+			'server_port' 		=> 20,
 			'reason'            => 5,
 			'reporter_name'     => 10,
 			'reporter_steam_id' => 20,
