@@ -48,7 +48,8 @@ class TriggerGotvRecording
 		$this->sendCommand('sm_csay Uma DEMO será armazenada em 1 segundo, o servidor travará brevemente devido a isso!', 11000);
 		$this->sendCommand($this->stopCommand, 13000);
 		$this->sendCommand('sm_csay DEMO finalizada!', 14000);
-		$this->sendCommand('sm_say O resultado do report poderá ser consultado em ' . route('reports.show', $this->report), 15000);
+		$this->sendCommand('sm_say O resultado do report poderá ser consultado em:', 15000);
+		$this->sendCommand('sm_say ' . route('reports.show', $this->report), 15500);
 	}
 
 	public function sendCommand($command, $delay = 0)
