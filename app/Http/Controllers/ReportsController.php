@@ -33,6 +33,19 @@ class ReportsController extends Controller
 		]);
 	}
 
+	public function show(Report $report)
+	{
+		$report->load([
+			'votes' => function ($query) {
+				$query->where('user_id', Auth::id());
+			},
+		]);
+
+		return view('reports.show', [
+			'report' => $report,
+		]);
+	}
+
 	public function search(Request $request)
 	{
 		$finds = Report::search($request->input('search'))->get();
@@ -67,7 +80,7 @@ class ReportsController extends Controller
 		$data = [
 			'server_ip'         => $request->input('server_ip'),
 			'server_port'       => $request->input('server_port'),
-			'vip'               => ((bool) $request->input('vip')),
+			'vip'               => ((bool)$request->input('vip')),
 			'reason'            => $request->input('reason'),
 			'reporter_name'     => $request->input('reporter_name'),
 			'reporter_steam_id' => $request->input('reporter_id'),

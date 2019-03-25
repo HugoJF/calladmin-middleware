@@ -12,29 +12,32 @@
             $voteDown = 'danger';
         }
     }
+    
+    $badges = [
+        -1 => 'danger',
+        0 => 'dark',
+        1 => 'success',
+    ];
 @endphp
 
 <div class="row border rounded bg-light p-3 mb-3">
     <div class="col d-flex align-items-center flex-column justify-content-center">
-        <h1 title="Vote report as CORRECT">
-            <a class="text-{{ $voteUp }} text-decoration-none" href="#" data-toggle="modal" data-target="#report-vote-up-{{ $report->id }}">
-                <i class="fas fa-chevron-up"></i>
-            </a>
-        </h1>
-        <h1 class="text-{{ $score == 0 ? 'dark' : ($score < 0 ? 'danger' : 'success') }}">{{ $score }}</h1>
-        <h1 title="Vote report as INCORRECT">
-            <a class="text-{{ $voteDown }} text-decoration-none" href="#" data-toggle="modal" data-target="#report-vote-down-{{ $report->id }}">
-                <i class="fas fa-chevron-down"></i>
-            </a>
-        </h1>
+        @auth
+            <h1 title="Vote report as CORRECT">
+                <a class="text-{{ $voteUp }} text-decoration-none" href="#" data-toggle="modal" data-target="#report-vote-up-{{ $report->id }}">
+                    <i class="fas fa-chevron-up"></i>
+                </a>
+            </h1>
+        @endauth
+        <h1 title="{{ $report->votes->count() }} total votes" class="text-{{ $score == 0 ? 'dark' : ($score < 0 ? 'danger' : 'success') }}">{{ $score }}</h1>
+        @auth
+            <h1 title="Vote report as INCORRECT">
+                <a class="text-{{ $voteDown }} text-decoration-none" href="#" data-toggle="modal" data-target="#report-vote-down-{{ $report->id }}">
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+            </h1>
+        @endauth
     </div>
-    @php
-        $badges = [
-            -1 => 'danger',
-            0 => 'dark',
-            1 => 'success',
-        ];
-    @endphp
     <div class="col d-flex" style="flex-grow: 20; flex-flow: column;">
         <div class="row flex-grow-1">
             <div class="col">
@@ -68,26 +71,28 @@
             </div>
             <div class="col">
                 <p class="pb-0 mb-1">
-                    <small class="text-muted">Created at: {{ $report->created_at->diffForHumans() }}</small>
+                    <a href="{{ route('reports.show', $report) }}">
+                        <small title="Permalink" class="text-muted">
+                            Created at: {{ $report->created_at->diffForHumans() }}
+                        </small>
+                    </a>
                 </p>
-                
-                <a
-                        class="btn btn-primary"
-                        title="{{ $report->demoFilename }}"
-                        href="{{ $report->demoUrl }}"
-                >Download demo</a>
-                <a
-                        class="btn btn-outline-success{{ $report->decided ? ' disabled' : '' }}"
-                        href="#"
-                        data-toggle="modal"
-                        data-target="#report-decision-{{ $report->id }}"
-                >Final decision</a>
-                <a
-                        class="btn btn-outline-danger{{ $report->decided ? ' disabled' : '' }}"
-                        href="#"
-                        data-toggle="modal"
-                        data-target="#report-delete-{{ $report->id }}"
-                >Delete</a>
+                @auth
+                    <a class="btn btn-primary"
+                       title="{{ $report->demoFilename }}"
+                       href="{{ $report->demoUrl }}"
+                    >Download demo</a>
+                    <a class="btn btn-outline-success{{ $report->decided ? ' disabled' : '' }}"
+                       href="#"
+                       data-toggle="modal"
+                       data-target="#report-decision-{{ $report->id }}"
+                    >Final decision</a>
+                    <a class="btn btn-outline-danger{{ $report->decided ? ' disabled' : '' }}"
+                       href="#"
+                       data-toggle="modal"
+                       data-target="#report-delete-{{ $report->id }}"
+                    >Delete</a>
+                @endauth
             </div>
         </div>
     </div>

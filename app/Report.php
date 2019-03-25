@@ -13,9 +13,9 @@ use Nicolaslopezj\Searchable\SearchableTrait;
  * @property-read mixed     $demo_filename
  * @property-read \App\User $reporter
  * @property-read \App\User $target
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Report newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Report newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Report query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Report newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Report newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Report query()
  * @mixin \Eloquent
  */
 class Report extends Model

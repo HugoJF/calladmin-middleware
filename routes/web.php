@@ -11,13 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-	if (\Illuminate\Support\Facades\Auth::check()) {
-		return redirect()->route('dashboard');
-	}
-
-	return view('welcome');
-})->name('home');
+Route::get('/', 'ReportsController@index')->name('home');
 
 Route::get('auth', 'AuthController@login')->name('login');
 Route::get('logout', 'AuthController@logout')->name('logout');
@@ -27,6 +21,7 @@ Route::get('search', 'ReportsController@search')->name('search');
 
 Route::prefix('reports')->name('reports.')->group(function () {
 	Route::get('/', 'ReportsController@index')->name('index');
+	Route::get('{report}', 'ReportsController@show')->name('show');
 
 	Route::post('{report}/vote', 'ReportsController@vote')->name('vote');
 
