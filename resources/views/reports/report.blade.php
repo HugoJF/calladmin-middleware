@@ -72,7 +72,7 @@
             <div class="col">
                 <p class="pb-0 mb-1">
                     <a href="{{ route('reports.show', $report) }}">
-                        <small title="Permalink" class="text-muted">
+                        <small title="{{ $report->created_at->toRfc7231String() }}" class="text-muted">
                             Created at: {{ $report->created_at->diffForHumans() }}
                         </small>
                     </a>
