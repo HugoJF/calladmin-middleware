@@ -41,4 +41,9 @@ class ReportPolicy
 	{
 		return true;
 	}
+
+	public function delete(User $user, Report $report)
+	{
+		return false;
+	}
 }

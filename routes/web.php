@@ -27,7 +27,7 @@ Route::prefix('reports')->name('reports.')->group(function () {
 
 	Route::patch('{report}/decision', 'ReportsController@decision')->name('decision')->middleware('can:decide,report');
 
-	Route::delete('{report}', 'ReportsController@delete')->name('delete');
+	Route::delete('{report}', 'ReportsController@delete')->name('delete')->middleware('can:delete,report');
 });
 
 Route::prefix('users')->name('users.')->group(function () {
