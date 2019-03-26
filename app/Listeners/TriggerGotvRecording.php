@@ -41,11 +41,12 @@ class TriggerGotvRecording
 		$this->report = $reportCreated->report;
 
 		$this->sendCommand($this->startCommand . ' demos/' . $this->report->demoFilename);
-		$this->sendCommand('sm_csay Uma DEMO será armazenada em 10 segundos, o servidor travará brevemente devido a isso!', 1000);
-		$this->sendCommand('sm_csay Uma DEMO será armazenada em 5 segundos, o servidor travará brevemente devido a isso!', 6000);
-		$this->sendCommand('sm_csay Uma DEMO será armazenada em 3 segundos, o servidor travará brevemente devido a isso!', 9000);
-		$this->sendCommand('sm_csay Uma DEMO será armazenada em 2 segundos, o servidor travará brevemente devido a isso!', 10000);
-		$this->sendCommand('sm_csay Uma DEMO será armazenada em 1 segundo, o servidor travará brevemente devido a isso!', 11000);
+		$this->sendCommand('sm_csay Uma DEMO será armazenada em 10 segundos, o servidor travará brevemente devido a uma limitação da Source Engine e não pode ser evitado. Utilize os reports apenas quando necessário!', 1000);
+		$this->sendCommand('sm_csay Uma DEMO será armazenada em 5 segundos, o servidor travará brevemente devido a uma limitação da Source Engine e não pode ser evitado. Utilize os reports apenas quando necessário!', 6000);
+		$this->sendCommand('sm_csay Uma DEMO será armazenada em 3 segundos, o servidor travará brevemente devido a uma limitação da Source Engine e não pode ser evitado. Utilize os reports apenas quando necessário!', 9000);
+		$this->sendCommand('sm_csay Uma DEMO será armazenada em 2 segundos, o servidor travará brevemente devido a uma limitação da Source Engine e não pode ser evitado. Utilize os reports apenas quando necessário!', 10000);
+		$this->sendCommand('sm_csay Uma DEMO será armazenada em 1 segundo, o servidor travará brevemente devido a uma limitação da Source Engine e não pode ser evitado. Utilize os reports apenas quando necessário!', 11000);
+		$this->sendCommand('sm_csay DEMO iniciada!', 12500);
 		$this->sendCommand($this->stopCommand, 13000);
 		$this->sendCommand('sm_csay DEMO finalizada!', 14000);
 		$this->sendCommand('sm_say O resultado do report poderá ser consultado em:', 15000);
