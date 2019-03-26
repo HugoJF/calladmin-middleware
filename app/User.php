@@ -45,7 +45,7 @@ class User extends Authenticatable
 
 	public function getScoreAttribute()
 	{
-		return cache()->remember("users-$this->id-score", 60, function () {
+		return cache()->remember("users-$this->id-score", 1, function () {
 			$this->load(['votes', 'votes.report']);
 
 			$score = $this->votes->reduce(function ($score, $vote) {
@@ -68,7 +68,7 @@ class User extends Authenticatable
 
 	public function getKarmaAttribute()
 	{
-		return cache()->remember("users-$this->id-karma", 60, function () {
+		return cache()->remember("users-$this->id-karma", 1, function () {
 			$this->load(['reports', 'targets']);
 
 			$karma = $this->reports->reduce(function ($karma, $report) {
