@@ -54,7 +54,7 @@ class TriggerGotvRecording
 				   ['sm_csay DEMO finalizada!', 14000],
 				   ['sm_say O resultado do report poderá ser consultado em:', 15000],
 				   ['sm_say "' . route('reports.show', $this->report) . '"', 15500],
-			   ])->run();
+			   ])->send();
 	}
 
 	public function sendCommand($command, $delay = 0)
