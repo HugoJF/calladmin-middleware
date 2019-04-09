@@ -51,6 +51,11 @@ class User extends Authenticatable
 			$score = $this->votes->reduce(function ($score, $vote) {
 				$report = $vote->report;
 
+				// Report was soft deleted
+				if(!$report) {
+					return $score;
+				}
+
 				if ($report->pending) {
 					return $score;
 				}
