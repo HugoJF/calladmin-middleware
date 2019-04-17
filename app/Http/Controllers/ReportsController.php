@@ -14,7 +14,7 @@ class ReportsController extends Controller
 {
 	public function index(Request $request)
 	{
-		$reports = Report::orderBy('created_at', 'DESC');
+		$reports = Report::orderBy('created_at', 'ASC');
 
 		if ($request->input('show-decided') != 'true') {
 			$reports = $reports->undecided();
