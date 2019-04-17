@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2 class="mb-2">Active reports: {{ Report::undecided()->count() }}</h2>
+    <h2 class="mb-2">Active reports: {{ App\Report::undecided()->count() }}</h2>
     <a class="btn btn-sm btn-secondary mb-4" href="?show-decided=true">Show decided reports</a>
     @forelse($reports as $report)
         @include('reports.report', $report)
