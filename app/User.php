@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Report[]                                                    $reports
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Report[]                                                    $targets
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Vote[]                                                      $votes
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
@@ -49,6 +50,12 @@ class User extends Authenticatable
 			$this->load(['votes', 'votes.report']);
 
 			$correct = $this->votes->reduce(function ($count, $vote) {
+				$report = $vote->report;
+
+				// Report was soft deleted
+				if (!$report)
+					return $count;
+
 				if ($vote->type === (boolean) $vote->report->decision)
 					return $count + 1;
 			}, 0);
