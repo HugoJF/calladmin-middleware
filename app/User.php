@@ -43,6 +43,25 @@ class User extends Authenticatable
 		'admin' => 'boolean',
 	];
 
+	public function getVotePrecisionAttribute()
+	{
+		return cache()->remember("users-$this->id-vote-precision", 1, function () {
+			$this->load(['votes', 'votes.report']);
+
+			$correct = $this->votes->reduce(function ($count, $vote) {
+				if ($vote->type === (boolean) $vote->report->decision)
+					return $count + 1;
+			}, 0);
+
+			$count = $this->votes()->count();
+
+			if ($count === 0)
+				return 0;
+
+			return $correct / $count;
+		});
+	}
+
 	public function getScoreAttribute()
 	{
 		return cache()->remember("users-$this->id-score", 1, function () {
@@ -68,6 +87,32 @@ class User extends Authenticatable
 			}, 0);
 
 			return $score;
+		});
+	}
+
+	public function getReportPrecisionAttribute()
+	{
+		return cache()->remember("users-$this->id-report-precision", 1, function () {
+			$this->load(['reports', 'targets']);
+
+			$correct = $this->reports->reduce(function ($correct, $report) {
+				if ($report->correct)
+					return $correct + 1;
+
+				return $correct;
+			}, 0);
+
+			$decided = $this->reports->reduce(function ($decided, $report) {
+				if ($report->decided)
+					return $decided + 1;
+
+				return $decided;
+			}, 0);
+
+			if ($decided === 0)
+				return 0;
+
+			return $correct / $decided;
 		});
 	}
 

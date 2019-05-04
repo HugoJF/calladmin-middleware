@@ -9,8 +9,10 @@
             <th>Steam2ID</th>
             <th>Score</th>
             <th>Karma</th>
-            <th>Votes</th>
-            <th>Reports</th>
+            <th title="Votes">V</th>
+            <th title="Vote precision">VP</th>
+            <th title="Reports">R</th>
+            <th title="Report precision">RP</th>
             <th>Targets</th>
             <th title="Ignore reports from user">IR</th>
             <th title="Ignore reports of user">IT</th>

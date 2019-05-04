@@ -10,16 +10,22 @@
     </td>
     
     <!-- Score -->
-    <td title="Score">{{ $user->score }}</td>
+    <td title="Score">@include('ui.badge', ['number' => $user->score])</td>
     
     <!-- Karma -->
-    <td title="Karma">{{ $user->karma }}</td>
+    <td title="Karma">@include('ui.badge', ['number' => $user->karma])</td>
     
     <!-- Votes -->
     <td title="Votes">{{ $user->votes()->count() }}</td>
     
+    <!-- Vote precision -->
+    <td title="Vote precision">{{ round($user->vote_precision * 100) }}%</td>
+    
     <!-- Reports -->
     <td title="Reports">{{ $user->reports()->count() }}</td>
+    
+    <!-- Report precision -->
+    <td title="Report precision">{{ round($user->report_precision * 100) }}%</td>
     
     <!-- Targets -->
     <td title="Targets">{{ $user->targets()->count() }}</td>

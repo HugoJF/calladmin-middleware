@@ -41,7 +41,7 @@
     <div class="col d-flex" style="flex-grow: 20; flex-flow: column;">
         <div class="row flex-grow-1">
             <div class="col">
-                <h5 class="mb-2">Reporter: <span class="badge badge-{{ $badges[$report->reporter->karma <=> 0] }}">{{ $report->reporter->karma }}</span></h5>
+                <h5 class="mb-2">Reporter: @include('ui.badge', ['number' => $report->reporter->karma])</h5>
                 <p class="mb-0">{{ $report->reporter_name }}</p>
                 <pre class="text-muted ml-2">{{ $report->reporter_steam_id }}</pre>
                 <p>
@@ -49,7 +49,7 @@
                 </p>
             </div>
             <div class="col">
-                <h5 class="mb-2">Target: <span class="badge badge-{{ $badges[$report->target->karma <=> 0] }}">{{ $report->target->karma }}</span></h5>
+                <h5 class="mb-2">Target: @include('ui.badge', ['number' => $report->target->karma])</h5>
                 <p class="mb-0">{{ $report->target_name }}</p>
                 <pre class="text-muted ml-2">{{ $report->target_steam_id }}</pre>
                 <p>
