@@ -91,9 +91,6 @@ class User extends Authenticatable
 			}, 0);
 
 			$karma = $this->targets->reduce(function ($karma, $target) {
-				if ($target->ignored) // TODO: avoid this is decided
-					return $karma + 0.5;
-
 				if ($target->pending)
 					return $karma;
 
