@@ -52,7 +52,7 @@ class User extends Authenticatable
 				$report = $vote->report;
 
 				// Report was soft deleted
-				if(!$report) {
+				if (!$report) {
 					return $score;
 				}
 
@@ -60,7 +60,7 @@ class User extends Authenticatable
 					return $score;
 				}
 
-				if ($vote->type === (boolean)$report->decision) {
+				if ($vote->type === (boolean) $report->decision) {
 					return $score + 1;
 				} else {
 					return $score - 1;
@@ -77,9 +77,11 @@ class User extends Authenticatable
 			$this->load(['reports', 'targets']);
 
 			$karma = $this->reports->reduce(function ($karma, $report) {
-				if ($report->pending) {
+				if ($report->ignored) // TODO: avoid this is decided
+					return $karma - 0.5;
+
+				if ($report->pending)
 					return $karma;
-				}
 
 				if ($report->incorrect) {
 					return $karma - 1;
@@ -89,9 +91,11 @@ class User extends Authenticatable
 			}, 0);
 
 			$karma = $this->targets->reduce(function ($karma, $target) {
-				if ($target->pending) {
+				if ($target->ignored) // TODO: avoid this is decided
+					return $karma + 0.5;
+
+				if ($target->pending)
 					return $karma;
-				}
 
 				if ($target->incorrect) {
 					return $karma + 1;

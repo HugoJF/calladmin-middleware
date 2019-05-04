@@ -64,6 +64,8 @@
                         <span class="badge badge-success">CORRECT</span>
                     @elseif($report->incorrect)
                         <span class="badge badge-danger">INCORRECT</span>
+                    @elseif($report->ignored    )
+                        <span class="badge badge-warning">IGNORED</span>
                     @else
                         <span class="badge badge-dark">PENDING</span>
                     @endif
@@ -87,6 +89,11 @@
                        data-toggle="modal"
                        data-target="#report-decision-{{ $report->id }}"
                     >Final decision</a>
+                    <a class="btn btn-outline-warning{{ $report->decided ? ' disabled' : '' }}"
+                       href="#"
+                       data-toggle="modal"
+                       data-target="#report-ignore-{{ $report->id }}"
+                    >Ignore</a>
                     <a class="btn btn-outline-danger{{ $report->decided ? ' disabled' : '' }}"
                        href="#"
                        data-toggle="modal"
@@ -119,6 +126,30 @@
                     <button type="submit" class="btn btn-danger">Incorrect</button>
                     {!! Form::close() !!}
                     
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endpush
+
+@push('modals')
+    <div class="modal fade" id="report-ignore-{{ $report->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Deleting report {{ $report->id }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to ignore report {{ $report->id }}?
+                </div>
+                <div class="modal-footer">
+                    {!! Form::open(['url' => route('reports.ignore', $report), 'method' => 'PATCH']) !!}
+                    <button type="submit" class="btn btn-danger">Ignore</button>
+                    {!! Form::close() !!}
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
             </div>

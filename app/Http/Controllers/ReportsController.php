@@ -8,6 +8,7 @@ use App\Report;
 use App\User;
 use App\Vote;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class ReportsController extends Controller
@@ -80,7 +81,7 @@ class ReportsController extends Controller
 		$data = [
 			'server_ip'         => $request->input('server_ip'),
 			'server_port'       => $request->input('server_port'),
-			'vip'               => ((bool)$request->input('vip')),
+			'vip'               => ((bool) $request->input('vip')),
 			'reason'            => $request->input('reason'),
 			'reporter_name'     => $request->input('reporter_name'),
 			'reporter_steam_id' => $request->input('reporter_id'),
@@ -183,6 +184,21 @@ class ReportsController extends Controller
 		$user->save();
 
 		return $user;
+	}
+
+	public function ignore(Report $report)
+	{
+		$report->ignored_at = Carbon::now();
+
+		$ignored = $report->save();
+
+		if ($ignored) {
+			flash()->success('Report ignored successfully!');
+		} else {
+			flash()->success('Report could not be ignored!');
+		}
+
+		return back();
 	}
 
 	public function delete(Report $report)

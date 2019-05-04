@@ -68,12 +68,17 @@ class Report extends Model
 	public function scopeUndecided($query)
 	{
 		/** @var Builder $query */
-		return $query->whereNull('decision');
+		return $query->whereNull('decision')->whereNull('ignored_at');
 	}
 
 	public function getDecidedAttribute()
 	{
 		return !$this->pending;
+	}
+
+	public function getIgnoredAttribute()
+	{
+		return !is_null($this->ignored_at);
 	}
 
 	public function getCorrectAttribute()

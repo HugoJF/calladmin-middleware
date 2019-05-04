@@ -42,6 +42,11 @@ class ReportPolicy
 		return true;
 	}
 
+	public function ignore(User $user, Report $report)
+	{
+		return false;
+	}
+
 	public function delete(User $user, Report $report)
 	{
 		return false;
