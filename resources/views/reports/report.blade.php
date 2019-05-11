@@ -80,25 +80,35 @@
                     </a>
                 </p>
                 @auth
+                    @if($report->reporter_id === Auth::id() && $report->decision === 0 && is_null($report->acked_at))
+                        <a class="btn btn-warning"
+                           title="#"
+                           href="{{ route('my-reports.ack', $report) }}"
+                        >Ack</a>
+                    @endif
+                    
                     <a class="btn btn-primary"
                        title="{{ $report->demoFilename }}"
                        href="{{ $report->demoUrl }}"
                     >Download demo</a>
-                    <a class="btn btn-outline-success{{ $report->decided ? ' disabled' : '' }}"
-                       href="#"
-                       data-toggle="modal"
-                       data-target="#report-decision-{{ $report->id }}"
-                    >Final decision</a>
-                    <a class="btn btn-outline-warning{{ $report->decided ? ' disabled' : '' }}"
-                       href="#"
-                       data-toggle="modal"
-                       data-target="#report-ignore-{{ $report->id }}"
-                    >Ignore</a>
-                    <a class="btn btn-outline-danger{{ $report->decided ? ' disabled' : '' }}"
-                       href="#"
-                       data-toggle="modal"
-                       data-target="#report-delete-{{ $report->id }}"
-                    >Delete</a>
+                    
+                    @if(Auth::user()->admin)
+                        <a class="btn btn-outline-success{{ $report->decided ? ' disabled' : '' }}"
+                           href="#"
+                           data-toggle="modal"
+                           data-target="#report-decision-{{ $report->id }}"
+                        >Final decision</a>
+                        <a class="btn btn-outline-warning{{ $report->decided ? ' disabled' : '' }}"
+                           href="#"
+                           data-toggle="modal"
+                           data-target="#report-ignore-{{ $report->id }}"
+                        >Ignore</a>
+                        <a class="btn btn-outline-danger{{ $report->decided ? ' disabled' : '' }}"
+                           href="#"
+                           data-toggle="modal"
+                           data-target="#report-delete-{{ $report->id }}"
+                        >Delete</a>
+                    @endif
                 @endauth
             </div>
         </div>

@@ -32,6 +32,13 @@ Route::prefix('reports')->name('reports.')->group(function () {
 	Route::delete('{report}', 'ReportsController@delete')->name('delete')->middleware('can:delete,report');
 });
 
+Route::prefix('my-reports')->name('my-reports.')->group(function () {
+	Route::get('/', 'MyReportsController@index')->name('index');
+//	Route::get('/list', 'MyReportsController@list')->name('list');
+	Route::get('{report}/ack', 'MyReportsController@ack')->name('ack');
+	Route::post('{report}/acked', 'MyReportsController@acked')->name('acked');
+});
+
 Route::prefix('users')->name('users.')->group(function () {
 	Route::get('/', 'UsersController@index')->name('index')->middleware('can:index,App\User');
 	Route::get('{user}', 'UsersController@show')->name('show')->middleware('can:show,user');
