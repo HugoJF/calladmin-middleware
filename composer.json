@@ -17,6 +17,7 @@
     "php": "^7.1.3",
     "anlutro/l4-settings": "^0.7.3",
     "fideloper/proxy": "^4.0",
+    "hugojf/csgo-server-api": "*",
     "invisnik/laravel-steam-auth": "3.*",
     "ixudra/curl": "^6.16",
     "kris/laravel-form-builder": "^1.16",
@@ -25,7 +26,7 @@
     "laravel/tinker": "^1.0",
     "laravelcollective/html": "^5.4.0",
     "nicolaslopezj/searchable": "1.*",
-    "hugojf/csgo-server-api": "*"
+    "sentry/sentry-laravel": "1.0.2"
   },
   "require-dev": {
     "doctrine/dbal": "~2.3",

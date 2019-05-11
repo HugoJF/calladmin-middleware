@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\SteamID;
 use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Invisnik\LaravelSteamAuth\SteamAuth;
@@ -38,8 +39,10 @@ class AuthController extends Controller
 	 *
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
-	public function redirectToSteam()
+	public function redirectToSteam(Request $request)
 	{
+		$request->session()->flash('redirect', url()->previous());
+
 		return $this->steam->redirect();
 	}
 
@@ -50,7 +53,7 @@ class AuthController extends Controller
 		return redirect()->route('home');
 	}
 
-	public function login()
+	public function login(Request $request)
 	{
 		if ($this->steam->validate()) {
 			$info = $this->steam->getUserInfo();
@@ -63,7 +66,12 @@ class AuthController extends Controller
 
 				Auth::login($user, true);
 
-				return redirect($this->redirectURL); // redirect to site
+				$previous = $request->session()->pull('redirect');
+				if ($previous) {
+					return redirect($previous);
+				} else {
+					return redirect($this->redirectURL); // redirect to site
+				}
 			}
 		}
 

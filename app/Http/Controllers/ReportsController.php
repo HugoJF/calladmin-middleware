@@ -131,6 +131,15 @@ class ReportsController extends Controller
 		$values = ['correct' => true, 'incorrect' => false];
 		$decision = $request->input('decision');
 
+		$isReporter = SteamID::normalizeSteamID64(Auth::user()->steamid) === SteamID::normalizeSteamID64($report->reporter_steam_id);
+		$isTarget = SteamID::normalizeSteamID64(Auth::user()->steamid) === SteamID::normalizeSteamID64($report->target_steam_id);
+
+		if($isReporter || $isTarget) {
+			flash()->error('You cannot vote a report that you are involved');
+
+			return back();
+		}
+
 		if ($report->decided) {
 			flash()->error('You cannot vote reports that are already decided!');
 
@@ -186,7 +195,7 @@ class ReportsController extends Controller
 		return $user;
 	}
 
-	public function ignore(Report $report)
+	protected function ignore(Report $report)
 	{
 		$report->ignored_at = Carbon::now();
 
