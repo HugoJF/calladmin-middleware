@@ -63,7 +63,18 @@ class User extends Authenticatable
 					return $count + 1;
 			}, 0);
 
-			$count = $this->votes()->count();
+			$count = $this->votes->reduce(function ($count, $vote) {
+				$report = $vote->report;
+
+				if (!$report)
+					return $count;
+
+				if ($report->ignored)
+					return $count;
+
+				if ($report->decided)
+					return $count + 1;
+			}, 0);
 
 			if ($count === 0)
 				return 0;
