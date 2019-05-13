@@ -64,6 +64,8 @@ class User extends Authenticatable
 
 				if ($vote->type === (boolean) $report->decision)
 					return $count + 1;
+				else
+					return $count;
 			}, 0);
 
 			$count = $this->votes->reduce(function ($count, $vote) {
@@ -77,6 +79,8 @@ class User extends Authenticatable
 
 				if ($report->decided)
 					return $count + 1;
+				else
+					return $count;
 			}, 0);
 
 			if ((int) $count === 0)
