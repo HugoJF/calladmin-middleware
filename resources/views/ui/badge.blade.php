@@ -6,4 +6,4 @@
     ];
 @endphp
 
-<span class="badge badge-{{ $badges[$number <=> 0] }}">{{ $number }}</span>
+<span class="badge badge-{{ $badges[$number <=> ($threshold ?? 0)] }}">{{ $prefix ?? '' }}{{ $number }}{{ $suffix ?? '' }}</span>

@@ -98,10 +98,7 @@ class Report extends Model
 
 	public function getScoreAttribute()
 	{
-		/** @var Collection $votes */
-		$votes = $this->votes()->get();
-
-		$score = $votes->reduce(function ($acc, $cur) {
+		$score = $this->votes->reduce(function ($acc, $cur) {
 			return $acc + ($cur->type === true ? 1 : -1);
 		}, 0);
 

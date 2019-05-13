@@ -9,7 +9,7 @@ class UsersController extends Controller
 {
 	public function index()
 	{
-		$users = User::all();
+		$users = User::with(['reports', 'targets', 'votes', 'votes.report'])->get();
 
 		return view('users.index', [
 			'users' => $users,

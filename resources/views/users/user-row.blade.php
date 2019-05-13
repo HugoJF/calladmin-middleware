@@ -1,3 +1,7 @@
+@php
+    $votePrecision = round($user->vote_precision * 100);
+@endphp
+
 <tr>
     <!-- Username -->
     <td>
@@ -16,19 +20,23 @@
     <td title="Karma">@include('ui.badge', ['number' => $user->karma])</td>
     
     <!-- Votes -->
-    <td title="Votes">{{ $user->votes()->count() }}</td>
+    <td title="Votes">{{ $user->votes->count() }}</td>
     
     <!-- Vote precision -->
-    <td title="Vote precision">{{ round($user->vote_precision * 100) }}%</td>
-    
+    @if($user->votes->count() > 0)
+        <td title="Vote precision">@include('ui.badge', ['number' => $votePrecision, $threshold = 0.5, $suffix = '%'])</td>
+    @else
+        <td title="Vote precision">{{ $votePrecision }}</td>
+    @endif
+
     <!-- Reports -->
-    <td title="Reports">{{ $user->reports()->count() }}</td>
+    <td title="Reports">{{ $user->reports->count() }}</td>
     
     <!-- Report precision -->
     <td title="Report precision">{{ round($user->report_precision * 100) }}%</td>
     
     <!-- Targets -->
-    <td title="Targets">{{ $user->targets()->count() }}</td>
+    <td title="Targets">{{ $user->targets->count() }}</td>
     
     <!-- Ignore reports -->
     <td>

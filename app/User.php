@@ -47,8 +47,6 @@ class User extends Authenticatable
 	public function getVotePrecisionAttribute()
 	{
 		return cache()->remember("users-$this->id-vote-precision", 1, function () {
-			$this->load(['votes', 'votes.report']);
-
 			$correct = $this->votes->reduce(function ($count, $vote) {
 				$report = $vote->report;
 
@@ -93,8 +91,6 @@ class User extends Authenticatable
 	public function getScoreAttribute()
 	{
 		return cache()->remember("users-$this->id-score", 1, function () {
-			$this->load(['votes', 'votes.report']);
-
 			$score = $this->votes->reduce(function ($score, $vote) {
 				$report = $vote->report;
 
@@ -121,8 +117,6 @@ class User extends Authenticatable
 	public function getReportPrecisionAttribute()
 	{
 		return cache()->remember("users-$this->id-report-precision", 1, function () {
-			$this->load(['reports', 'targets']);
-
 			$correct = $this->reports->reduce(function ($correct, $report) {
 				if ($report->ignored)
 					return $correct;
@@ -150,8 +144,6 @@ class User extends Authenticatable
 	public function getKarmaAttribute()
 	{
 		return cache()->remember("users-$this->id-karma", 1, function () {
-			$this->load(['reports', 'targets']);
-
 			$karma = $this->reports->reduce(function ($karma, $report) {
 				if ($report->ignored) // TODO: avoid this is decided
 					return $karma - 0.5;

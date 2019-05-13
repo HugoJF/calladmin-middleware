@@ -22,9 +22,13 @@ class ReportsController extends Controller
 		}
 
 		$reports = $reports->with([
-			'votes' => function ($query) {
-				$query->where('user_id', Auth::id());
-			},
+			'votes',
+			'reporter',
+			'reporter.reports',
+			'reporter.targets',
+			'target',
+			'target.reports',
+			'target.targets',
 		]);
 
 		$reports = $reports->paginate(5);
