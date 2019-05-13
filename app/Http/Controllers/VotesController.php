@@ -12,7 +12,8 @@ class VotesController extends Controller
 	public function index()
 	{
 		if (Auth::user()->admin) {
-			return $this->adminIndex();
+			return $this->userIndex();
+			//			return $this->adminIndex();
 		} else {
 			return $this->userIndex();
 		}
