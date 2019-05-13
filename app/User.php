@@ -56,7 +56,10 @@ class User extends Authenticatable
 				if (!$report)
 					return $count;
 
-				if ($vote->type === (boolean) $vote->report->decision)
+				if ($report->ignored)
+					return $count;
+
+				if ($vote->type === (boolean) $report->decision)
 					return $count + 1;
 			}, 0);
 
@@ -105,7 +108,7 @@ class User extends Authenticatable
 			$correct = $this->reports->reduce(function ($correct, $report) {
 				if ($report->ignored)
 					return $correct;
-				
+
 				if ($report->correct)
 					return $correct + 1;
 
