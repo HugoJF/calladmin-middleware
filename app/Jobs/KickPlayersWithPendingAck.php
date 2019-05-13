@@ -37,7 +37,7 @@ class KickPlayersWithPendingAck implements ShouldQueue
 	{
 		$api = CsgoApi::all()->execute('status', 0, true)->wait()->send();
 
-		if (is_null($api))
+		if (!$api)
 			return;
 
 		$responses = collect($api['status']);
@@ -56,6 +56,9 @@ class KickPlayersWithPendingAck implements ShouldQueue
 		$players = [];
 		foreach ($statuses as $ip => $sv) {
 			foreach ($sv as $p) {
+				if (!is_object($p))
+					continue;
+
 				if (!property_exists($p, 'steamid'))
 					continue;
 
