@@ -59,6 +59,9 @@ class User extends Authenticatable
 				if ($report->ignored)
 					return $count;
 
+				if (!$report->decided)
+					return $count;
+
 				if ($vote->type === (boolean) $report->decision)
 					return $count + 1;
 			}, 0);
