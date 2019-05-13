@@ -103,6 +103,9 @@ class User extends Authenticatable
 			$this->load(['reports', 'targets']);
 
 			$correct = $this->reports->reduce(function ($correct, $report) {
+				if ($report->ignored)
+					return $correct;
+				
 				if ($report->correct)
 					return $correct + 1;
 
