@@ -56,6 +56,9 @@
                 <a class="nav-link" href="{{ route('votes.index') }}">Votes</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="{{ route('votes.index') }}">My votes</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('users.index') }}">Users</a>
             </li>
         </ul>
