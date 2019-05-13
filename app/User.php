@@ -76,10 +76,10 @@ class User extends Authenticatable
 					return $count + 1;
 			}, 0);
 
-			if ($count === 0)
+			if ((int) $count === 0)
 				return 0;
 
-			return $correct / $count;
+			return $correct / (int) $count;
 		});
 	}
 
