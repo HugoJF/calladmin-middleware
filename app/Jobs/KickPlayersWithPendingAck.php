@@ -37,6 +37,9 @@ class KickPlayersWithPendingAck implements ShouldQueue
 	{
 		$api = CsgoApi::all()->execute('status', 0, true)->wait()->send();
 
+		if (is_null($api))
+			return;
+
 		$responses = collect($api['status']);
 
 		// Parse commands
@@ -128,6 +131,6 @@ class KickPlayersWithPendingAck implements ShouldQueue
 
 		CsgoApi::to($server)->execute("sm_kick \"#{$id}\" Bloqueado do servidor. Abra o console para mais informações.", 1000, false)->send();
 
-		Log::info("Kicking player ${id} for incorrect report!");
+		Log::info("Kicking player ${id} for incorrect report ({$report->id})!");
 	}
 }

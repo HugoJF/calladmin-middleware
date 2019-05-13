@@ -134,7 +134,7 @@ class ReportsController extends Controller
 		$isReporter = SteamID::normalizeSteamID64(Auth::user()->steamid) === SteamID::normalizeSteamID64($report->reporter_steam_id);
 		$isTarget = SteamID::normalizeSteamID64(Auth::user()->steamid) === SteamID::normalizeSteamID64($report->target_steam_id);
 
-		if($isReporter || $isTarget) {
+		if ($isReporter || $isTarget) {
 			flash()->error('You cannot vote a report that you are involved');
 
 			return back();
@@ -154,7 +154,13 @@ class ReportsController extends Controller
 
 		$vote = $report->votes()->where('user_id', Auth::id())->first();
 
-		if ($vote) {
+		if ($vote && $vote->type === $values[ $decision ]) {
+			$vote->delete();
+
+			flash()->success('Vote deleted successfully!');
+
+			return back();
+		} else if ($vote) {
 			$vote->type = $values[ $decision ];
 
 			$vote->save();
@@ -162,19 +168,19 @@ class ReportsController extends Controller
 			flash()->success('Vote updated successfully!');
 
 			return back();
+		} else {
+			$vote = Vote::make();
+
+			$vote->type = $values[ $decision ];
+			$vote->user()->associate(Auth::user());
+			$vote->report()->associate($report);
+
+			$vote->save();
+
+			flash()->success('Vote registered successfully!');
+
+			return back();
 		}
-
-		$vote = Vote::make();
-
-		$vote->type = $values[ $decision ];
-		$vote->user()->associate(Auth::user());
-		$vote->report()->associate($report);
-
-		$vote->save();
-
-		flash()->success('Vote registered successfully!');
-
-		return back();
 	}
 
 	private function findOrCreate($id, $username)

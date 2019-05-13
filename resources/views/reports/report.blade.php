@@ -20,7 +20,7 @@
     ];
 @endphp
 
-<div class="row border rounded bg-light p-3 mb-3">
+<div class="row border {{ $report->acked_at ? '' : 'border-primary' }} rounded bg-light p-3 mb-3">
     <div class="col d-flex align-items-center flex-column justify-content-center">
         @auth
             <h1 title="Vote report as CORRECT">
