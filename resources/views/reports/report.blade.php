@@ -1,6 +1,6 @@
 @php
     $score = $report->score;
-    $vote = $report->votes->first();
+    $vote = $report->votes->where('user_id', Auth::id())->first();
 
     $voteUp = 'secondary';
     $voteDown = 'secondary';
