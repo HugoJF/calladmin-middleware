@@ -47,6 +47,10 @@ class KickPlayersWithPendingAck implements ShouldQueue
 			return StatusCommand::build($res);
 		});
 
+		$statuses = $statuses->filter(function ($i) {
+			return is_object($i) && property_exists($i, 'players');
+		});
+
 		// Key players by ID and remove server info
 		$statuses = $statuses->map(function ($sv) {
 			return collect($sv->players)->keyBy('steamid');
