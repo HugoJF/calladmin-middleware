@@ -30,6 +30,9 @@ Route::prefix('reports')->name('reports.')->group(function () {
 	Route::patch('{report}/ignore', 'ReportsController@ignore')->name('ignore')->middleware('can:ignore,report');
 
 	Route::delete('{report}', 'ReportsController@delete')->name('delete')->middleware('can:delete,report');
+
+	Route::post('{report}/comments', 'CommentController@store')->name('comments.store')->middleware('can:store,App\Comment');
+	Route::delete('{report}/comments/{comment}', 'CommentController@destroy')->name('comments.delete')->middleware('can:delete,comment');
 });
 
 Route::prefix('my-reports')->name('my-reports.')->group(function () {

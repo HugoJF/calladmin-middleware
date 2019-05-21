@@ -21,98 +21,118 @@
 @endphp
 
 <div class="row border {{ $report->acked_at ? '' : 'border-primary' }} rounded bg-light p-3 mb-3">
-    <div class="col d-flex align-items-center flex-column justify-content-center">
-        @auth
-            <h1 title="Vote report as CORRECT">
-                <a class="text-{{ $voteUp }} text-decoration-none" href="#" data-toggle="modal" data-target="#report-vote-up-{{ $report->id }}">
-                    <i class="fas fa-chevron-up"></i>
-                </a>
-            </h1>
-        @endauth
-        <h1 title="{{ $report->votes->count() }} total votes" class="text-{{ $score == 0 ? 'dark' : ($score < 0 ? 'danger' : 'success') }}">{{ $score }}</h1>
-        @auth
-            <h1 title="Vote report as INCORRECT">
-                <a class="text-{{ $voteDown }} text-decoration-none" href="#" data-toggle="modal" data-target="#report-vote-down-{{ $report->id }}">
-                    <i class="fas fa-chevron-down"></i>
-                </a>
-            </h1>
-        @endauth
-    </div>
-    <div class="col d-flex" style="flex-grow: 20; flex-flow: column;">
-        <div class="row flex-grow-1">
-            <div class="col">
-                <h5 class="mb-2">Reporter: @include('ui.badge', ['number' => $report->reporter->karma])</h5>
-                <p class="mb-0">{{ $report->reporter_name }}</p>
-                <pre class="text-muted ml-2">{{ $report->reporter_steam_id }}</pre>
-                <p>
-                    Reason: <code>{{ $report->reason }}</code>
-                </p>
-            </div>
-            <div class="col">
-                <h5 class="mb-2">Target: @include('ui.badge', ['number' => $report->target->karma])</h5>
-                <p class="mb-0">{{ $report->target_name }}</p>
-                <pre class="text-muted ml-2">{{ $report->target_steam_id }}</pre>
-                <p>
-                    Server: <code>{{ $report->server_ip }}:{{ $report->server_port }}</code>
-                </p>
-            </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col">
-                <h4>Final decision:
-                    @if($report->correct)
-                        <span class="badge badge-success">CORRECT</span>
-                    @elseif($report->incorrect)
-                        <span class="badge badge-danger">INCORRECT</span>
-                    @elseif($report->ignored    )
-                        <span class="badge badge-warning">IGNORED</span>
-                    @else
-                        <span class="badge badge-dark">PENDING</span>
-                    @endif
-                </h4>
-            </div>
-            <div class="col">
-                <p class="pb-0 mb-1">
-                    <a href="{{ route('reports.show', $report) }}">
-                        <small title="{{ $report->created_at->toRfc7231String() }}" class="text-muted">
-                            Created at: {{ $report->created_at->diffForHumans() }}
-                        </small>
+    <div class="col-12 mb-4 d-flex">
+        <div class="col d-flex align-items-center flex-column justify-content-center">
+            @auth
+                <h1 title="Vote report as CORRECT">
+                    <a class="text-{{ $voteUp }} text-decoration-none" href="#" data-toggle="modal" data-target="#report-vote-up-{{ $report->id }}">
+                        <i class="fas fa-chevron-up"></i>
                     </a>
-                </p>
-                @auth
-                    @if($report->reporter_id === Auth::id() && $report->decision === 0 && is_null($report->acked_at))
-                        <a class="btn btn-warning"
-                           title="#"
-                           href="{{ route('my-reports.ack', $report) }}"
-                        >Ack</a>
-                    @endif
-                    
-                    <a class="btn btn-primary"
-                       title="{{ $report->demoFilename }}"
-                       href="{{ $report->demoUrl }}"
-                    >Download demo</a>
-                    
-                    @if(Auth::user()->admin)
-                        <a class="btn btn-outline-success{{ $report->decided ? ' disabled' : '' }}"
-                           href="#"
-                           data-toggle="modal"
-                           data-target="#report-decision-{{ $report->id }}"
-                        >Final decision</a>
-                        <a class="btn btn-outline-warning{{ $report->decided ? ' disabled' : '' }}"
-                           href="#"
-                           data-toggle="modal"
-                           data-target="#report-ignore-{{ $report->id }}"
-                        >Ignore</a>
-                        <a class="btn btn-outline-danger{{ $report->decided ? ' disabled' : '' }}"
-                           href="#"
-                           data-toggle="modal"
-                           data-target="#report-delete-{{ $report->id }}"
-                        >Delete</a>
-                    @endif
-                @endauth
+                </h1>
+            @endauth
+            <h1 title="{{ $report->votes->count() }} total votes" class="text-{{ $score == 0 ? 'dark' : ($score < 0 ? 'danger' : 'success') }}">{{ $score }}</h1>
+            @auth
+                <h1 title="Vote report as INCORRECT">
+                    <a class="text-{{ $voteDown }} text-decoration-none" href="#" data-toggle="modal" data-target="#report-vote-down-{{ $report->id }}">
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                </h1>
+            @endauth
+        </div>
+        <div class="col d-flex" style="flex-grow: 20; flex-flow: column;">
+            <div class="row flex-grow-1">
+                <div class="col">
+                    <h5 class="mb-2">Reporter: @include('ui.badge', ['number' => $report->reporter->karma])</h5>
+                    <p class="mb-0">{{ $report->reporter_name }}</p>
+                    <pre class="text-muted ml-2">{{ $report->reporter_steam_id }}</pre>
+                    <p>
+                        Reason: <code>{{ $report->reason }}</code>
+                    </p>
+                </div>
+                <div class="col">
+                    <h5 class="mb-2">Target: @include('ui.badge', ['number' => $report->target->karma])</h5>
+                    <p class="mb-0">{{ $report->target_name }}</p>
+                    <pre class="text-muted ml-2">{{ $report->target_steam_id }}</pre>
+                    <p>
+                        Server: <code>{{ $report->server_ip }}:{{ $report->server_port }}</code>
+                    </p>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col">
+                    <h4>Final decision:
+                        @if($report->correct)
+                            <span class="badge badge-success">CORRECT</span>
+                        @elseif($report->incorrect)
+                            <span class="badge badge-danger">INCORRECT</span>
+                        @elseif($report->ignored    )
+                            <span class="badge badge-warning">IGNORED</span>
+                        @else
+                            <span class="badge badge-dark">PENDING</span>
+                        @endif
+                    </h4>
+                </div>
+                <div class="col">
+                    <p class="pb-0 mb-1">
+                        <a href="{{ route('reports.show', $report) }}">
+                            <small title="{{ $report->created_at->toRfc7231String() }}" class="text-muted">
+                                Created at: {{ $report->created_at->diffForHumans() }}
+                            </small>
+                        </a>
+                    </p>
+                    @auth
+                        @if($report->reporter_id === Auth::id() && $report->decision === 0 && is_null($report->acked_at))
+                            <a class="btn btn-warning"
+                               title="#"
+                               href="{{ route('my-reports.ack', $report) }}"
+                            >Ack</a>
+                        @endif
+                        
+                        <a class="btn btn-primary"
+                           title="{{ $report->demoFilename }}"
+                           href="{{ $report->demoUrl }}"
+                        >Download demo</a>
+                        
+                        @if(Auth::user()->admin)
+                            <a class="btn btn-outline-success{{ $report->decided ? ' disabled' : '' }}"
+                               href="#"
+                               data-toggle="modal"
+                               data-target="#report-decision-{{ $report->id }}"
+                            >Final decision</a>
+                            <a class="btn btn-outline-warning{{ $report->decided ? ' disabled' : '' }}"
+                               href="#"
+                               data-toggle="modal"
+                               data-target="#report-ignore-{{ $report->id }}"
+                            >Ignore</a>
+                            <a class="btn btn-outline-danger{{ $report->decided ? ' disabled' : '' }}"
+                               href="#"
+                               data-toggle="modal"
+                               data-target="#report-delete-{{ $report->id }}"
+                            >Delete</a>
+                        @endif
+                    @endauth
+                </div>
             </div>
         </div>
     </div>
+    @if(Auth::check() && Auth::user()->admin)
+        <div class="col-12">
+            <h3>Comments</h3>
+            <div>
+                @foreach ($report->comments as $comment)
+                    @include('comments.comment', ['comment' => $comment])
+                @endforeach
+            </div>
+            {!! Form::open(['url' => route('reports.comments.store', $report), 'method' => 'POST']) !!}
+            <div class="input-group mt-2 mb-1">
+                <textarea rows="1" name="comment" class="form-control" placeholder="Write a comment..." aria-label="comment"></textarea>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="submit" id="comment-button">Submit comment</button>
+                </div>
+            </div>
+            {!! Form::close() !!}
+        </div>
+    @endif
 </div>
 
 @push('modals')

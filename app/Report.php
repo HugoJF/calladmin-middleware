@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
@@ -13,6 +14,7 @@ use Nicolaslopezj\Searchable\SearchableTrait;
  * @property-read mixed     $demo_filename
  * @property-read \App\User $reporter
  * @property-read \App\User $target
+ * @property Carbon  created_at
  * @method static \Illuminate\Database\Eloquent\Builder|Report newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Report newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Report query()
@@ -25,7 +27,7 @@ class Report extends Model
 	protected $searchable = [
 		'columns' => [
 			'server_ip'         => 10,
-			'server_port' 		=> 20,
+			'server_port'       => 20,
 			'reason'            => 5,
 			'reporter_name'     => 10,
 			'reporter_steam_id' => 20,
@@ -49,7 +51,6 @@ class Report extends Model
 		'target_steam_id',
 	];
 
-
 	public function target()
 	{
 		return $this->belongsTo(User::class);
@@ -63,6 +64,11 @@ class Report extends Model
 	public function votes()
 	{
 		return $this->hasMany(Vote::class);
+	}
+
+	public function comments()
+	{
+		return $this->hasMany(Comment::class);
 	}
 
 	public function scopeUndecided($query)
@@ -83,12 +89,12 @@ class Report extends Model
 
 	public function getCorrectAttribute()
 	{
-		return ((boolean)$this->decision) === true;
+		return ((boolean) $this->decision) === true;
 	}
 
 	public function getIncorrectAttribute()
 	{
-		return !$this->pending && ((boolean)$this->decision) === false;
+		return !$this->pending && ((boolean) $this->decision) === false;
 	}
 
 	public function getPendingAttribute()
