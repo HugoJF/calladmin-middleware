@@ -115,7 +115,7 @@
             </div>
         </div>
     </div>
-    @if(Auth::check() && Auth::user()->admin)
+    @if(Auth::check())
         <div class="col-12">
             <h3>Comments</h3>
             <div>
