@@ -7,6 +7,8 @@ use App\Events\ReportCreated;
 use App\Report;
 use App\User;
 use App\Vote;
+use DB;
+use hugojf\CsgoServerApi\Facades\CsgoApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -120,6 +122,17 @@ class ReportsController extends Controller
 			return back();
 		}
 
+		// TODO: make this an event
+		if ($values[ $decision ]) {
+			try {
+				$this->addBan($report, $request->input('reason'), intval($request->input('duration')));
+			} catch (\Exception $e) {
+				flash()->error($e->getMessage());
+
+				return back();
+			}
+		}
+
 		$report->decision = $values[ $decision ];
 		$report->save();
 
@@ -203,6 +216,56 @@ class ReportsController extends Controller
 		$user->save();
 
 		return $user;
+	}
+
+	/**
+	 * @param Report $report
+	 * @param        $reason
+	 * @param        $duration
+	 *
+	 * @throws \Exception
+	 */
+	protected function addBan(Report $report, $reason, $duration)
+	{
+		// Get the end of the SteamID
+		preg_match('/STEAM_\d:\d:(\d+)/i', Auth::user()->steamid, $matches);
+
+		// Check if it was split correctly
+		if (count($matches) !== 2)
+			throw new \Exception('Could not validate admin SteamID3');
+
+		// Search for admin ID on SourceBans table
+		$adminId = $matches[1];
+		$adminInfo = DB::connection('sourcebans_pp')->table('sb_admins')->where('authid', 'like', "%$adminId")->first(['aid']);
+
+		// Check if admin exists
+		if (is_null($adminInfo))
+			throw new \Exception('You are trying to add a ban but no admin information could be found! Tell de_nerd to add you as a admin on SourceBans!');
+
+		// Build URL to report
+		$url = route('reports.show', $report);
+
+		// Insert ban
+		DB::connection('sourcebans_pp')->table('sb_bans')->insert([
+			'ip'         => '',
+			'authid'     => $report->target->steamid,
+			'name'       => $report->target->username,
+			'created'    => Carbon::now()->timestamp,
+			'ends'       => Carbon::now()->timestamp + $duration,
+			'length'     => $duration,
+			'reason'     => "[Calladmin-Middleware] $reason ($url)",
+			'aid'        => $adminInfo->aid,
+			'adminIp'    => '',
+			'country'    => null,
+			'RemovedBy'  => null,
+			'RemoveType' => null,
+			'RemovedOn'  => null,
+			'type'       => 0,
+			'ureason'    => null,
+		]);
+
+		// Kick players
+		CsgoApi::all()->execute("sm_kick \"#{$report->target->steamid}\" \"Kickado por decisão de report no CallAdmin-Middleware\"", 0, false)->send();
 	}
 
 	protected function ignore(Report $report)

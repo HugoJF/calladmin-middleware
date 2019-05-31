@@ -97,8 +97,13 @@
                             <a class="btn btn-outline-success{{ $report->decided ? ' disabled' : '' }}"
                                href="#"
                                data-toggle="modal"
-                               data-target="#report-decision-{{ $report->id }}"
-                            >Final decision</a>
+                               data-target="#report-decision-correct-{{ $report->id }}"
+                            >Correct</a>
+                            <a class="btn btn-outline-danger{{ $report->decided ? ' disabled' : '' }}"
+                               href="#"
+                               data-toggle="modal"
+                               data-target="#report-decision-incorrect-{{ $report->id }}"
+                            >Incorrect</a>
                             <a class="btn btn-outline-warning{{ $report->decided ? ' disabled' : '' }}"
                                href="#"
                                data-toggle="modal"
@@ -135,8 +140,125 @@
     @endif
 </div>
 
+@php
+    $minute = 60;
+    $hour = 60 * $minute;
+    $day = 24 * $hour;
+    $month = 30 * $day;
+    
+    $durationsHours = [
+        [
+            'title' => '1 hour',
+            'duration' => $hour,
+        ],
+        [
+            'title' => '2 hours',
+            'duration' => 2 * $hour,
+        ],
+        [
+            'title' => '4 hours',
+            'duration' => 4 * $hour,
+        ],
+        [
+            'title' => '12 hours',
+            'duration' => 12 * $hour,
+        ],
+    ];
+
+    $durationsDays = [
+        [
+            'title' => '1 day',
+            'duration' => $day,
+        ],
+        [
+            'title' => '2 days',
+            'duration' => 2 * $day,
+        ],
+        [
+            'title' => '3 days',
+            'duration' => 3 * $day,
+        ],
+        [
+            'title' => '4 days',
+            'duration' => 4 * $day,
+        ],
+        [
+            'title' => '7 days',
+            'duration' => 7 * $day,
+        ],
+        [
+            'title' => '14 days',
+            'duration' => 14 * $day,
+        ],
+    ];
+
+    $durationMonths = [
+        [
+            'title' => '1 month',
+            'duration' => 1 * $month,
+        ],
+        [
+            'title' => '2 months',
+            'duration' => 2 * $month,
+        ],
+        [
+            'title' => '3 months',
+            'duration' => 3 * $month,
+        ],
+        [
+            'title' => '4 months',
+            'duration' => 4 * $month,
+        ],
+    ];
+    
+    $durations = [$durationsHours, $durationsDays, $durationMonths];
+@endphp
+
 @push('modals')
-    <div class="modal fade" id="report-decision-{{ $report->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="report-decision-correct-{{ $report->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            {!! Form::open(['url' => route('reports.decision', $report), 'method' => 'PATCH']) !!}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Final decision for report {{ $report->id }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6>Ban duration</h6>
+                    <div class="row">
+                        @foreach ($durations as $a => $durationGroups)
+                            <div class="col-4">
+                                @foreach ($durationGroups as $b => $duration)
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="duration-{{ $a . '-' . $b }}" name="duration" value="{{ $duration['duration'] }}" class="custom-control-input">
+                                        <label class="custom-control-label" for="duration-{{ $a . '-' . $b }}">{{ $duration['title'] }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </div>
+                    <br>
+                    <h6>Final reason</h6>
+                    <div class="form-group">
+                        <input name="reason" class="form-control" type="text" placeholder="Reason">
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0">
+                    {!! Form::hidden('decision', 'correct') !!}
+                    <button type="submit" class="btn btn-primary">Correct</button>
+                    
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+@endpush
+
+@push('modals')
+    <div class="modal fade" id="report-decision-incorrect-{{ $report->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -146,11 +268,6 @@
                     </button>
                 </div>
                 <div class="modal-footer border-top-0">
-                    {!! Form::open(['url' => route('reports.decision', $report), 'method' => 'PATCH']) !!}
-                    {!! Form::hidden('decision', 'correct') !!}
-                    <button type="submit" class="btn btn-primary">Correct</button>
-                    {!! Form::close() !!}
-                    
                     {!! Form::open(['url' => route('reports.decision', $report), 'method' => 'PATCH']) !!}
                     {!! Form::hidden('decision', 'incorrect') !!}
                     <button type="submit" class="btn btn-danger">Incorrect</button>
