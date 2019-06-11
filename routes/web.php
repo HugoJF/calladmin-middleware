@@ -35,7 +35,7 @@ Route::prefix('reports')->name('reports.')->group(function () {
 	Route::delete('{report}/comments/{comment}', 'CommentController@destroy')->name('comments.delete')->middleware('can:delete,comment');
 });
 
-Route::prefix('my-reports')->name('my-reports.')->group(function () {
+Route::prefix('my-reports')->middleware(['auth'])->name('my-reports.')->group(function () {
 	Route::get('/', 'MyReportsController@index')->name('index');
 //	Route::get('/list', 'MyReportsController@list')->name('list');
 	Route::get('{report}/ack', 'MyReportsController@ack')->name('ack');
