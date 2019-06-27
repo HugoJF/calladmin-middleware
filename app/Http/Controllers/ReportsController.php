@@ -298,8 +298,9 @@ class ReportsController extends Controller
 
 	public function missingVideo()
 	{
-		return Report::where('ignored_at', '!=', null)
+		return Report::whereNull('ignored_at')
 					 ->whereNull('video_url')
+					 ->whereNull('decision')
 					 ->whereNull('decision')
 					 ->orderBy('created_at', 'ASC')
 					 ->get()
