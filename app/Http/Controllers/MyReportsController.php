@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class MyReportsController extends Controller
 {
-	public const CONFIRMATION_TEXT = 'Concordo em melhorar a descrição e precisão de todos os meus futuros reports visando ajudar toda a equipe dos servidores de_nerdTV.';
+	public const CONFIRMATION_TEXT = 'Concordo em melhorar meus reports para ajudar toda a equipe dos servidores de_nerdTV';
 
 	public function index(Request $request)
 	{

@@ -17,5 +17,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix('v1')->group(function () {
+	Route::get('/reports/missing-video', 'ReportsController@missingVideo');
+	Route::patch('/reports/{report}/attach-video', 'ReportsController@attachVideo');
+});
+
 Route::post('reports', 'ReportsController@store')->name('store');
 

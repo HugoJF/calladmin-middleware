@@ -295,4 +295,27 @@ class ReportsController extends Controller
 
 		return back();
 	}
+
+	public function missingVideo()
+	{
+		return Report::where('ignored_at', '!=', null)
+					 ->whereNull('video_url')
+					 ->whereNull('decision')
+					 ->orderBy('created_at', 'ASC')
+					 ->get()
+					 ->each(function ($report) {
+						 $steam = new SteamID($report->target_steam_id);
+						 $report->target_steam_id_64 = $steam->ConvertToUInt64();
+						 $report->append('demoUrl');
+					 });
+	}
+
+	public function attachVideo(Request $request, Report $report)
+	{
+		$report->video_url = $request->input('url');
+
+		$report->save();
+
+		return $report;
+	}
 }
