@@ -232,6 +232,10 @@
             'title' => '4 months',
             'duration' => 4 * $month,
         ],
+        [
+            'title' => 'Permanent',
+            'duration' => 0,
+        ]
     ];
     
     $durations = [$durationsHours, $durationsDays, $durationMonths];
