@@ -242,7 +242,7 @@
     $durations = [$durationsHours, $durationsDays, $durationMonths];
 @endphp
 
-@if(Auth::user()->admin)
+@if(Auth::check() && Auth::user()->admin)
     @push('modals')
         <div class="modal fade" id="report-attach-video-{{ $report->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
