@@ -126,6 +126,7 @@
         </div>
     </div>
     @if($report->video_url)
+        <h3>Demo recording</h3>
         <div class="p-4 w-100">
             <div class="embed-responsive embed-responsive-16by9">
                 <iframe
