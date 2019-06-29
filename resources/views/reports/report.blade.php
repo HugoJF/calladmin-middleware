@@ -126,7 +126,7 @@
         </div>
     </div>
     @if($report->video_url)
-        <div class="p-4">
+        <div class="p-4 w-100">
             <div class="embed-responsive embed-responsive-16by9">
                 <iframe
                         id="ytplayer"
