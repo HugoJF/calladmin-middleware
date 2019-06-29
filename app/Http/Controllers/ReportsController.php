@@ -268,7 +268,7 @@ class ReportsController extends Controller
 		CsgoApi::all()->execute("sm_kick \"#{$report->target->steamid}\" \"Kickado por decisão de report no CallAdmin-Middleware\"", 0, false)->send();
 	}
 
-	protected function ignore(Report $report)
+	public function ignore(Report $report)
 	{
 		$report->ignored_at = Carbon::now();
 
@@ -279,6 +279,23 @@ class ReportsController extends Controller
 		} else {
 			flash()->success('Report could not be ignored!');
 		}
+
+		return back();
+	}
+
+	public function attachVideo(Request $request, Report $report)
+	{
+		if (!$request->input('url')) {
+			flash()->error('Missing video URL');
+
+			return back();
+		}
+
+		$report->video_url = $request->input('url');
+
+		$report->save();
+
+		flash()->success('Video attached!');
 
 		return back();
 	}
@@ -311,7 +328,7 @@ class ReportsController extends Controller
 					 });
 	}
 
-	public function attachVideo(Request $request, Report $report)
+	public function attachVideoApi(Request $request, Report $report)
 	{
 		$report->video_url = $request->input('url');
 

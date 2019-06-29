@@ -25,8 +25,8 @@ Route::prefix('reports')->name('reports.')->group(function () {
 
 	Route::post('{report}/vote', 'ReportsController@vote')->name('vote');
 
+	Route::patch('{report}/attach-video', 'ReportsController@attachVideo')->name('attach-video');
 	Route::patch('{report}/decision', 'ReportsController@decision')->name('decision')->middleware('can:decide,report');
-
 	Route::patch('{report}/ignore', 'ReportsController@ignore')->name('ignore')->middleware('can:ignore,report');
 
 	Route::delete('{report}', 'ReportsController@delete')->name('delete')->middleware('can:delete,report');

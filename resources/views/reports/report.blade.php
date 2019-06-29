@@ -94,6 +94,11 @@
                         >Download demo</a>
                         
                         @if(Auth::user()->admin)
+                            <a class="btn btn-outline-primary{{ $report->decided ? ' disabled' : '' }}"
+                               href="#"
+                               data-toggle="modal"
+                               data-target="#report-attach-video-{{ $report->id }}"
+                            >Attach video</a>
                             <a class="btn btn-outline-success{{ $report->decided ? ' disabled' : '' }}"
                                href="#"
                                data-toggle="modal"
@@ -120,6 +125,19 @@
             </div>
         </div>
     </div>
+    @if($report->video_url)
+        <div class="embed-responsive embed-responsive-16by9">
+            <iframe
+                    id="ytplayer"
+                    type="text/html"
+                    width="100%"
+                    src="https://www.youtube.com/embed/{{ $report->video_url }}?autoplay=0"
+                    frameborder="0"
+            >
+            </iframe>
+        </div>
+    @endif
+    
     @if(Auth::check())
         <div class="col-12">
             <h3>Comments</h3>
@@ -213,6 +231,36 @@
     
     $durations = [$durationsHours, $durationsDays, $durationMonths];
 @endphp
+
+@if(Auth::user()->admin)
+    @push('modals')
+        <div class="modal fade" id="report-attach-video-{{ $report->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                {!! Form::open(['url' => route('reports.attach-video', $report), 'method' => 'PATCH']) !!}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Final decision for report {{ $report->id }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h6>Attach video to report {{ $report->id }}</h6>
+                        <div class="form-group">
+                            <input name="url" class="form-control" type="text" placeholder="Video URL">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+    @endpush
+@endif
 
 @push('modals')
     <div class="modal fade" id="report-decision-correct-{{ $report->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
