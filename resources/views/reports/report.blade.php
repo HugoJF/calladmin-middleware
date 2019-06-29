@@ -289,8 +289,8 @@
                             <div class="col-4">
                                 @foreach ($durationGroups as $b => $duration)
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" id="duration-{{ $a . '-' . $b }}" name="duration" value="{{ $duration['duration'] }}" class="custom-control-input">
-                                        <label class="custom-control-label" for="duration-{{ $a . '-' . $b }}">{{ $duration['title'] }}</label>
+                                        <input type="radio" id="duration-{{ $report->id }}-{{ $a . '-' . $b }}" name="duration" value="{{ $duration['duration'] }}" class="custom-control-input">
+                                        <label class="custom-control-label" for="duration-{{ $report->id }}-{{ $a . '-' . $b }}">{{ $duration['title'] }}</label>
                                     </div>
                                 @endforeach
                             </div>
