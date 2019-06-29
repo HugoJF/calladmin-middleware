@@ -126,15 +126,17 @@
         </div>
     </div>
     @if($report->video_url)
-        <div class="embed-responsive embed-responsive-16by9">
-            <iframe
-                    id="ytplayer"
-                    type="text/html"
-                    width="100%"
-                    src="https://www.youtube.com/embed/{{ $report->video_url }}?autoplay=0"
-                    frameborder="0"
-            >
-            </iframe>
+        <div class="p-4">
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe
+                        id="ytplayer"
+                        type="text/html"
+                        width="100%"
+                        src="https://www.youtube.com/embed/{{ $report->video_url }}?autoplay=0"
+                        frameborder="0"
+                >
+                </iframe>
+            </div>
         </div>
     @endif
     

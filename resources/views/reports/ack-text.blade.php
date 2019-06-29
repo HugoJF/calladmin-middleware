@@ -50,7 +50,7 @@
                     @csrf
                     <div class="form-group mx-sm-3 mb-2 flex-grow-1">
                         <label for="ack" class="sr-only">Ack</label>
-                        <textarea style="height: 84px;" name="confirmation" class="form-control-lg w-100" id="ack" placeholder="Concordo em melhorar a descrição e precisão de todos os meus futuros reports visando ajudar toda a equipe dos servidores de_nerdTV."></textarea>
+                        <textarea style="height: 84px;" name="confirmation" class="form-control-lg w-100" id="ack" placeholder="Concordo em melhorar meus reports para ajudar toda a equipe dos servidores de_nerdTV"></textarea>
                     </div>
                     <button type="submit" class="btn btn-lg btn-primary mb-2">Confirmar</button>
                 </form>
