@@ -134,7 +134,8 @@
                             id="ytplayer"
                             type="text/html"
                             width="100%"
-                            src="https://www.youtube.com/embed/{{ $report->video_url }}?autoplay=0"
+                            allowfullscreen
+                            src="https://www.youtube.com/embed/{{ $report->video_url }}?autoplay=0&rel=0&showinfo=0"
                             frameborder="0"
                     >
                     </iframe>
