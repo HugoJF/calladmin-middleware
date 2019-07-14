@@ -21,7 +21,7 @@
         </p>
         
         <h4 class="mt-5">► O que devo fazer para poder jogar novamente?</h4>
-        <p class="para-de-querer-copiar-e-colar-seu-puto-e-aprende-que-nao-eh-pra-ficar-reportando-qualquer-um-na-porra-dos-servidores">Por favor digite abaixo e clique em confirmar: <strong>Concordo em melhorar a descrição e precisão de todos os meus futuros reports visando ajudar toda a equipe dos servidores de_nerdTV.</strong></p>
+        <p class="para-de-querer-copiar-e-colar-seu-puto-e-aprende-que-nao-eh-pra-ficar-reportando-qualquer-um-na-porra-dos-servidores">Por favor digite abaixo e clique em confirmar: <strong>{{ \App\Http\Controllers\MyReportsController::CONFIRMATION_TEXT }}</strong></p>
         
         <h4 class="mt-5">► Nosso objetivo</h4>
         <ul>
@@ -50,7 +50,7 @@
                     @csrf
                     <div class="form-group mx-sm-3 mb-2 flex-grow-1">
                         <label for="ack" class="sr-only">Ack</label>
-                        <textarea style="height: 84px;" name="confirmation" class="form-control-lg w-100" id="ack" placeholder="Concordo em melhorar meus reports para ajudar toda a equipe dos servidores de_nerdTV"></textarea>
+                        <textarea style="height: 84px;" name="confirmation" class="form-control-lg w-100" id="ack" placeholder="{{ \App\Http\Controllers\MyReportsController::CONFIRMATION_TEXT }}"></textarea>
                     </div>
                     <button type="submit" class="btn btn-lg btn-primary mb-2">Confirmar</button>
                 </form>
