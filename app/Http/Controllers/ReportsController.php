@@ -330,7 +330,12 @@ class ReportsController extends Controller
 
 	public function attachVideoApi(Request $request, Report $report)
 	{
-		$report->video_url = $request->input('url');
+		$url = $request->input('url');
+
+		if (preg_match('/v=(.+)$/g', $url, $matches))
+			$url = $matches[1];
+
+		$report->video_url = $url;
 
 		$report->save();
 
