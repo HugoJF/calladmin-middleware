@@ -285,17 +285,21 @@ class ReportsController extends Controller
 
 	public function attachVideo(Request $request, Report $report)
 	{
-		if (!$request->input('url')) {
+		if (!$request->has('url')) {
 			flash()->error('Missing video URL');
 
 			return back();
 		}
+		$url = $request->input('url');
+		if (preg_match('/v=(.+)$/', $url, $matches)) {
+			$url = $matches[1];
+		}
 
-		$report->video_url = $request->input('url');
+		$report->video_url = $url;
 
 		$report->save();
 
-		flash()->success('Video attached!');
+		flash()->success("Video ID <strong>$url</strong> attached!");
 
 		return back();
 	}
@@ -332,8 +336,9 @@ class ReportsController extends Controller
 	{
 		$url = $request->input('url');
 
-		if (preg_match('/v=(.+)$/g', $url, $matches))
+		if (preg_match('/v=(.+)$/', $url, $matches)) {
 			$url = $matches[1];
+		}
 
 		$report->video_url = $url;
 
