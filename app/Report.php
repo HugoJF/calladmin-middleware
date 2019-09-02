@@ -51,6 +51,14 @@ class Report extends Model
 		'target_steam_id',
 	];
 
+	public static function correctness()
+	{
+		$total = Report::whereNotNull('decision')->count();
+		$correct = Report::where('decision', 1)->count();
+
+		return $correct / $total;
+	}
+
 	public function target()
 	{
 		return $this->belongsTo(User::class);
