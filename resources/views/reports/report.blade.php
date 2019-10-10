@@ -42,7 +42,7 @@
         <div class="col d-flex flex-grow-1">
             <div class="row flex-grow-1">
                 <div class="col">
-                    <h5 class="mb-2">Reporter: @include('ui.badge', ['number' => $report->reporter->karma])</h5>
+                    <h5 class="mb-2">Reporter:</h5>
                     <p class="mb-0">
                         {{ $report->reporter_name }}
                         @include('components.user-stats', ['user' => $report->reporter])
@@ -66,7 +66,7 @@
                     </h3>
                 </div>
                 <div class="col">
-                    <h5 class="mb-2">Target: @include('ui.badge', ['number' => $report->target->karma])</h5>
+                    <h5 class="mb-2">Target:</h5>
                     <p class="mb-0">
                         {{ $report->target_name }}
                         @include('components.user-stats', ['user' => $report->target])
