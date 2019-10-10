@@ -43,8 +43,13 @@
             <div class="row flex-grow-1">
                 <div class="col">
                     <h5 class="mb-2">Reporter: @include('ui.badge', ['number' => $report->reporter->karma])</h5>
-                    <p class="mb-0">{{ $report->reporter_name }}</p>
-                    <pre class="text-muted ml-2">{{ $report->reporter_steam_id }}</pre>
+                    <p class="mb-0">
+                        {{ $report->reporter_name }}
+                        @include('components.user-stats', ['user' => $report->reporter])
+                    </p>
+                    <div class="ml-2">
+                        <pre class="text-muted">{{ $report->reporter_steam_id }}</pre>
+                    </div>
                     <p>
                         Reason: <code>{{ $report->reason }}</code>
                     </p>
@@ -62,7 +67,10 @@
                 </div>
                 <div class="col">
                     <h5 class="mb-2">Target: @include('ui.badge', ['number' => $report->target->karma])</h5>
-                    <p class="mb-0">{{ $report->target_name }}</p>
+                    <p class="mb-0">
+                        {{ $report->target_name }}
+                        @include('components.user-stats', ['user' => $report->target])
+                    </p>
                     <pre class="text-muted ml-2">{{ $report->target_steam_id }}</pre>
                     <p>
                         Server: <code>{{ $report->server_ip }}:{{ $report->server_port }}</code>

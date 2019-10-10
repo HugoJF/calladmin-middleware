@@ -173,6 +173,77 @@ class User extends Authenticatable
 		});
 	}
 
+	public function getReportStateAttribute()
+	{
+		$t = $this->report_count;
+
+		if ($t <= 2)
+			return 'dark';
+
+		$c = $this->correct_report_count;
+
+		if ($c / $t < 0.6)
+			return 'danger';
+		else
+			return 'success';
+	}
+
+	public function getCorrectReportCountAttribute()
+	{
+		return $this->reports()->whereDecision(true)->count();
+	}
+
+	public function getReportCountAttribute()
+	{
+		return $this->reports()->whereNotNull('decision')->count();
+	}
+
+	public function getVoteStateAttribute()
+	{
+		$t = $this->vote_count;
+
+		if ($t <= 2)
+			return 'dark';
+
+		$c = $this->correct_vote_count;
+
+		if ($c / $t < .75)
+			return 'danger';
+		else
+			return 'success';
+	}
+
+	public function getTargetStateAttribute()
+	{
+		if ($this->correct_target_count > 0)
+			return 'danger';
+
+		if ($this->target_count === 0)
+			return 'dark';
+		else
+			return 'success';
+	}
+
+	public function getCorrectTargetCountAttribute()
+	{
+		return $this->targets()->whereDecision(true)->count();
+	}
+
+	public function getTargetCountAttribute()
+	{
+		return $this->targets()->count();
+	}
+
+	public function getCorrectVoteCountAttribute()
+	{
+		return ($this->votes()->join('reports', 'votes.report_id', '=', 'reports.id')->whereRaw('votes.type = reports.decision')->count());
+	}
+
+	public function getVoteCountAttribute()
+	{
+		return $this->votes()->count();
+	}
+
 	public function reports()
 	{
 		return $this->hasMany(Report::class, 'reporter_id');
