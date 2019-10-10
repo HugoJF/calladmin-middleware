@@ -21,8 +21,8 @@
 @endphp
 
 <div class="row border {{ $report->acked_at ? '' : 'border-primary' }} rounded bg-light p-3 mb-3">
-    <div class="col-12 mb-4 d-flex">
-        <div class="col d-flex align-items-center flex-column justify-content-center">
+    <div class="col-12 mb-2 d-flex">
+        <div class="col d-flex flex-grow-0 align-items-center flex-column justify-content-center">
             @auth
                 <h1 title="Vote report as CORRECT">
                     <a class="text-{{ $voteUp }} text-decoration-none" href="#" data-toggle="modal" data-target="#report-vote-up-{{ $report->id }}">
@@ -39,7 +39,7 @@
                 </h1>
             @endauth
         </div>
-        <div class="col d-flex" style="flex-grow: 20; flex-flow: column;">
+        <div class="col d-flex flex-grow-1">
             <div class="row flex-grow-1">
                 <div class="col">
                     <h5 class="mb-2">Reporter: @include('ui.badge', ['number' => $report->reporter->karma])</h5>
@@ -48,6 +48,17 @@
                     <p>
                         Reason: <code>{{ $report->reason }}</code>
                     </p>
+                    <h3>
+                        @if($report->correct)
+                            <span class="badge badge-success">CORRECT REPORT</span>
+                        @elseif($report->incorrect)
+                            <span class="badge badge-danger">INCORRECT REPORT</span>
+                        @elseif($report->ignored)
+                            <span class="badge badge-warning">REPORT IGNORED</span>
+                        @else
+                            <span class="badge badge-dark">PENDING DECISION</span>
+                        @endif
+                    </h3>
                 </div>
                 <div class="col">
                     <h5 class="mb-2">Target: @include('ui.badge', ['number' => $report->target->karma])</h5>
@@ -56,23 +67,6 @@
                     <p>
                         Server: <code>{{ $report->server_ip }}:{{ $report->server_port }}</code>
                     </p>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col">
-                    <h4>Final decision:
-                        @if($report->correct)
-                            <span class="badge badge-success">CORRECT</span>
-                        @elseif($report->incorrect)
-                            <span class="badge badge-danger">INCORRECT</span>
-                        @elseif($report->ignored    )
-                            <span class="badge badge-warning">IGNORED</span>
-                        @else
-                            <span class="badge badge-dark">PENDING</span>
-                        @endif
-                    </h4>
-                </div>
-                <div class="col">
                     <p class="pb-0 mb-1">
                         <a href="{{ route('reports.show', $report) }}">
                             <small title="{{ $report->created_at->toRfc7231String() }}" class="text-muted">
@@ -80,47 +74,63 @@
                             </small>
                         </a>
                     </p>
-                    @auth
-                        @if($report->reporter_id === Auth::id() && $report->decision === 0 && is_null($report->acked_at))
-                            <a class="btn btn-warning"
-                               title="#"
-                               href="{{ route('my-reports.ack', $report) }}"
-                            >Ack</a>
-                        @endif
-                        
-                        <a class="btn btn-primary"
-                           title="{{ $report->demoFilename }}"
-                           href="{{ $report->demoUrl }}"
-                        >Download demo</a>
-                        
-                        @if(Auth::user()->admin)
-                            <a class="btn btn-outline-primary{{ $report->decided ? ' disabled' : '' }}"
-                               href="#"
-                               data-toggle="modal"
-                               data-target="#report-attach-video-{{ $report->id }}"
-                            >Attach video</a>
+                    <div class="mx-2 btn-group">
+                        @auth
+                            @if($report->reporter_id === Auth::id() && $report->decision === 0 && is_null($report->acked_at))
+                                <a class="btn btn-warning"
+                                   title="#"
+                                   href="{{ route('my-reports.ack', $report) }}"
+                                >Ack</a>
+                            @endif
+                            @if(Auth::user()->admin)
+                                <a class="btn btn-outline-primary{{ $report->decided ? ' disabled' : '' }}"
+                                   href="#"
+                                   data-toggle="modal"
+                                   data-target="#report-attach-video-{{ $report->id }}"
+                                >
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                    <i class="fa fa-video-camera" aria-hidden="true"></i>
+                                </a>
+                            @endif
+                            <a class="btn btn-primary"
+                               title="{{ $report->demoFilename }}"
+                               href="{{ $report->demoUrl }}"
+                            >
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                                Demo
+                            </a>
+                            
                             <a class="btn btn-outline-success{{ $report->decided ? ' disabled' : '' }}"
                                href="#"
                                data-toggle="modal"
                                data-target="#report-decision-correct-{{ $report->id }}"
-                            >Correct</a>
+                            >
+                                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                Correct
+                            </a>
+                            
                             <a class="btn btn-outline-danger{{ $report->decided ? ' disabled' : '' }}"
                                href="#"
                                data-toggle="modal"
                                data-target="#report-decision-incorrect-{{ $report->id }}"
-                            >Incorrect</a>
+                            >
+                                <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                                Incorrect
+                            </a>
+                            
                             <a class="btn btn-outline-warning{{ $report->decided ? ' disabled' : '' }}"
                                href="#"
                                data-toggle="modal"
                                data-target="#report-ignore-{{ $report->id }}"
-                            >Ignore</a>
+                            ><i class="fa fa-ban" aria-hidden="true"></i></a>
+                            
                             <a class="btn btn-outline-danger{{ $report->decided ? ' disabled' : '' }}"
                                href="#"
                                data-toggle="modal"
                                data-target="#report-delete-{{ $report->id }}"
-                            >Delete</a>
-                        @endif
-                    @endauth
+                            ><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        @endauth
+                    </div>
                 </div>
             </div>
         </div>

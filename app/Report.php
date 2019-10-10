@@ -14,7 +14,7 @@ use Nicolaslopezj\Searchable\SearchableTrait;
  * @property-read mixed     $demo_filename
  * @property-read \App\User $reporter
  * @property-read \App\User $target
- * @property Carbon  created_at
+ * @property Carbon         created_at
  * @method static \Illuminate\Database\Eloquent\Builder|Report newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Report newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Report query()
@@ -56,7 +56,10 @@ class Report extends Model
 		$total = Report::whereNotNull('decision')->count();
 		$correct = Report::where('decision', 1)->count();
 
-		return $correct / $total;
+		if ($total === 0)
+			return 0;
+		else
+			return $correct / $total;
 	}
 
 	public function target()
