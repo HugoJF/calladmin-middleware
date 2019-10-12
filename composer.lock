@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "41f714c768d541640edf41fe6b4ae187",
+    "content-hash": "bcc9ec3bd9b417e1d030ce008a98a71f",
     "packages": [
         {
             "name": "anlutro/l4-settings",
@@ -4390,6 +4390,47 @@
                 "environment"
             ],
             "time": "2019-01-29T11:11:52+00:00"
+        },
+        {
+            "name": "xpaw/steamid",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xPaw/SteamID.php.git",
+                "reference": "2a7cea536dffb0326a95d9c94febe2b3f9897e59"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xPaw/SteamID.php/zipball/2a7cea536dffb0326a95d9c94febe2b3f9897e59",
+                "reference": "2a7cea536dffb0326a95d9c94febe2b3f9897e59",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gmp": "*",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "dev-master",
+                "phpunit/phpunit": "4.7.x-dev"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "SteamID.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pavel Djundik",
+                    "email": "steamid.php@xpaw.me"
+                }
+            ],
+            "description": "SteamID conversion library",
+            "time": "2015-10-20T09:48:55+00:00"
         },
         {
             "name": "zendframework/zend-diactoros",

@@ -37,7 +37,7 @@ Route::prefix('reports')->name('reports.')->group(function () {
 
 Route::prefix('my-reports')->middleware(['auth'])->name('my-reports.')->group(function () {
 	Route::get('/', 'MyReportsController@index')->name('index');
-//	Route::get('/list', 'MyReportsController@list')->name('list');
+	//	Route::get('/list', 'MyReportsController@list')->name('list');
 	Route::get('{report}/ack', 'MyReportsController@ack')->name('ack');
 	Route::post('{report}/acked', 'MyReportsController@acked')->name('acked');
 });

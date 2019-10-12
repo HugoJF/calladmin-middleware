@@ -4,7 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Classes\SteamID;
 use App\Events\ReportCreated;
+use App\Exceptions\AlreadyDecidedException;
+use App\Exceptions\InvalidDecisionException;
+use App\Exceptions\MissingVideoUrlException;
+use App\Exceptions\InvolvedInReportException;
 use App\Report;
+use App\ReportService;
+use App\Services\VoteService;
 use App\User;
 use App\Vote;
 use DB;
@@ -55,7 +61,9 @@ class ReportsController extends Controller
 
 	public function search(Request $request)
 	{
-		$finds = Report::search($request->input('search'))->get();
+		$term = $request->input('search');
+
+		$finds = Report::search($term)->get();
 
 		return view('reports.search', [
 			'reports' => $finds,
@@ -111,93 +119,66 @@ class ReportsController extends Controller
 		return ['message' => 'Report created'];
 	}
 
-	public function decision(Request $request, Report $report)
+	/**
+	 * @param ReportService $service
+	 * @param Request       $request
+	 * @param Report        $report
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 * @throws InvalidDecisionException
+	 */
+	public function decision(ReportService $service, Request $request, Report $report)
 	{
-		$values = ['correct' => true, 'incorrect' => false];
+		$reason = $request->input('reason');
+		$duration = $request->input('duration');
 		$decision = $request->input('decision');
 
-		if (!array_key_exists($decision, $values)) {
-			flash()->error('Invalid decision!');
-
-			return back();
-		}
-
-		// TODO: make this an event
-		if ($values[ $decision ]) {
-			try {
-				$this->addBan($report, $request->input('reason'), intval($request->input('duration')));
-			} catch (\Exception $e) {
-				flash()->error($e->getMessage());
-
-				return back();
-			}
-		}
-
-		$report->decision = $values[ $decision ];
-		$report->save();
+		$service->decide($report, $decision, $duration, $reason);
 
 		flash()->success('Report decided successfully!');
 
 		return back();
 	}
 
-	public function vote(Request $request, Report $report)
+	/**
+	 * @param ReportService $service
+	 * @param VoteService   $voteService
+	 * @param Request       $request
+	 * @param Report        $report
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 * @throws AlreadyDecidedException
+	 * @throws InvalidDecisionException
+	 * @throws InvolvedInReportException
+	 */
+	public function vote(ReportService $service, VoteService $voteService, Request $request, Report $report)
 	{
+		$decision = $service->translateDecision($request->input('decision'));
+
+		$isReporter = steamid64(Auth::user()->steamid) === steamid64($report->reporter_steam_id);
+		$isTarget = steamid64(Auth::user()->steamid) === steamid64($report->target_steam_id);
+
+		// Check if user is actually involved
+		if ($isReporter || $isTarget)
+			throw new InvolvedInReportException();
+
+		// Check if report is already decided
+		if ($report->decided)
+			throw new AlreadyDecidedException();
+
 		/** @var Vote $vote */
-
-		$values = ['correct' => true, 'incorrect' => false];
-		$decision = $request->input('decision');
-
-		$isReporter = SteamID::normalizeSteamID64(Auth::user()->steamid) === SteamID::normalizeSteamID64($report->reporter_steam_id);
-		$isTarget = SteamID::normalizeSteamID64(Auth::user()->steamid) === SteamID::normalizeSteamID64($report->target_steam_id);
-
-		if ($isReporter || $isTarget) {
-			flash()->error('You cannot vote a report that you are involved');
-
-			return back();
-		}
-
-		if ($report->decided) {
-			flash()->error('You cannot vote reports that are already decided!');
-
-			return back();
-		}
-
-		if (!array_key_exists($decision, $values)) {
-			flash()->error('Invalid decision!');
-
-			return back();
-		}
-
 		$vote = $report->votes()->where('user_id', Auth::id())->first();
 
-		if ($vote && $vote->type === $values[ $decision ]) {
-			$vote->delete();
-
-			flash()->success('Vote deleted successfully!');
-
-			return back();
+		// Handle vote
+		if ($vote && $vote->type === $decision) {
+			$voteService->delete($vote);
 		} else if ($vote) {
-			$vote->type = $values[ $decision ];
-
-			$vote->save();
-
-			flash()->success('Vote updated successfully!');
-
-			return back();
+			$voteService->update($vote, $decision);
 		} else {
-			$vote = Vote::make();
-
-			$vote->type = $values[ $decision ];
-			$vote->user()->associate(Auth::user());
-			$vote->report()->associate($report);
-
-			$vote->save();
-
-			flash()->success('Vote registered successfully!');
-
-			return back();
+			$voteService->create($report, $decision);
 		}
+
+		return back();
 	}
 
 	private function findOrCreate($id, $username)
@@ -218,61 +199,9 @@ class ReportsController extends Controller
 		return $user;
 	}
 
-	/**
-	 * @param Report $report
-	 * @param        $reason
-	 * @param        $duration
-	 *
-	 * @throws \Exception
-	 */
-	protected function addBan(Report $report, $reason, $duration)
+	public function ignore(ReportService $service, Report $report)
 	{
-		// Get the end of the SteamID
-		preg_match('/STEAM_\d:\d:(\d+)/i', Auth::user()->steamid, $matches);
-
-		// Check if it was split correctly
-		if (count($matches) !== 2)
-			throw new \Exception('Could not validate admin SteamID3');
-
-		// Search for admin ID on SourceBans table
-		$adminId = $matches[1];
-		$adminInfo = DB::connection('sourcebans_pp')->table('sb_admins')->where('authid', 'like', "%$adminId")->first(['aid']);
-
-		// Check if admin exists
-		if (is_null($adminInfo))
-			throw new \Exception('You are trying to add a ban but no admin information could be found! Tell de_nerd to add you as a admin on SourceBans!');
-
-		// Build URL to report
-		$url = route('reports.show', $report);
-
-		// Insert ban
-		DB::connection('sourcebans_pp')->table('sb_bans')->insert([
-			'ip'         => '',
-			'authid'     => $report->target->steamid,
-			'name'       => $report->target->username,
-			'created'    => Carbon::now()->timestamp,
-			'ends'       => Carbon::now()->timestamp + $duration,
-			'length'     => $duration,
-			'reason'     => "[Calladmin-Middleware] $reason ($url)",
-			'aid'        => $adminInfo->aid,
-			'adminIp'    => '',
-			'country'    => null,
-			'RemovedBy'  => null,
-			'RemoveType' => null,
-			'RemovedOn'  => null,
-			'type'       => 0,
-			'ureason'    => null,
-		]);
-
-		// Kick players
-		CsgoApi::all()->execute("sm_kick \"#{$report->target->steamid}\" \"Kickado por decisão de report no CallAdmin-Middleware\"", 0, false)->send();
-	}
-
-	public function ignore(Report $report)
-	{
-		$report->ignored_at = Carbon::now();
-
-		$ignored = $report->save();
+		$ignored = $service->ignoreReport($report);
 
 		if ($ignored) {
 			flash()->success('Report ignored successfully!');
@@ -283,21 +212,22 @@ class ReportsController extends Controller
 		return back();
 	}
 
-	public function attachVideo(Request $request, Report $report)
+	/**
+	 * @param ReportService $service
+	 * @param Request       $request
+	 * @param Report        $report
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 * @throws MissingVideoUrlException
+	 */
+	public function attachVideo(ReportService $service, Request $request, Report $report)
 	{
-		if (!$request->has('url')) {
-			flash()->error('Missing video URL');
+		if (!$request->has('url'))
+			throw new MissingVideoUrlException();
 
-			return back();
-		}
 		$url = $request->input('url');
-		if (preg_match('/v=(.+)$/', $url, $matches)) {
-			$url = $matches[1];
-		}
 
-		$report->video_url = $url;
-
-		$report->save();
+		$service->attachVideo($report, $url);
 
 		flash()->success("Video ID <strong>$url</strong> attached!");
 
@@ -332,18 +262,20 @@ class ReportsController extends Controller
 					 });
 	}
 
-	public function attachVideoApi(Request $request, Report $report)
+	public function attachVideoApi(ReportService $service, Request $request, Report $report)
 	{
-		$url = $request->input('url');
-
-		if (preg_match('/v=(.+)$/', $url, $matches)) {
-			$url = $matches[1];
-		}
-
-		$report->video_url = $url;
-
-		$report->save();
+		$service->attachVideo($report, $request->input('url'));
 
 		return $report;
+	}
+
+	public function attachChat(ReportService $service, Request $request, Report $report)
+	{
+		$service->attachChat($report, $request->all());
+	}
+
+	public function attachPlayerData(ReportService $service, Request $request, Report $report)
+	{
+		$service->attachPlayerData($report, $request->all());
 	}
 }

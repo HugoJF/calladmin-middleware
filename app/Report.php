@@ -37,7 +37,9 @@ class Report extends Model
 	];
 
 	protected $casts = [
-		'vip' => 'bool',
+		'vip'         => 'bool',
+		'chat'        => 'array',
+		'player_data' => 'array',
 	];
 
 	protected $fillable = [

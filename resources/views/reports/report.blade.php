@@ -22,6 +22,8 @@
 
 <div class="row border {{ $report->acked_at ? '' : 'border-primary' }} rounded bg-light p-3 mb-3">
     <div class="col-12 mb-2 d-flex">
+        
+        <!-- Vote arrows -->
         <div class="col d-flex flex-grow-0 align-items-center flex-column justify-content-center">
             @auth
                 <h1 title="Vote report as CORRECT">
@@ -39,8 +41,12 @@
                 </h1>
             @endauth
         </div>
+        
+        <!-- Main report body -->
         <div class="col d-flex flex-grow-1">
             <div class="row flex-grow-1">
+                
+                <!-- Reporter information card -->
                 <div class="col">
                     <h5 class="mb-2">Reporter:</h5>
                     <p class="mb-0">
@@ -65,6 +71,8 @@
                         @endif
                     </h3>
                 </div>
+                
+                <!-- Target information card -->
                 <div class="col">
                     <h5 class="mb-2">Target:</h5>
                     <p class="mb-0">
@@ -143,6 +151,41 @@
             </div>
         </div>
     </div>
+    
+    @if($report->player_data)
+        <div class="col-6">
+            <h3>Players</h3>
+            <table class="table table-sm">
+                <tbody>
+                @foreach ($report->player_data ?? [] as $player)
+                    <tr>
+                        <td><code>{{ $player['steamid'] }}</code></td>
+                        <td>{{ $player['name'] }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+    
+    @if($report->chat)
+        <div class="col-6">
+            <h3>Chat messages</h3>
+            <ul class="pl-4 list-unstyled">
+                @foreach ($report->chat as $chat)
+                    @php
+                        $message = preg_split('/:/', $chat['message'])
+                    @endphp
+                    @if(count($message) === 2)
+                        <li class="my-1"><strong>{{ preg_replace('/\*DEAD\*|\(Counter-Terrorist\)\s|\(Terrorist\)\s/', '', $message[0]) }}: </strong>{{ $message[1] }}</li>
+                    @else
+                        <li>{{ $chat['message'] }}</li>
+                    @endif
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
     @if($report->video_url)
         <div class="col-12">
             <h3>Demo recording</h3>
