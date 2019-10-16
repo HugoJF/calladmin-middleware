@@ -117,12 +117,12 @@ class Report extends Model
 
 	public function getPlayerDataAttribute($value)
 	{
-		return json_decode($value);
+		return json_decode($value, true);
 	}
 
 	public function getChatAttribute($value)
 	{
-		return json_decode($value);
+		return json_decode($value, true);
 	}
 
 	public function setPlayerDataAttribute($value)
