@@ -272,10 +272,14 @@ class ReportsController extends Controller
 	public function attachChat(ReportService $service, Request $request, Report $report)
 	{
 		$service->attachChat($report, $request->all());
+
+		return ['success' => true];
 	}
 
 	public function attachPlayerData(ReportService $service, Request $request, Report $report)
 	{
 		$service->attachPlayerData($report, $request->all());
+
+		return ['success' => true];
 	}
 }

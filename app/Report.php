@@ -127,12 +127,12 @@ class Report extends Model
 
 	public function setPlayerDataAttribute($value)
 	{
-		$this->player_data = json_encode($value);
+		$this->attributes['player_data'] = json_encode($value);
 	}
 
 	public function setChatAttribute($value)
 	{
-		$this->chat = json_encode($value);
+		$this->attributes['chat'] = json_encode($value);
 	}
 
 	public function getScoreAttribute()
