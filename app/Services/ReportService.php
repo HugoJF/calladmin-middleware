@@ -96,12 +96,14 @@ class ReportService
 	 * @param        $duration
 	 * @param        $reason
 	 *
+	 * @return \Illuminate\Http\RedirectResponse
 	 * @throws InvalidDecisionException
 	 */
-	public function decide(Report $report, string $decision, $duration, $reason): void
+	public function decide(Report $report, string $decision, $duration, $reason)
 	{
+		$decision = $this->translateDecision($decision);
 		// TODO: make this an event
-		if ($this->translateDecision($decision)) {
+		if ($decision) {
 			try {
 				$this->banUser($report, $duration, $reason);
 			} catch (Exception $e) {
@@ -111,7 +113,7 @@ class ReportService
 			}
 		}
 
-		$report->decision = $values[ $decision ];
+		$report->decision = $decision;
 		$report->save();
 	}
 }
