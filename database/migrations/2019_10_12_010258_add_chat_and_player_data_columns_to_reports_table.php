@@ -14,8 +14,8 @@ class AddChatAndPlayerDataColumnsToReportsTable extends Migration
     public function up()
     {
         Schema::table('reports', function (Blueprint $table) {
-        	$table->json('chat')->nullable();
-        	$table->json('player_data')->nullable();
+        	$table->text('chat')->nullable();
+        	$table->text('player_data')->nullable();
         });
     }
 

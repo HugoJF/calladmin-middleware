@@ -115,6 +115,26 @@ class Report extends Model
 		return $this->decision === null;
 	}
 
+	public function getPlayerDataAttribute($value)
+	{
+		return json_decode($value);
+	}
+
+	public function getChatAttribute($value)
+	{
+		return json_decode($value);
+	}
+
+	public function setPlayerDataAttribute($value)
+	{
+		$this->player_data = json_encode($value);
+	}
+
+	public function setChatAttribute($value)
+	{
+		$this->chat = json_encode($value);
+	}
+
 	public function getScoreAttribute()
 	{
 		$score = $this->votes->reduce(function ($acc, $cur) {

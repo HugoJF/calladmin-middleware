@@ -24,11 +24,11 @@ class ReportService
 
 	/**
 	 * @param Report $report
-	 * @param array  $chat
+	 * @param array  $playerData
 	 */
-	public function attachPlayerData(Report $report, array $chat)
+	public function attachPlayerData(Report $report, array $playerData)
 	{
-		$report->player_data = $chat;
+		$report->player_data = $playerData;
 
 		$report->save();
 	}
