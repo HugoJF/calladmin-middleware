@@ -28,6 +28,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
 
+		$schedule->command('videos:search')->everyFiveMinutes();
 		$schedule->job(new KickPlayersWithPendingAck())->everyMinute();
     }
 
