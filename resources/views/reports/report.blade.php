@@ -191,14 +191,21 @@
             <h3>Demo recording</h3>
             <div class="p-4 w-100">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <iframe
-                            id="ytplayer"
-                            type="text/html"
-                            width="100%"
-                            allowfullscreen
-                            src="https://www.youtube.com/embed/{{ $report->video_url }}?autoplay=0&rel=0&showinfo=0"
-                            frameborder="0"
-                    >
+                    @if(strncmp($report->video_url, 'youtube:', 8) === 0)
+                        <iframe
+                                id="ytplayer"
+                                type="text/html"
+                                width="100%"
+                                allowfullscreen
+                                src="https://www.youtube.com/embed/{{ str_replace('youtube:', '', $report->video_url) }}?autoplay=0&rel=0&showinfo=0"
+                                frameborder="0"
+                        >
+                    @elseif(strncmp($report->video_url, 'html:', 5) === 0)
+                        <video controls>
+                            <source src="{{ str_replace('html:', '', $report->video_url) }}" type="video/mp4">
+                        </video>
+                    @endif
+                    
                     </iframe>
                 </div>
             </div>

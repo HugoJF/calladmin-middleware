@@ -42,9 +42,11 @@ class ReportService
 
 		if (preg_match('/v=(.+)$/', $url, $matches)) {
 			$url = $matches[1];
+			$report->video_url = "youtube:$url";
+		} else {
+			$report->video_url = "html:$url";
 		}
 
-		$report->video_url = $url;
 
 		$report->save();
 	}
