@@ -44,7 +44,7 @@ class SearchForVideos extends Command
 	 */
 	public function handle()
 	{
-		$reports = Report::query()->where('video_url', '')->whereNull('decision')->whereNull('ignored_at')->get();
+		$reports = Report::query()->whereNull('video_url')->whereNull('decision')->whereNull('ignored_at')->get();
 
 		$client = new Client();
 
