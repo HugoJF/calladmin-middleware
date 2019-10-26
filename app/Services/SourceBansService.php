@@ -29,7 +29,7 @@ class SourceBansService
 		if (is_null($adminInfo))
 			throw new MissingAdminOnSourceBansException();
 
-		return $adminInfo['aid'];
+		return $adminInfo->aid;
 	}
 
 	public function insertBan(Report $report, User $admin, $duration, $reason, $url)
