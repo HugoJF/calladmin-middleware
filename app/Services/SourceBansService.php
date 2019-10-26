@@ -34,7 +34,7 @@ class SourceBansService
 
 	public function insertBan(Report $report, User $admin, $duration, $reason, $url)
 	{
-		$aid = $this->getUserAid($admin);
+		$aid = $this->getUserAid($admin->steamid);
 
 		DB::connection('sourcebans_pp')->table('sb_bans')->insert([
 			'ip'         => '',

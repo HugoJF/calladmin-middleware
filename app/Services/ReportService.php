@@ -76,7 +76,7 @@ class ReportService
 		$url = route('reports.show', $report);
 
 		// Insert ban
-		$sb->insertBan($report, Auth::user()->steamid, $duration, $reason, $url);
+		$sb->insertBan($report, Auth::user(), $duration, $reason, $url);
 
 		// Kick players
 		CsgoApi::all()->execute("sm_kick \"#{$report->target->steamid}\" \"Kickado por decisão de report no CallAdmin-Middleware\"", 0, false)->send();
