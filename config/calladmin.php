@@ -1,5 +1,5 @@
 <?php
 
 return [
-	'minio' => 'https://minio.delta.denerdtv.com/calladmin/video/',
+	'minio' => env('VIDEO_REPOSITORY_URL', 'https://minio.epsilon.denerdtv.com/calladmin/video/'),
 ];
