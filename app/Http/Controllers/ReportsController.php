@@ -48,11 +48,7 @@ class ReportsController extends Controller
 
 	public function show(Report $report)
 	{
-		$report->load([
-			'votes' => function ($query) {
-				$query->where('user_id', Auth::id());
-			},
-		]);
+		$report->load(['votes']);
 
 		return view('reports.show', [
 			'report' => $report,
