@@ -3,33 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\Notifications\NewComment;
 use App\Report;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Notification;
 
 class CommentController extends Controller
 {
-	public function store(Request $request, Report $report)
-	{
-		$comment = Comment::make();
+    public function store(Request $request, Report $report)
+    {
+        $comment = Comment::make();
 
-		$comment->comment = $request->input('comment');
-		$comment->report()->associate($report);
-		$comment->user()->associate(Auth::user());
+        $comment->comment = $request->input('comment');
+        $comment->report()->associate($report);
+        $comment->user()->associate(Auth::user());
 
-		$comment->save();
+        $comment->save();
 
-		flash()->success('Comment saved successfully!');
+        $admins = User::where('admin', true)->get();
+        Notification::send($admins, new NewComment($comment));
 
-		return back();
-	}
+        flash()->success('Comment saved successfully!');
 
-	public function destroy(Report $report, Comment $comment)
-	{
-		$comment->delete();
+        return back();
+    }
 
-		flash()->success('Comment was deleted successfully!');
+    public function destroy(Report $report, Comment $comment)
+    {
+        $comment->delete();
 
-		return back();
-	}
+        flash()->success('Comment was deleted successfully!');
+
+        return back();
+    }
 }

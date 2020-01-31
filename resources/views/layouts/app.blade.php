@@ -7,17 +7,17 @@
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
     <title>CallAdmin Middleware</title>
-    
+
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('/css/custom.css') }}">
-    
+
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -27,7 +27,7 @@
             -ms-user-select: none;
             user-select: none;
         }
-        
+
         @media (min-width: 768px) {
             .bd-placeholder-img-lg {
                 font-size: 3.5rem;
@@ -65,6 +65,24 @@
                 <a class="nav-link" href="{{ route('users.index') }}">Users</a>
             </li>
         </ul>
+        @if(auth()->check())
+            <div class="mr-4 position-relative">
+                <a href="{{ route('notifications.index') }}">
+                    @if($notificationCount > 0)
+                        <h3 class="text-white">
+                            <i class="fas fa-envelope-open-text"></i>
+                        </h3>
+                        <span class="badge badge-primary position-absolute" style="left: -8px;bottom: -2px;">
+                           {{ $notificationCount }}
+                        </span>
+                    @else
+                        <h3 class="text-white-50">
+                            <i class="fas fa-envelope"></i>
+                        </h3>
+                    @endif
+                </a>
+            </div>
+        @endif
         <form class="form-inline mt-2 mt-md-0" method="GET" action="{{ route('search') }}">
             <input class="form-control mr-sm-2" name="search" type="text" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -87,7 +105,7 @@
         @endforeach
     @endif
     @include('flash::message')
-    
+
     @yield('content')
 </main>
 
