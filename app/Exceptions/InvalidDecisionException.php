@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class InvalidDecisionException extends FlashException
 {
