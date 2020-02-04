@@ -26,7 +26,6 @@ class CommentCreated implements NotifiesAssociatedUsers
      */
     public function __construct(Comment $comment)
     {
-        //
         $this->comment = $comment;
     }
 
@@ -35,7 +34,7 @@ class CommentCreated implements NotifiesAssociatedUsers
      */
     public function getAssociatedUsers()
     {
-        return User::where('admin', true)->get();
+        return admins();
     }
 
     /**

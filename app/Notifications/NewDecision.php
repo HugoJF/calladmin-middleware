@@ -61,7 +61,7 @@ class NewDecision extends Notification
     {
         $decision = $this->report->decision ? 'correct' : 'incorrect';
         return [
-            'icon'     => 'far fa-check-square',
+            'icon'     => 'fas fa-check-square',
             'title'    => 'Report decided',
             'body'     => "Report <strong>{$this->report->id}</strong> was decided as <strong>{$decision}</strong>",
             'view_url' => route('reports.show', $this->report),

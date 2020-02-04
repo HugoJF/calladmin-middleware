@@ -34,7 +34,7 @@ class ReportDecided implements NotifiesAssociatedUsers
      */
     public function getAssociatedUsers()
     {
-        return User::where('admin', true)->get();
+        return admins();
     }
 
     /**
