@@ -26,7 +26,7 @@
     "laravel/tinker": "^1.0",
     "laravelcollective/html": "^5.4.0",
     "nicolaslopezj/searchable": "1.*",
-    "sentry/sentry-laravel": "1.0.2",
+    "sentry/sentry-laravel": "1.6.1",
     "xpaw/steamid": "^1.0"
   },
   "require-dev": {
