@@ -34,7 +34,9 @@ class ReportDecided implements NotifiesAssociatedUsers
      */
     public function getAssociatedUsers()
     {
-        return admins();
+        return admins()
+            ->add($this->report->reporter)
+            ->add($this->report->target);
     }
 
     /**

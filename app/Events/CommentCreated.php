@@ -34,7 +34,9 @@ class CommentCreated implements NotifiesAssociatedUsers
      */
     public function getAssociatedUsers()
     {
-        return admins();
+        return admins()
+            ->add($this->comment->report->reporter)
+            ->add($this->comment->report->target);
     }
 
     /**
