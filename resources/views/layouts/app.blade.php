@@ -83,13 +83,18 @@
                 </a>
             </div>
         @endif
+
         <form class="form-inline mt-2 mt-md-0" method="GET" action="{{ route('search') }}">
             <input class="form-control mr-sm-2" name="search" type="text" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
+
+        <a class="btn btn-outline-primary ml-2" href="{{ route('users.settings') }}"><i class="fas fa-user-cog mr-1"></i>Settings</a>
+
         @guest
             <a class="btn btn-outline-primary my-2 ml-2" href="{{ route('redirect-to-steam') }}">Login</a>
         @endguest
+
         @auth
             <a class="btn btn-outline-danger my-2 ml-2" href="{{ route('logout') }}">Logout</a>
         @endauth

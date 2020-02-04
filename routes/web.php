@@ -43,6 +43,11 @@ Route::prefix('my-reports')->middleware(['auth'])->name('my-reports.')->group(fu
 });
 
 Route::prefix('users')->name('users.')->group(function () {
+    Route::prefix('settings')->group(function () {
+        Route::get('/', 'UsersController@settings')->name('settings');
+        Route::patch('/', 'UsersController@updateSettings')->name('settings.update');
+    });
+
     Route::get('/', 'UsersController@index')->name('index')->middleware('can:index,App\User');
     Route::get('{user}', 'UsersController@show')->name('show')->middleware('can:show,user');
 
