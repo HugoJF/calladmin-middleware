@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\Events\CommentCreated;
 use App\Notifications\NewComment;
 use App\Report;
 use App\User;
@@ -22,8 +23,7 @@ class CommentController extends Controller
 
         $comment->save();
 
-        $admins = User::where('admin', true)->get();
-        Notification::send($admins, new NewComment($comment));
+        event(new CommentCreated($comment));
 
         flash()->success('Comment saved successfully!');
 
