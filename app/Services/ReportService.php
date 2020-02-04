@@ -39,14 +39,12 @@ class ReportService
 	 */
 	public function attachVideo(Report $report, string $url)
 	{
-
 		if (preg_match('/v=(.+)$/', $url, $matches)) {
 			$url = $matches[1];
 			$report->video_url = "youtube:$url";
 		} else {
 			$report->video_url = "html:$url";
 		}
-
 
 		$report->save();
 	}
@@ -60,7 +58,7 @@ class ReportService
 	{
 		$report->ignored_at = Carbon::now();
 
-		return $report->save();;
+		return $report->save();
 	}
 
 	/**
@@ -115,6 +113,7 @@ class ReportService
 			}
 		}
 
+		$report->decider()->associate(auth()->user());
 		$report->decision = $decision;
 		$report->save();
 	}

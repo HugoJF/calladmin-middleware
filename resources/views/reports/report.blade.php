@@ -12,7 +12,7 @@
             $voteDown = 'danger';
         }
     }
-    
+
     $badges = [
         -1 => 'danger',
         0 => 'dark',
@@ -20,9 +20,9 @@
     ];
 @endphp
 
-<div class="row border {{ $report->acked_at ? '' : 'border-primary' }} rounded bg-light p-3 mb-3">
+<div class="row border rounded bg-light p-3 mb-3">
     <div class="col-12 mb-2 d-flex">
-        
+
         <!-- Vote arrows -->
         <div class="col d-flex flex-grow-0 align-items-center flex-column justify-content-center">
             @auth
@@ -41,11 +41,11 @@
                 </h1>
             @endauth
         </div>
-        
+
         <!-- Main report body -->
         <div class="col d-flex flex-grow-1">
             <div class="row flex-grow-1">
-                
+
                 <!-- Reporter information card -->
                 <div class="col">
                     <h5 class="mb-2">Reporter:</h5>
@@ -59,6 +59,11 @@
                     <p>
                         Reason: <code>{{ $report->reason }}</code>
                     </p>
+                    @if($report->decision !== null && $report->decider_id)
+                        <p>
+                            Decider: <code>{{ $report->decider->username ?? $report->decider->name }}</code>
+                        </p>
+                    @endif
                     <h3>
                         @if($report->correct)
                             <span class="badge badge-success">CORRECT REPORT</span>
@@ -70,8 +75,9 @@
                             <span class="badge badge-dark">PENDING DECISION</span>
                         @endif
                     </h3>
+                    @include('reports.partials.ack')
                 </div>
-                
+
                 <!-- Target information card -->
                 <div class="col">
                     <h5 class="mb-2">Target:</h5>
@@ -115,7 +121,7 @@
                                 <i class="fa fa-download" aria-hidden="true"></i>
                                 Demo
                             </a>
-                            
+
                             <a class="btn btn-outline-success{{ $report->decided ? ' disabled' : '' }}"
                                href="#"
                                data-toggle="modal"
@@ -124,7 +130,7 @@
                                 <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                                 Correct
                             </a>
-                            
+
                             <a class="btn btn-outline-danger{{ $report->decided ? ' disabled' : '' }}"
                                href="#"
                                data-toggle="modal"
@@ -133,13 +139,13 @@
                                 <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                                 Incorrect
                             </a>
-                            
+
                             <a class="btn btn-outline-warning{{ $report->decided ? ' disabled' : '' }}"
                                href="#"
                                data-toggle="modal"
                                data-target="#report-ignore-{{ $report->id }}"
                             ><i class="fa fa-ban" aria-hidden="true"></i></a>
-                            
+
                             <a class="btn btn-outline-danger{{ $report->decided ? ' disabled' : '' }}"
                                href="#"
                                data-toggle="modal"
@@ -151,7 +157,7 @@
             </div>
         </div>
     </div>
-    
+
     @if($report->player_data)
         <div class="col-6">
             <h3>Players</h3>
@@ -167,7 +173,7 @@
             </table>
         </div>
     @endif
-    
+
     @if($report->chat)
         <div class="col-6">
             <h3>Chat messages</h3>
@@ -185,7 +191,7 @@
             </ul>
         </div>
     @endif
-    
+
     @if($report->video_url)
         <div class="col-12">
             <h3>Demo recording</h3>
@@ -193,25 +199,25 @@
                 <div class="embed-responsive embed-responsive-16by9">
                     @if(strncmp($report->video_url, 'youtube:', 8) === 0)
                         <iframe
-                                id="ytplayer"
-                                type="text/html"
-                                width="100%"
-                                allowfullscreen
-                                src="https://www.youtube.com/embed/{{ str_replace('youtube:', '', $report->video_url) }}?autoplay=0&rel=0&showinfo=0"
-                                frameborder="0"
+                            id="ytplayer"
+                            type="text/html"
+                            width="100%"
+                            allowfullscreen
+                            src="https://www.youtube.com/embed/{{ str_replace('youtube:', '', $report->video_url) }}?autoplay=0&rel=0&showinfo=0"
+                            frameborder="0"
                         >
-                    @elseif(strncmp($report->video_url, 'html:', 5) === 0)
-                        <video controls>
-                            <source src="{{ str_replace('html:', '', $report->video_url) }}" type="video/mp4">
-                        </video>
-                    @endif
-                    
-                    </iframe>
+                            @elseif(strncmp($report->video_url, 'html:', 5) === 0)
+                                <video controls>
+                                    <source src="{{ str_replace('html:', '', $report->video_url) }}" type="video/mp4">
+                                </video>
+                            @endif
+
+                        </iframe>
                 </div>
             </div>
         </div>
     @endif
-    
+
     @if(Auth::check())
         <div class="col-12">
             <h3>Comments</h3>
@@ -237,7 +243,7 @@
     $hour = 60 * $minute;
     $day = 24 * $hour;
     $month = 30 * $day;
-    
+
     $durationsHours = [
         [
             'title' => '1 hour',
@@ -306,7 +312,7 @@
             'duration' => 0,
         ]
     ];
-    
+
     $durations = [$durationsHours, $durationsDays, $durationMonths];
 @endphp
 
@@ -330,7 +336,7 @@
                     </div>
                     <div class="modal-footer border-top-0">
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        
+
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     </div>
                     {!! Form::close() !!}
@@ -374,7 +380,7 @@
                 <div class="modal-footer border-top-0">
                     {!! Form::hidden('decision', 'correct') !!}
                     <button type="submit" class="btn btn-primary">Correct</button>
-                    
+
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
                 {!! Form::close() !!}
@@ -398,7 +404,7 @@
                     {!! Form::hidden('decision', 'incorrect') !!}
                     <button type="submit" class="btn btn-danger">Incorrect</button>
                     {!! Form::close() !!}
-                    
+
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
             </div>

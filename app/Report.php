@@ -84,6 +84,11 @@ class Report extends Model
 		return $this->hasMany(Comment::class);
 	}
 
+    public function decider()
+    {
+        return $this->belongsTo(User::class);
+	}
+
 	public function scopeUndecided($query)
 	{
 		/** @var Builder $query */

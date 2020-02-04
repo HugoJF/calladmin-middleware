@@ -263,4 +263,9 @@ use Notifiable;
 	{
 		return $this->hasMany(Vote::class);
 	}
+
+    public function decisions()
+    {
+        return $this->hasMany(Report::class, 'decider_id');
+	}
 }
