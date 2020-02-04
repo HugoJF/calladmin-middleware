@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\ReportDecided;
 use App\Exceptions\InvalidDecisionException;
 use App\Http\Controllers\SourceBansService;
 use Exception;
@@ -116,5 +117,7 @@ class ReportService
 		$report->decider()->associate(auth()->user());
 		$report->decision = $decision;
 		$report->save();
+
+		event(new ReportDecided($report));
 	}
 }

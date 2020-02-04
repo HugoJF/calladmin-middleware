@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\CommentCreated;
 use App\Events\ReportCreated;
+use App\Events\ReportDecided;
 use App\Listeners\NotifyAssociatedUsers;
 use App\Listeners\NotifyDiscord;
 use App\Listeners\TriggerGotvRecording;
@@ -30,6 +31,9 @@ class EventServiceProvider extends ServiceProvider
         CommentCreated::class => [
             NotifyAssociatedUsers::class,
         ],
+        ReportDecided::class => [
+            NotifyAssociatedUsers::class,
+        ]
     ];
 
     /**
@@ -40,6 +44,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-        //
     }
 }
