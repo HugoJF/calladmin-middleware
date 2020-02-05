@@ -49,9 +49,10 @@ class NewComment extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+            ->from('calladmin@denerdtv.com', 'CallAdmin-Middleware')
+            ->subject('New comment')
+            ->line("A new comment was posted on report {$this->comment->report->id}")
+            ->action('View comment', route('reports.show', $this->comment->report));
     }
 
     /**
