@@ -7,7 +7,7 @@
     </div>
 
     <table class="table">
-        @foreach ($notifications ?? [] as $notification)
+        @forelse ($notifications ?? [] as $notification)
             <tr>
                 <!-- Unread dot -->
                 <td class="align-middle text-primary">
@@ -53,7 +53,13 @@
                     </div>
                 </td>
             </tr>
-        @endforeach
+        @empty
+            <tr>
+                <td class="text-center" colspan="5">
+                    <h3 class="py-4">There are no notifications for you!</h3>
+                </td>
+            </tr>
+        @endforelse
     </table>
 
 @endsection

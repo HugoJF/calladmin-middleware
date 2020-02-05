@@ -13,11 +13,9 @@ use App\ReportService;
 use App\Services\VoteService;
 use App\User;
 use App\Vote;
-use DB;
-use hugojf\CsgoServerApi\Facades\CsgoApi;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Notification;
 
 class ReportsController extends Controller
 {
