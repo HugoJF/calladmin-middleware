@@ -97,7 +97,7 @@ class ReportService
 	 * @param        $duration
 	 * @param        $reason
 	 *
-	 * @return \Illuminate\Http\RedirectResponse
+	 * @return bool
 	 * @throws InvalidDecisionException
 	 */
 	public function decide(Report $report, string $decision, $duration, $reason)
@@ -110,7 +110,7 @@ class ReportService
 			} catch (Exception $e) {
 				flash()->error($e->getMessage());
 
-				return back();
+				return false;
 			}
 		}
 
@@ -119,5 +119,7 @@ class ReportService
 		$report->save();
 
 		event(new ReportDecided($report));
+
+		return true;
 	}
 }
