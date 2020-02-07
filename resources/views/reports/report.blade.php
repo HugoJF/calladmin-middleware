@@ -84,7 +84,7 @@
                     @include('comments.comment', ['comment' => $comment])
                 @endforeach
             </div>
-            @if(!$commentsDisabled ?? true)
+            @if(!($commentsDisabled ?? false))
                 {!! Form::open(['url' => route('reports.comments.store', $report), 'method' => 'POST']) !!}
                     <div class="input-group mt-2 mb-1">
                         <textarea rows="1" name="comment" class="form-control" placeholder="Write a comment..." aria-label="comment"></textarea>

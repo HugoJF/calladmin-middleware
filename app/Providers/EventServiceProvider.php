@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\CommentCreated;
+use App\Events\ReportAcked;
 use App\Events\ReportCreated;
 use App\Events\ReportDecided;
 use App\Listeners\NotifyAssociatedUsers;
@@ -33,6 +34,9 @@ class EventServiceProvider extends ServiceProvider
             NotifyAssociatedUsers::class,
         ],
         ReportDecided::class => [
+            NotifyAssociatedUsers::class,
+        ],
+        ReportAcked::class => [
             NotifyAssociatedUsers::class,
         ]
     ];

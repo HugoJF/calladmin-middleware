@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\StatusCommand;
 use App\Classes\SteamID;
+use App\Events\ReportAcked;
 use App\Jobs\KickPlayersWithPendingAck;
 use App\Report;
-use hugojf\CsgoServerApi\Facades\CsgoApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -56,6 +55,8 @@ class MyReportsController extends Controller
 		$report->acked_at = Carbon::now();
 
 		$report->save();
+
+		event(new ReportAcked($report));
 
 		flash()->success('Obrigado por confirmar! Você está liberado para conectar em nossos servidores novamente.');
 
