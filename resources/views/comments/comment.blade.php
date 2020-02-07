@@ -4,7 +4,9 @@
         <div class="d-flex justify-content-between mb-1">
             <strong class="text-dark">{{ '@' }}{{ $comment->user->username }}</strong>
             {!! Form::open(['url' => route('reports.comments.delete', ['report' => $report, 'comment' => $comment]), 'method' => 'DELETE', 'class' => 'd-inline']) !!}
-            <button type="submit" class="btn btn-link btn-sm text-danger">Delete</button>
+            @if(auth()->check() && (auth()->user()->admin === true || auth()->id() === $comment->user_id))
+                <button type="submit" class="btn btn-link btn-sm text-danger">Delete</button>
+            @endif
             {!! Form::close() !!}
         </div>
         {!! nl2br(e($comment->comment)) !!}
