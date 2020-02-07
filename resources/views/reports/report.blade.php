@@ -10,9 +10,9 @@
     <div class="col-12 mb-2 d-flex">
 
         <!-- Vote arrows -->
-        @include('reports.partials.vote-arrows')
+    @include('reports.partials.vote-arrows')
 
-        <!-- Main report body -->
+    <!-- Main report body -->
         @include('reports.partials.body')
     </div>
 
@@ -84,14 +84,16 @@
                     @include('comments.comment', ['comment' => $comment])
                 @endforeach
             </div>
-            {!! Form::open(['url' => route('reports.comments.store', $report), 'method' => 'POST']) !!}
-            <div class="input-group mt-2 mb-1">
-                <textarea rows="1" name="comment" class="form-control" placeholder="Write a comment..." aria-label="comment"></textarea>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-primary" type="submit" id="comment-button">Submit comment</button>
-                </div>
-            </div>
-            {!! Form::close() !!}
+            @if(!$commentsDisabled ?? true)
+                {!! Form::open(['url' => route('reports.comments.store', $report), 'method' => 'POST']) !!}
+                    <div class="input-group mt-2 mb-1">
+                        <textarea rows="1" name="comment" class="form-control" placeholder="Write a comment..." aria-label="comment"></textarea>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit" id="comment-button">Submit comment</button>
+                        </div>
+                    </div>
+                {!! Form::close() !!}
+            @endif
         </div>
     @endif
 </div>

@@ -2,7 +2,7 @@
 
 @section('content')
     <h2 class="mb-2">Incorrect report acknowledgement</h2>
-    
-    @include('reports.report', $report)
-    @include('reports.ack-text', $report)
+
+    @include('reports.report', ['commentsDisabled' => true])
+    @include('reports.ack-text')
 @endsection
