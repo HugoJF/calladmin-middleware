@@ -17,10 +17,10 @@ class CreateVotesTable extends Migration
 			$table->increments('id');
 
 			$table->boolean('type');
-			$table->unsignedInteger('report_id')->references('id')->on('reports');
-			$table->unsignedInteger('user_id')->references('id')->on('users');
+			$table->unsignedInteger('report_id');
+			$table->unsignedInteger('user_id');
 			$table->unique(['report_id', 'user_id']);
-			
+
 			$table->timestamps();
 		});
 	}

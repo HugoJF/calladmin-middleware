@@ -27,8 +27,8 @@ class CreateReportsTable extends Migration
 			$table->string('target_name');
 			$table->string('target_steam_id');
 
-			$table->integer('reporter_id')->unsigned()->references('id')->on('users');
-			$table->integer('target_id')->unsigned()->references('id')->on('users');
+			$table->integer('reporter_id')->unsigned();
+			$table->integer('target_id')->unsigned();
 
 			$table->boolean('decision')->nullable();
 

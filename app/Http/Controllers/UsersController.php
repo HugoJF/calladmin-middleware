@@ -11,7 +11,7 @@ class UsersController extends Controller
 {
     public function index()
     {
-        $users = User::with(['reports', 'targets', 'votes', 'votes.report'])->get();
+        $users = User::with(['reports', 'targets', 'votes', 'votes.report'])->limit(200)->get();
 
         return view('users.index', [
             'users' => $users,
