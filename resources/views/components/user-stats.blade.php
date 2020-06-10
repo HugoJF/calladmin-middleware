@@ -2,7 +2,7 @@
     R:
     {{ $user->correct_report_count }}
     /
-    {{ $user->report_count }}
+    {{ $user->decided_report_count }}
 </span>
 <span class="badge badge-{{ $user->vote_state }}">
     V:
@@ -14,5 +14,5 @@
     T:
     {{ $user->correct_target_count }}
     /
-    {{ $user->target_count }}
+    {{ $user->decided_target_count }}
 </span>

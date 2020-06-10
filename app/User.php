@@ -33,7 +33,7 @@ class User extends Authenticatable
 
     public function getVotePrecisionAttribute()
     {
-        return cache()->remember("users-$this->id-vote-precision", 1, function () {
+        return cache()->remember("users-$this->id-vote-precision", 300, function () {
             $correct = 0;
             $count = 0;
 
@@ -62,7 +62,7 @@ class User extends Authenticatable
 
     public function getScoreAttribute()
     {
-        return cache()->remember("users-$this->id-score", 1, function () {
+        return cache()->remember("users-$this->id-score", 300, function () {
             $score = 0;
 
             /** @var Vote $vote */
@@ -86,7 +86,7 @@ class User extends Authenticatable
 
     public function getReportPrecisionAttribute()
     {
-        return cache()->remember("users-$this->id-report-precision", 1, function () {
+        return cache()->remember("users-$this->id-report-precision", 300, function () {
             $correct = 0;
             $decided = 0;
 
@@ -113,7 +113,7 @@ class User extends Authenticatable
 
     public function getKarmaAttribute()
     {
-        return cache()->remember("users-$this->id-karma", 1, function () {
+        return cache()->remember("users-$this->id-karma", 300, function () {
             $karma = 0;
 
             /** @var Report $report */
