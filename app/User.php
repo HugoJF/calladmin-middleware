@@ -47,68 +47,51 @@ class User extends Authenticatable
     public function getVotePrecisionAttribute()
     {
         return cache()->remember("users-$this->id-vote-precision", 1, function () {
-            $correct = $this->votes->reduce(function ($count, $vote) {
+            $correct = 0;
+            $count = 0;
+
+            /** @var Vote $vote */
+            foreach ($this->votes as $vote) {
                 $report = $vote->report;
 
-                // Report was soft deleted
-                if (!$report)
-                    return $count;
+                if ($report->ignored || $report->pending) {
+                    continue;
+                }
 
-                if ($report->ignored)
-                    return $count;
+                $count++;
 
-                if (!$report->decided)
-                    return $count;
+                if ($vote->type === (boolean) $report->decision) {
+                    $correct++;
+                }
+            }
 
-                if ($vote->type === (boolean) $report->decision)
-                    return $count + 1;
-                else
-                    return $count;
-            }, 0);
-
-            $count = $this->votes->reduce(function ($count, $vote) {
-                $report = $vote->report;
-
-                if (!$report)
-                    return $count;
-
-                if ($report->ignored)
-                    return $count;
-
-                if ($report->decided)
-                    return $count + 1;
-                else
-                    return $count;
-            }, 0);
-
-            if ((int) $count === 0)
+            if ($count === 0) {
                 return 0;
+            }
 
-            return $correct / (int) $count;
+            return $correct / $count;
         });
     }
 
     public function getScoreAttribute()
     {
         return cache()->remember("users-$this->id-score", 1, function () {
-            $score = $this->votes->reduce(function ($score, $vote) {
+            $score = 0;
+
+            /** @var Vote $vote */
+            foreach ($this->votes as $vote) {
                 $report = $vote->report;
 
-                // Report was soft deleted
-                if (!$report) {
-                    return $score;
-                }
-
-                if ($report->pending) {
-                    return $score;
+                if ($report->ignored || $report->pending) {
+                    continue;
                 }
 
                 if ($vote->type === (boolean) $report->decision) {
-                    return $score + 1;
+                    $score++;
                 } else {
-                    return $score - 1;
+                    $score--;
                 }
-            }, 0);
+            }
 
             return $score;
         });
@@ -117,25 +100,25 @@ class User extends Authenticatable
     public function getReportPrecisionAttribute()
     {
         return cache()->remember("users-$this->id-report-precision", 1, function () {
-            $correct = $this->reports->reduce(function ($correct, $report) {
-                if ($report->ignored)
-                    return $correct;
+            $correct = 0;
+            $decided = 0;
 
-                if ($report->correct)
-                    return $correct + 1;
+            /** @var Report $report */
+            foreach ($this->reports as $report) {
+                if ($report->ignored || $report->pending) {
+                    continue;
+                }
 
-                return $correct;
-            }, 0);
+                $decided++;
 
-            $decided = $this->reports->reduce(function ($decided, $report) {
-                if ($report->decided)
-                    return $decided + 1;
+                if ($report->correct) {
+                    $correct++;
+                }
+            }
 
-                return $decided;
-            }, 0);
-
-            if ($decided === 0)
+            if ($decided === 0) {
                 return 0;
+            }
 
             return $correct / $decided;
         });
@@ -144,30 +127,42 @@ class User extends Authenticatable
     public function getKarmaAttribute()
     {
         return cache()->remember("users-$this->id-karma", 1, function () {
-            $karma = $this->reports->reduce(function ($karma, $report) {
-                if ($report->ignored) // TODO: avoid this is decided
-                    return $karma - 0.5;
+            $karma = 0;
 
-                if ($report->pending)
-                    return $karma;
+            /** @var Report $report */
+            foreach ($this->reports as $report) {
+                if ($report->ignored) {
+                    $karma -= 0.5;
+                    continue;
+                }
+
+                if ($report->pending) {
+                    continue;
+                }
 
                 if ($report->incorrect) {
-                    return $karma - 1;
+                    $karma--;
                 } else {
-                    return $karma + 1;
+                    $karma++;
                 }
-            }, 0);
+            }
 
-            $karma = $this->targets->reduce(function ($karma, $target) {
-                if ($target->pending)
-                    return $karma;
+            foreach ($this->targets as $report) {
+                if ($report->ignored) {
+                    $karma += 0.5;
+                    continue;
+                }
 
-                if ($target->incorrect) {
-                    return $karma + 1;
+                if ($report->pending) {
+                    continue;
+                }
+
+                if ($report->incorrect) {
+                    $karma++;
                 } else {
-                    return $karma - 1;
+                    $karma--;
                 }
-            }, $karma);
+            }
 
             return $karma;
         });
@@ -190,10 +185,10 @@ class User extends Authenticatable
 
     public function getCorrectReportCountAttribute()
     {
-        return $this->reports()->whereDecision(true)->count();
+        return $this->reports()->whereNotNull('ignored_at')->whereDecision(true)->count();
     }
 
-    public function getReportCountAttribute()
+    public function getDecidedReportCountAttribute()
     {
         return $this->reports()->whereNotNull('decision')->count();
     }
@@ -226,17 +221,22 @@ class User extends Authenticatable
 
     public function getCorrectTargetCountAttribute()
     {
-        return $this->targets()->whereDecision(true)->count();
+        return $this->targets()->whereNotNull('ignored_at')->whereDecision(true)->count();
     }
 
-    public function getTargetCountAttribute()
+    public function getDecidedTargetCountAttribute()
     {
-        return $this->targets()->count();
+        return $this->targets()->whereNotNull('decision')->count();
     }
 
     public function getCorrectVoteCountAttribute()
     {
-        return ($this->votes()->join('reports', 'votes.report_id', '=', 'reports.id')->whereRaw('votes.type = reports.decision')->count());
+        return $this
+            ->votes()
+            ->join('reports', 'votes.report_id', '=', 'reports.id')
+            ->whereRaw('votes.type = reports.decision')
+            ->whereNotNull('ignored_at')
+            ->count();
     }
 
     public function getVoteCountAttribute()

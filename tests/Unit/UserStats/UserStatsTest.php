@@ -39,7 +39,7 @@ class UserStatsTest extends UserStatsTestBase
         $this->assertEquals(1, $this->voter->correct_vote_count);
         $this->assertEquals(4, $this->voter->vote_count);
 
-//        $this->assertEquals(0, $this->voter->karma);
+        $this->assertEquals(0, $this->voter->karma);
         $this->assertEquals(-0.5, $this->reporter->karma);
         $this->assertEquals(0.5, $this->target->karma);
 
