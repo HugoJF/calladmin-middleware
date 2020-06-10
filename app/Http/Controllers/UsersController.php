@@ -11,7 +11,7 @@ class UsersController extends Controller
 {
     public function index()
     {
-        $users = User::with(['reports', 'targets', 'votes', 'votes.report'])->paginate(50);
+        $users = User::with(['reports', 'targets', 'votes', 'votes.report'])->paginate(5);
 
         return view('users.index', [
             'users' => $users,

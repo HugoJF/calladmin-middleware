@@ -13,10 +13,8 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\User::class, function (Faker $faker) {
+$factory->define(App\Vote::class, function (Faker $faker) {
     return [
-        'name'    => $faker->name,
-        'email'   => $faker->unique()->safeEmail,
-        'steamid' => 'STEAM_0:1:' . $faker->numberBetween(0, 36509127),
+        'type' => $faker->boolean(30),
     ];
 });

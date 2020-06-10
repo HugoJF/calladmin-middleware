@@ -13,10 +13,14 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\User::class, function (Faker $faker) {
+$factory->define(App\Report::class, function (Faker $faker) {
     return [
-        'name'    => $faker->name,
-        'email'   => $faker->unique()->safeEmail,
-        'steamid' => 'STEAM_0:1:' . $faker->numberBetween(0, 36509127),
+        'server_ip'   => $faker->ipv4,
+        'server_port' => $faker->numberBetween(0, 49152),
+        'reason'      => $faker->paragraph(5),
+        'vip'         => $faker->boolean(30),
+
+        'reporter_name' => $faker->name,
+        'target_name'   => $faker->name,
     ];
 });
