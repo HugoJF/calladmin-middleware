@@ -4,8 +4,8 @@ namespace App\Notifications;
 
 use App\Report;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class NewDecision extends Notification
 {

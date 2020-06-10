@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddChatAndPlayerDataColumnsToReportsTable extends Migration
 {
@@ -14,8 +14,8 @@ class AddChatAndPlayerDataColumnsToReportsTable extends Migration
     public function up()
     {
         Schema::table('reports', function (Blueprint $table) {
-        	$table->text('chat')->nullable();
-        	$table->text('player_data')->nullable();
+            $table->text('chat')->nullable();
+            $table->text('player_data')->nullable();
         });
     }
 
@@ -27,7 +27,7 @@ class AddChatAndPlayerDataColumnsToReportsTable extends Migration
     public function down()
     {
         Schema::table('reports', function (Blueprint $table) {
-        	$table->dropColumn(['chat', 'player_data']);
+            $table->dropColumn(['chat', 'player_data']);
         });
     }
 }

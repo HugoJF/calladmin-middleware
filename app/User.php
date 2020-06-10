@@ -2,9 +2,8 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * App\User
@@ -188,6 +187,11 @@ class User extends Authenticatable
         return $this->reports()->whereNotNull('ignored_at')->whereDecision(true)->count();
     }
 
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'reporter_id');
+    }
+
     public function getDecidedReportCountAttribute()
     {
         return $this->reports()->whereNotNull('decision')->count();
@@ -224,6 +228,11 @@ class User extends Authenticatable
         return $this->targets()->whereNotNull('ignored_at')->whereDecision(true)->count();
     }
 
+    public function targets()
+    {
+        return $this->hasMany(Report::class, 'target_id');
+    }
+
     public function getDecidedTargetCountAttribute()
     {
         return $this->targets()->whereNotNull('decision')->count();
@@ -239,6 +248,11 @@ class User extends Authenticatable
             ->count();
     }
 
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
+
     public function getVoteCountAttribute()
     {
         return $this->votes()->count();
@@ -249,24 +263,9 @@ class User extends Authenticatable
         return $this->email;
     }
 
-    public function reports()
-    {
-        return $this->hasMany(Report::class, 'reporter_id');
-    }
-
     public function comments()
     {
         return $this->hasMany(Comment::class);
-    }
-
-    public function targets()
-    {
-        return $this->hasMany(Report::class, 'target_id');
-    }
-
-    public function votes()
-    {
-        return $this->hasMany(Vote::class);
     }
 
     public function decisions()

@@ -3,14 +3,14 @@
         <!-- Reporter information card -->
         <div class="col">
             <!-- Reporter information -->
-            @include('reports.partials.user-info', [
-                'role' => 'Reporter',
-                'user' => $report->reporter,
-                'name' => $report->reporter_name,
-                'steamid' => $report->reporter_steam_id
-            ])
+        @include('reports.partials.user-info', [
+            'role' => 'Reporter',
+            'user' => $report->reporter,
+            'name' => $report->reporter_name,
+            'steamid' => $report->reporter_steam_id
+        ])
 
-            <!-- Reason -->
+        <!-- Reason -->
             <p>Reason: <code>{{ $report->reason }}</code></p>
 
             <!-- Decider -->
@@ -18,24 +18,24 @@
                 <p>Decider: <code>{{ $report->decider->username ?? $report->decider->name }}</code></p>
             @endif
 
-            <!-- Status -->
+        <!-- Status -->
             @include('reports.partials.status')
 
-            <!-- Ack -->
+        <!-- Ack -->
             @include('reports.partials.ack')
         </div>
 
         <!-- Target information card -->
         <div class="col">
             <!-- Target information -->
-            @include('reports.partials.user-info', [
-                'role' => 'Target',
-                'user' => $report->target,
-                'name' => $report->target_name,
-                'steamid' => $report->target_steam_id
-            ])
+        @include('reports.partials.user-info', [
+            'role' => 'Target',
+            'user' => $report->target,
+            'name' => $report->target_name,
+            'steamid' => $report->target_steam_id
+        ])
 
-            <!-- Server information -->
+        <!-- Server information -->
             <p>
                 Server: <code>{{ $report->server_ip }}:{{ $report->server_port }}</code>
             </p>

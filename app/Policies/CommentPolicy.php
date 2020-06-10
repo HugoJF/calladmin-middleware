@@ -8,32 +8,32 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CommentPolicy
 {
-	use HandlesAuthorization;
+    use HandlesAuthorization;
 
-	/**
-	 * Create a new policy instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		//
-	}
+    /**
+     * Create a new policy instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
 
-	public function before(User $user, $ability)
-	{
-		if ($user->admin === true) {
-			return true;
-		}
-	}
+    public function before(User $user, $ability)
+    {
+        if ($user->admin === true) {
+            return true;
+        }
+    }
 
-	public function store(User $user)
-	{
-		return true;
-	}
+    public function store(User $user)
+    {
+        return true;
+    }
 
-	public function delete(User $user, Comment $comment)
-	{
-		return $comment->user_id === $user->id;
-	}
+    public function delete(User $user, Comment $comment)
+    {
+        return $comment->user_id === $user->id;
+    }
 }

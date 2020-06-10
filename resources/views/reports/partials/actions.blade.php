@@ -1,13 +1,13 @@
 <div class="mx-2 btn-group">
-    @auth
-        <!-- Acknowledgement button -->
+@auth
+    <!-- Acknowledgement button -->
         @if($report->reporter_id === auth()->id() && $report->decision === 0 && is_null($report->acked_at))
             <a class="btn btn-warning"
                href="{{ route('my-reports.ack', $report) }}"
             >Ack</a>
         @endif
 
-        <!-- Add video button -->
+    <!-- Add video button -->
         @if(auth()->user()->admin)
             <a class="btn btn-outline-primary{{ $report->decided ? ' disabled' : '' }}"
                href="#"
@@ -19,7 +19,7 @@
             </a>
         @endif
 
-        <!-- Download button -->
+    <!-- Download button -->
         <a class="btn btn-primary"
            title="{{ $report->demoFilename }}"
            href="{{ $report->demoUrl }}"

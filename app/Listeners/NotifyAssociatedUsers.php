@@ -3,8 +3,6 @@
 namespace App\Listeners;
 
 use App\Contracts\NotifiesAssociatedUsers;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Notification;
 
 class NotifyAssociatedUsers

@@ -23,7 +23,7 @@ class UserStatsTest extends UserStatsTestBase
 
         // Pending report
         $this->generateReport(false, false, [
-            'decision'   => null,
+            'decision' => null,
         ]);
 
         $this->assertEquals(0.5, $this->voter->vote_precision);

@@ -12,114 +12,114 @@ use Illuminate\Support\Facades\Auth;
 
 class ReportService
 {
-	/**
-	 * @param Report $report
-	 * @param array  $chat
-	 */
-	public function attachChat(Report $report, array $chat)
-	{
-		$report->chat = $chat;
+    /**
+     * @param Report $report
+     * @param array  $chat
+     */
+    public function attachChat(Report $report, array $chat)
+    {
+        $report->chat = $chat;
 
-		$report->save();
-	}
+        $report->save();
+    }
 
-	/**
-	 * @param Report $report
-	 * @param array  $playerData
-	 */
-	public function attachPlayerData(Report $report, array $playerData)
-	{
-		$report->player_data = $playerData;
+    /**
+     * @param Report $report
+     * @param array  $playerData
+     */
+    public function attachPlayerData(Report $report, array $playerData)
+    {
+        $report->player_data = $playerData;
 
-		$report->save();
-	}
+        $report->save();
+    }
 
-	/**
-	 * @param Report $report
-	 * @param string $url
-	 */
-	public function attachVideo(Report $report, string $url)
-	{
-		if (preg_match('/v=(.+)$/', $url, $matches)) {
-			$url = $matches[1];
-			$report->video_url = "youtube:$url";
-		} else {
-			$report->video_url = "html:$url";
-		}
+    /**
+     * @param Report $report
+     * @param string $url
+     */
+    public function attachVideo(Report $report, string $url)
+    {
+        if (preg_match('/v=(.+)$/', $url, $matches)) {
+            $url = $matches[1];
+            $report->video_url = "youtube:$url";
+        } else {
+            $report->video_url = "html:$url";
+        }
 
-		$report->save();
-	}
+        $report->save();
+    }
 
-	/**
-	 * @param Report $report
-	 *
-	 * @return bool
-	 */
-	public function ignoreReport(Report $report)
-	{
-		$report->ignored_at = Carbon::now();
+    /**
+     * @param Report $report
+     *
+     * @return bool
+     */
+    public function ignoreReport(Report $report)
+    {
+        $report->ignored_at = Carbon::now();
 
-		return $report->save();
-	}
+        return $report->save();
+    }
 
-	/**
-	 * @param Report $report
-	 * @param        $duration
-	 * @param        $reason
-	 */
-	public function banUser(Report $report, $duration, $reason)
-	{
-		$sb = app(SourceBansService::class);
+    /**
+     * @param Report $report
+     * @param string $decision
+     * @param        $duration
+     * @param        $reason
+     *
+     * @return bool
+     * @throws InvalidDecisionException
+     */
+    public function decide(Report $report, string $decision, $duration, $reason)
+    {
+        $decision = $this->translateDecision($decision);
+        // TODO: make this an event
+        if ($decision) {
+            try {
+                $this->banUser($report, $duration, $reason);
+            } catch (Exception $e) {
+                flash()->error($e->getMessage());
 
-		// Build URL to report
-		$url = route('reports.show', $report);
+                return false;
+            }
+        }
 
-		// Insert ban
-		$sb->insertBan($report, Auth::user(), $duration, $reason, $url);
+        $report->decider()->associate(auth()->user());
+        $report->decision = $decision;
+        $report->save();
 
-		// Kick players
-		CsgoApi::all()->execute("sm_kick \"#{$report->target->steamid}\" \"Kickado por decisão de report no CallAdmin-Middleware\"", 0, false)->send();
-	}
+        event(new ReportDecided($report));
 
-	public function translateDecision($decision)
-	{
-		$values = ['correct' => true, 'incorrect' => false];
+        return true;
+    }
 
-		if (!array_key_exists($decision, $values))
-			throw new InvalidDecisionException();
+    public function translateDecision($decision)
+    {
+        $values = ['correct' => true, 'incorrect' => false];
 
-		return $values[ $decision ];
-	}
+        if (!array_key_exists($decision, $values))
+            throw new InvalidDecisionException();
 
-	/**
-	 * @param Report $report
-	 * @param string $decision
-	 * @param        $duration
-	 * @param        $reason
-	 *
-	 * @return bool
-	 * @throws InvalidDecisionException
-	 */
-	public function decide(Report $report, string $decision, $duration, $reason)
-	{
-		$decision = $this->translateDecision($decision);
-		// TODO: make this an event
-		if ($decision) {
-			try {
-				$this->banUser($report, $duration, $reason);
-			} catch (Exception $e) {
-				flash()->error($e->getMessage());
+        return $values[ $decision ];
+    }
 
-				return false;
-			}
-		}
+    /**
+     * @param Report $report
+     * @param        $duration
+     * @param        $reason
+     */
+    public function banUser(Report $report, $duration, $reason)
+    {
+        $sb = app(SourceBansService::class);
 
-		$report->decider()->associate(auth()->user());
-		$report->decision = $decision;
-		$report->save();
+        // Build URL to report
+        $url = route('reports.show', $report);
 
-		event(new ReportDecided($report));
+        // Insert ban
+        $sb->insertBan($report, Auth::user(), $duration, $reason, $url);
 
-		return true;
-	}
+        // Kick players
+        CsgoApi::all()->execute("sm_kick \"#{$report->target->steamid}\" \"Kickado por decisão de report no CallAdmin-Middleware\"", 0, false)->send();
+    }
 }

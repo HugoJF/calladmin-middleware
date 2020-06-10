@@ -12,54 +12,54 @@ use Illuminate\Support\Facades\Auth;
 
 class MyReportsController extends Controller
 {
-	public const CONFIRMATION_TEXT = 'Concordo em melhorar meus reports para ajudar toda a equipe dos servidores de_nerdTV';
+    public const CONFIRMATION_TEXT = 'Concordo em melhorar meus reports para ajudar toda a equipe dos servidores de_nerdTV';
 
-	public function index(Request $request)
-	{
-		$reports = Auth::user()->reports()->paginate(5);
+    public function index(Request $request)
+    {
+        $reports = Auth::user()->reports()->paginate(5);
 
-		return view('reports.my-reports', [
-			'reports' => $reports,
-		]);
-	}
+        return view('reports.my-reports', [
+            'reports' => $reports,
+        ]);
+    }
 
-	public function ack(Report $report)
-	{
-		return view('reports.ack', [
-			'report' => $report,
-		]);
-	}
+    public function ack(Report $report)
+    {
+        return view('reports.ack', [
+            'report' => $report,
+        ]);
+    }
 
-	public function list()
-	{
-		dispatch(new KickPlayersWithPendingAck());
-	}
+    public function list()
+    {
+        dispatch(new KickPlayersWithPendingAck());
+    }
 
-	public function acked(Request $request, Report $report)
-	{
-		if ($request->input('confirmation') !== MyReportsController::CONFIRMATION_TEXT) {
-			flash()->error('Por favor verifique seu texto de confirmação!');
+    public function acked(Request $request, Report $report)
+    {
+        if ($request->input('confirmation') !== MyReportsController::CONFIRMATION_TEXT) {
+            flash()->error('Por favor verifique seu texto de confirmação!');
 
-			return back();
-		}
+            return back();
+        }
 
-		$reporterId = SteamID::normalizeSteamID64($report->reporter_steam_id);
-		$authedId = SteamID::normalizeSteamID64(Auth::user()->steamid);
+        $reporterId = SteamID::normalizeSteamID64($report->reporter_steam_id);
+        $authedId = SteamID::normalizeSteamID64(Auth::user()->steamid);
 
-		if($reporterId !== $authedId) {
-			flash()->error('Você não pode confirmar reports de outras pessoas');
+        if ($reporterId !== $authedId) {
+            flash()->error('Você não pode confirmar reports de outras pessoas');
 
-			return back();
-		}
+            return back();
+        }
 
-		$report->acked_at = Carbon::now();
+        $report->acked_at = Carbon::now();
 
-		$report->save();
+        $report->save();
 
-		event(new ReportAcked($report));
+        event(new ReportAcked($report));
 
-		flash()->success('Obrigado por confirmar! Você está liberado para conectar em nossos servidores novamente.');
+        flash()->success('Obrigado por confirmar! Você está liberado para conectar em nossos servidores novamente.');
 
-		return redirect()->route('reports.show', $report);
-	}
+        return redirect()->route('reports.show', $report);
+    }
 }

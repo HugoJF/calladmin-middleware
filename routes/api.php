@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,12 +12,12 @@ use Illuminate\Http\Request;
 */
 
 Route::prefix('v1')->group(function () {
-	Route::get('/reports/missing-video', 'ReportsController@missingVideo');
+    Route::get('/reports/missing-video', 'ReportsController@missingVideo');
 
-	Route::post('/reports/{report}/chat', 'ReportsController@attachChat');
-	Route::post('/reports/{report}/player-data', 'ReportsController@attachPlayerData');
+    Route::post('/reports/{report}/chat', 'ReportsController@attachChat');
+    Route::post('/reports/{report}/player-data', 'ReportsController@attachPlayerData');
 
-	Route::patch('/reports/{report}/attach-video', 'ReportsController@attachVideo');
+    Route::patch('/reports/{report}/attach-video', 'ReportsController@attachVideo');
 });
 
 Route::post('reports', 'ReportsController@store')->name('store');

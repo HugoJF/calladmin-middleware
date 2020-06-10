@@ -18,16 +18,15 @@ class LaravelSettingsForm extends Form
         $this
             ->add('site-name', 'text', [
                 'label' => 'Website Name',
-                'rules' => ['required', 'max:255']
+                'rules' => ['required', 'max:255'],
             ])
             ->add('company-name', 'text', [
                 'label' => 'Company Name',
-                'rules' => ['required', 'max:255']
+                'rules' => ['required', 'max:255'],
             ])
             ->add('email', 'email', [
                 'label' => 'Email',
-                'rules' => ['required', 'max:255']
-            ])
-        ;
+                'rules' => ['required', 'max:255'],
+            ]);
     }
 }

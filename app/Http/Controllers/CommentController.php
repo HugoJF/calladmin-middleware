@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\Events\CommentCreated;
-use App\Notifications\NewComment;
 use App\Report;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Notification;
 
 class CommentController extends Controller
 {

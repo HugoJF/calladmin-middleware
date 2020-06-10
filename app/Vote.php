@@ -14,17 +14,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Vote extends Model
 {
-	protected $casts = [
-		'type' => 'boolean',
-	];
+    protected $casts = [
+        'type' => 'boolean',
+    ];
 
-	public function user()
-	{
-		return $this->belongsTo(User::class);
-	}
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
-	public function report()
-	{
-		return $this->belongsTo(Report::class);
-	}
+    public function report()
+    {
+        return $this->belongsTo(Report::class);
+    }
 }

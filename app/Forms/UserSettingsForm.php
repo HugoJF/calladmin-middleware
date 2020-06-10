@@ -11,7 +11,6 @@ class UserSettingsForm extends Form
         $this
             ->add('email', 'text', [
                 'label' => 'Notifications E-mail',
-            ])
-        ;
+            ]);
     }
 }

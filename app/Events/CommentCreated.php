@@ -5,10 +5,8 @@ namespace App\Events;
 use App\Comment;
 use App\Contracts\NotifiesAssociatedUsers;
 use App\Notifications\NewComment;
-use App\User;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Support\Collection;
+use Illuminate\Queue\SerializesModels;
 
 class CommentCreated implements NotifiesAssociatedUsers
 {

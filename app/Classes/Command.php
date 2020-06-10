@@ -10,53 +10,53 @@ namespace App\Classes;
 
 abstract class Command
 {
-	const TYPE_STATUS = 1;
-	const TYPE_PLAYER_STATUS = 2;
+    const TYPE_STATUS = 1;
+    const TYPE_PLAYER_STATUS = 2;
 
-	public const PATTERN = '';
+    public const PATTERN = '';
 
-	static $params = [];
-	static $dontTrim = [];
+    static $params = [];
+    static $dontTrim = [];
 
-	public abstract static function getType();
+    public abstract static function getType();
 
-	public static function build($raw)
-	{
-		$count = preg_match_all(static::PATTERN, $raw, $matches, PREG_SET_ORDER);
-		$results = [];
+    public static function build($raw)
+    {
+        $count = preg_match_all(static::PATTERN, $raw, $matches, PREG_SET_ORDER);
+        $results = [];
 
-		foreach ($matches as $match) {
-			$command = new static();
+        foreach ($matches as $match) {
+            $command = new static();
 
-			$command->fill($match);
+            $command->fill($match);
 
-			$results[] = $command;
-		}
+            $results[] = $command;
+        }
 
-		if ($count === 1) {
-			return $results[0];
-		} else if ($count === 0) {
-			return false;
-		} else {
-			return $results;
-		}
-	}
+        if ($count === 1) {
+            return $results[0];
+        } else if ($count === 0) {
+            return false;
+        } else {
+            return $results;
+        }
+    }
 
-	protected function fill($matches)
-	{
-		foreach (static::$params as $key => $param) {
-			if ($param !== null) {
-				if (!array_key_exists($key, $matches))
-					throw new \Error("Could not find index $key in " . json_encode($matches));
+    protected function fill($matches)
+    {
+        foreach (static::$params as $key => $param) {
+            if ($param !== null) {
+                if (!array_key_exists($key, $matches))
+                    throw new \Error("Could not find index $key in " . json_encode($matches));
 
-				$p = $matches[ $key ];
+                $p = $matches[ $key ];
 
-				if (!in_array($param, static::$dontTrim))
-					$p = trim($p);
+                if (!in_array($param, static::$dontTrim))
+                    $p = trim($p);
 
-				$this->$param = $p;
-			}
-		}
-	}
+                $this->$param = $p;
+            }
+        }
+    }
 
 }

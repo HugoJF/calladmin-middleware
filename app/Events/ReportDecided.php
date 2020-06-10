@@ -5,10 +5,8 @@ namespace App\Events;
 use App\Contracts\NotifiesAssociatedUsers;
 use App\Notifications\NewDecision;
 use App\Report;
-use App\User;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Support\Collection;
+use Illuminate\Queue\SerializesModels;
 
 class ReportDecided implements NotifiesAssociatedUsers
 {

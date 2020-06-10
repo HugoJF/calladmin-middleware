@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\User;
-use App\Vote;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class VotePolicy
@@ -20,8 +19,8 @@ class VotePolicy
         //
     }
 
-	public function index(User $user)
-	{
-		return true;
+    public function index(User $user)
+    {
+        return true;
     }
 }

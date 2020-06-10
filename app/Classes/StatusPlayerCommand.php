@@ -9,32 +9,27 @@
 namespace App\Classes;
 
 use App\Classes\Event;
-use App\Classes\SteamID;
-use App\User;
-use Illuminate\Support\Facades\Log;
 
 class StatusPlayerCommand extends Command
 {
-	const PATTERN = "/^#(?:\s*?)(\d*?) (\d*?) \"(.*?)\" (.*?) (.*?) (.*?) (.*?) (.*?) (.*?) (.*?)$/m";
+    const PATTERN = "/^#(?:\s*?)(\d*?) (\d*?) \"(.*?)\" (.*?) (.*?) (.*?) (.*?) (.*?) (.*?) (.*?)$/m";
+    static $params = [
+        null, 'userid', 'slot', 'username', 'steamid', 'duration', 'ping',
+        'loss', 'state', 'rate', 'addr',
+    ];
+    public $userid;
+    public $slot;
+    public $username;
+    public $steamid;
+    public $duration;
+    public $ping;
+    public $loss;
+    public $state;
+    public $rate;
+    public $addr;
 
-	public $userid;
-	public $slot;
-	public $username;
-	public $steamid;
-	public $duration;
-	public $ping;
-	public $loss;
-	public $state;
-	public $rate;
-	public $addr;
-
-	static $params = [
-		null, 'userid', 'slot', 'username', 'steamid', 'duration', 'ping',
-		'loss', 'state', 'rate', 'addr',
-	];
-
-	public static function getType()
-	{
-		return Command::TYPE_PLAYER_STATUS;
-	}
+    public static function getType()
+    {
+        return Command::TYPE_PLAYER_STATUS;
+    }
 }

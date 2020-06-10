@@ -9,7 +9,6 @@ use App\Events\ReportDecided;
 use App\Listeners\NotifyAssociatedUsers;
 use App\Listeners\NotifyDiscord;
 use App\Listeners\TriggerGotvRecording;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -33,12 +32,12 @@ class EventServiceProvider extends ServiceProvider
         CommentCreated::class => [
             NotifyAssociatedUsers::class,
         ],
-        ReportDecided::class => [
+        ReportDecided::class  => [
             NotifyAssociatedUsers::class,
         ],
-        ReportAcked::class => [
+        ReportAcked::class    => [
             NotifyAssociatedUsers::class,
-        ]
+        ],
     ];
 
     /**

@@ -6,8 +6,8 @@ use App\Classes\SteamID;
 use App\Events\ReportCreated;
 use App\Exceptions\AlreadyDecidedException;
 use App\Exceptions\InvalidDecisionException;
-use App\Exceptions\MissingVideoUrlException;
 use App\Exceptions\InvolvedInReportException;
+use App\Exceptions\MissingVideoUrlException;
 use App\Report;
 use App\ReportService;
 use App\Services\VoteService;
@@ -15,7 +15,6 @@ use App\User;
 use App\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Notification;
 
 class ReportsController extends Controller
 {
@@ -113,6 +112,24 @@ class ReportsController extends Controller
         return ['message' => 'Report created'];
     }
 
+    private function findOrCreate($id, $username)
+    {
+        $user = User::where('steamid', $id)->first();
+
+        if (!is_null($user)) {
+            return $user;
+        }
+
+        $user = User::make();
+
+        $user->username = $username;
+        $user->steamid = $id;
+
+        $user->save();
+
+        return $user;
+    }
+
     /**
      * @param ReportService $service
      * @param Request       $request
@@ -175,24 +192,6 @@ class ReportsController extends Controller
         }
 
         return back();
-    }
-
-    private function findOrCreate($id, $username)
-    {
-        $user = User::where('steamid', $id)->first();
-
-        if (!is_null($user)) {
-            return $user;
-        }
-
-        $user = User::make();
-
-        $user->username = $username;
-        $user->steamid = $id;
-
-        $user->save();
-
-        return $user;
     }
 
     public function ignore(ReportService $service, Report $report)

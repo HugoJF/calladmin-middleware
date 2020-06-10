@@ -5,9 +5,8 @@ namespace App\Events;
 use App\Contracts\NotifiesAssociatedUsers;
 use App\Notifications\NewReport;
 use App\Report;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Support\Collection;
+use Illuminate\Queue\SerializesModels;
 
 class ReportCreated implements NotifiesAssociatedUsers
 {

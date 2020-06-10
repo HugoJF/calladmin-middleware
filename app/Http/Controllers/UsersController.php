@@ -83,15 +83,15 @@ class UsersController extends Controller
         $form = $builder->create(UserSettingsForm::class, [
             'method' => 'PATCH',
             'model'  => auth()->user(),
-            'url'  => route('users.settings.update'),
+            'url'    => route('users.settings.update'),
         ]);
 
         return view('form', [
-            'title' => 'User settings',
-            'form' => $form,
+            'title'       => 'User settings',
+            'form'        => $form,
             'submit_text' => 'Update',
         ]);
-	}
+    }
 
     public function updateSettings(Request $request)
     {

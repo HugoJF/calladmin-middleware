@@ -8,47 +8,47 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ReportPolicy
 {
-	use HandlesAuthorization;
+    use HandlesAuthorization;
 
-	/**
-	 * Create a new policy instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		//
-	}
+    /**
+     * Create a new policy instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
 
-	public function before(User $user, $ability)
-	{
-		if ($user->admin === true) {
-			return true;
-		}
-	}
+    public function before(User $user, $ability)
+    {
+        if ($user->admin === true) {
+            return true;
+        }
+    }
 
-	public function index(User $user)
-	{
-		return false;
-	}
+    public function index(User $user)
+    {
+        return false;
+    }
 
-	public function decide(User $user, Report $report)
-	{
-		return false;
-	}
+    public function decide(User $user, Report $report)
+    {
+        return false;
+    }
 
-	public function vote(User $user, Report $report)
-	{
-		return true;
-	}
+    public function vote(User $user, Report $report)
+    {
+        return true;
+    }
 
-	public function ignore(User $user, Report $report)
-	{
-		return false;
-	}
+    public function ignore(User $user, Report $report)
+    {
+        return false;
+    }
 
-	public function delete(User $user, Report $report)
-	{
-		return false;
-	}
+    public function delete(User $user, Report $report)
+    {
+        return false;
+    }
 }
