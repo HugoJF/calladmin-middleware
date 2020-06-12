@@ -19,7 +19,7 @@ Route::get('redirect-to-steam', 'AuthController@redirectToSteam')->name('redirec
 Route::get('dashboard', 'ReportsController@index')->name('dashboard');
 Route::get('search', 'ReportsController@search')->name('search');
 
-Route::get('test-upload', function (\Illuminate\Http\Request $request) {
+Route::post('test-upload', function (\Illuminate\Http\Request $request) {
    $content = $request->getContent();
 
    Storage::disk('local')->put(\Illuminate\Support\Str::random(16), $content);
