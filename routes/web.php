@@ -19,6 +19,14 @@ Route::get('redirect-to-steam', 'AuthController@redirectToSteam')->name('redirec
 Route::get('dashboard', 'ReportsController@index')->name('dashboard');
 Route::get('search', 'ReportsController@search')->name('search');
 
+Route::get('test-upload', function (\Illuminate\Http\Request $request) {
+   $content = $request->getContent();
+
+   Storage::disk('local')->put(\Illuminate\Support\Str::random(16), $content);
+
+   return request()->json(['status' => 201], 201);
+});
+
 Route::prefix('reports')->name('reports.')->group(function () {
     Route::get('/', 'ReportsController@index')->name('index');
     Route::get('{report}', 'ReportsController@show')->name('show');
