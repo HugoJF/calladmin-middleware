@@ -31,35 +31,6 @@ class User extends Authenticatable
         'admin' => 'boolean',
     ];
 
-    public function getVotePrecisionAttribute()
-    {
-        return cache()->remember("users-$this->id-vote-precision", 300, function () {
-            $correct = 0;
-            $count = 0;
-
-            /** @var Vote $vote */
-            foreach ($this->votes as $vote) {
-                $report = $vote->report;
-
-                if ($report->ignored || $report->pending) {
-                    continue;
-                }
-
-                $count++;
-
-                if ($vote->type === (boolean) $report->decision) {
-                    $correct++;
-                }
-            }
-
-            if ($count === 0) {
-                return 0;
-            }
-
-            return $correct / $count;
-        });
-    }
-
     public function getScoreAttribute()
     {
         return cache()->remember("users-$this->id-score", 300, function () {
@@ -81,33 +52,6 @@ class User extends Authenticatable
             }
 
             return $score;
-        });
-    }
-
-    public function getReportPrecisionAttribute()
-    {
-        return cache()->remember("users-$this->id-report-precision", 300, function () {
-            $correct = 0;
-            $decided = 0;
-
-            /** @var Report $report */
-            foreach ($this->reports as $report) {
-                if ($report->ignored || $report->pending) {
-                    continue;
-                }
-
-                $decided++;
-
-                if ($report->correct) {
-                    $correct++;
-                }
-            }
-
-            if ($decided === 0) {
-                return 0;
-            }
-
-            return $correct / $decided;
         });
     }
 
@@ -155,65 +99,174 @@ class User extends Authenticatable
         });
     }
 
-    public function getReportStateAttribute()
+    public function getVotePrecisionAttribute()
     {
-        $t = $this->report_count;
+        $stats = $this->vote_stats;
 
-        if ($t <= 2)
-            return 'dark';
-
-        $c = $this->correct_report_count;
-
-        if ($c / $t < 0.6)
-            return 'danger';
-        else
-            return 'success';
+        return $stats['correct'] / ($stats['count'] ?? 1);
     }
 
-    public function getCorrectReportCountAttribute()
+    public function getCorrectVoteCountAttribute()
     {
-        return $this->reports()->whereNotNull('ignored_at')->whereDecision(true)->count();
+        return $this->vote_stats['correct'];
     }
 
-    public function reports()
+    public function getVoteCountAttribute()
     {
-        return $this->hasMany(Report::class, 'reporter_id');
+        return $this->vote_stats['count'];
     }
 
-    public function getDecidedReportCountAttribute()
+    public function getVoteStatsAttribute()
     {
-        return $this->reports()->whereNotNull('decision')->count();
+        return cache()->remember("users-$this->id-vote-stats", 300, function () {
+            $correct = 0;
+            $count = 0;
+
+            /** @var Vote $vote */
+            foreach ($this->votes as $vote) {
+                $report = $vote->report;
+
+                if ($report->ignored || $report->pending) {
+                    continue;
+                }
+
+                $count++;
+
+                if ($vote->type === (boolean) $report->decision) {
+                    $correct++;
+                }
+            }
+
+            return compact('correct', 'count');
+        });
     }
 
     public function getVoteStateAttribute()
     {
         $t = $this->vote_count;
 
-        if ($t <= 2)
+        if ($t <= 2) {
             return 'dark';
-
+        }
         $c = $this->correct_vote_count;
 
-        if ($c / $t < .75)
+        if ($c / $t < .75) {
             return 'danger';
-        else
+        } else {
             return 'success';
+        }
+    }
+
+    public function getReportPrecisionAttribute()
+    {
+        return $this->report_stats['correct'] / ($this->report_stats['decided'] ?? 1);
+    }
+
+    public function getCorrectReportCountAttribute()
+    {
+        return $this->report_stats['correct'];
+    }
+
+    public function getDecidedReportCountAttribute()
+    {
+        return $this->report_stats['decided'];
+    }
+
+    public function getReportStatsAttribute()
+    {
+        return cache()->remember("users-$this->id-report-stats", 300, function () {
+            $correct = 0;
+            $decided = 0;
+            $count = 0;
+
+            /** @var Report $report */
+            foreach ($this->reports as $report) {
+                $count++;
+
+                if ($report->ignored || $report->pending) {
+                    continue;
+                }
+
+                $decided++;
+
+                if ($report->correct) {
+                    $correct++;
+                }
+            }
+
+            return compact('correct', 'decided', 'count');
+        });
+    }
+
+    public function getReportStateAttribute()
+    {
+        $t = $this->report_count;
+
+        if ($t <= 2) {
+            return 'dark';
+        }
+
+        $c = $this->correct_report_count;
+
+        if ($c / $t < 0.6) {
+            return 'danger';
+        } else {
+            return 'success';
+        }
     }
 
     public function getTargetStateAttribute()
     {
-        if ($this->correct_target_count > 0)
+        if ($this->correct_target_count > 0) {
             return 'danger';
+        }
 
-        if ($this->target_count === 0)
+        if ($this->target_count === 0) {
             return 'dark';
-        else
+        } else {
             return 'success';
+        }
     }
 
     public function getCorrectTargetCountAttribute()
     {
-        return $this->targets()->whereNotNull('ignored_at')->whereDecision(true)->count();
+        return $this->target_stats['correct'];
+    }
+
+    public function getDecidedTargetCountAttribute()
+    {
+        return $this->target_stats['decided'];
+    }
+
+    public function getTargetStatsAttribute()
+    {
+        return cache()->remember("users-$this->id-target-stats", 300, function () {
+            $correct = 0;
+            $decided = 0;
+            $count = 0;
+
+            /** @var Report $report */
+            foreach ($this->targets as $report) {
+                $count++;
+
+                if ($report->ignored || $report->pending) {
+                    continue;
+                }
+
+                $decided++;
+
+                if ($report->correct) {
+                    $correct++;
+                }
+            }
+
+            return compact('correct', 'decided', 'count');
+        });
+    }
+
+    public function routeNotificationForMail($notification)
+    {
+        return $this->email;
     }
 
     public function targets()
@@ -221,34 +274,14 @@ class User extends Authenticatable
         return $this->hasMany(Report::class, 'target_id');
     }
 
-    public function getDecidedTargetCountAttribute()
+    public function reports()
     {
-        return $this->targets()->whereNotNull('decision')->count();
-    }
-
-    public function getCorrectVoteCountAttribute()
-    {
-        return $this
-            ->votes()
-            ->join('reports', 'votes.report_id', '=', 'reports.id')
-            ->whereRaw('votes.type = reports.decision')
-            ->whereNotNull('ignored_at')
-            ->count();
+        return $this->hasMany(Report::class, 'reporter_id');
     }
 
     public function votes()
     {
         return $this->hasMany(Vote::class);
-    }
-
-    public function getVoteCountAttribute()
-    {
-        return $this->votes()->count();
-    }
-
-    public function routeNotificationForMail($notification)
-    {
-        return $this->email;
     }
 
     public function comments()
