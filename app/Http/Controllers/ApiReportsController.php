@@ -73,7 +73,7 @@ class ApiReportsController extends Controller
 
     public function demo(Request $request, Report $report)
     {
-        Storage::disk('minio', "calladmin/demos/$report->id.dem", $request->getContent());
+        Storage::disk('minio', "demos/$report->id.dem", $request->getContent());
 
         return response()->json(['success' => true]);
     }
