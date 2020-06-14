@@ -20,6 +20,12 @@ Route::prefix('v1')->group(function () {
     Route::patch('/reports/{report}/attach-video', 'ReportsController@attachVideo');
 });
 
+Route::name('api.v2.reports.')->prefix('v2/reports')->group(function () {
+    Route::post('/', 'ApiReportsController@store')->name('create');
+
+    Route::post('{report}/demo', 'ApiReportsController@demo')->name('demo');
+});
+
 Route::post('test-upload', function (\Illuminate\Http\Request $request) {
     $content = $request->getContent();
 

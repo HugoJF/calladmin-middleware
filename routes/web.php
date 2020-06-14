@@ -19,6 +19,12 @@ Route::get('redirect-to-steam', 'AuthController@redirectToSteam')->name('redirec
 Route::get('dashboard', 'ReportsController@index')->name('dashboard');
 Route::get('search', 'ReportsController@search')->name('search');
 
+Route::get('route', function () {
+    return response()->json([
+        'demo_url' => route('api.v2.reports.demo', \App\Report::first()),
+    ], 201);
+});
+
 Route::prefix('reports')->name('reports.')->group(function () {
     Route::get('/', 'ReportsController@index')->name('index');
     Route::get('{report}', 'ReportsController@show')->name('show');

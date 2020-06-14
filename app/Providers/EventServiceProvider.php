@@ -26,7 +26,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         ReportCreated::class  => [
             NotifyDiscord::class,
-            TriggerGotvRecording::class,
+//            TriggerGotvRecording::class,
             NotifyAssociatedUsers::class,
         ],
         CommentCreated::class => [
