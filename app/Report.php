@@ -135,6 +135,13 @@ class Report extends Model
         }, 0);
     }
 
+    public function getVideoUrlAttribute()
+    {
+        $url = config('calladmin.minio');
+
+        return "$url/video/$this->id.mp4";
+    }
+
     public function getDemoUrlAttribute()
     {
         $url = config('calladmin.minio');

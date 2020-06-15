@@ -44,13 +44,17 @@ class SearchForVideos extends Command
      */
     public function handle()
     {
-        $reports = Report::query()->whereNull('video_url')->whereNull('decision')->whereNull('ignored_at')->get();
+        $reports = Report::query()
+                         ->whereNull('video_url')
+                         ->whereNull('decision')
+                         ->whereNull('ignored_at')
+                         ->cursor();
 
-        $client = new Client();
+        $client = new Client;
 
         foreach ($reports as $report) {
             $this->info("Search video for report {$report->id}");
-            $url = $this->getVideoUrl($report->id);
+            $url = $report->video_url;
 
             try {
                 $res = $client->request('HEAD', $url);
@@ -67,10 +71,5 @@ class SearchForVideos extends Command
                 $this->info("Could not find video, request returned with status {$statusCode}");
             }
         }
-    }
-
-    protected function getVideoUrl($id)
-    {
-        return "{$this->minio}$id.mp4";
     }
 }
