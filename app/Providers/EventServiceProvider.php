@@ -25,8 +25,6 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         ReportCreated::class  => [
-            NotifyDiscord::class,
-//            TriggerGotvRecording::class,
             NotifyAssociatedUsers::class,
         ],
         CommentCreated::class => [
