@@ -24,20 +24,20 @@ class ReportsController extends Controller
     public function store(UserService $service, Request $request)
     {
         // Check database for reporter
-        $reporter = $service->findOrCreate(
-            $request->input('reporter_id'),
-            $request->input('reporter_name')
-        );
+        $reporter = $service->findOrCreate([
+            'steamid'  => $request->input('reporter_id'),
+            'username' => $request->input('reporter_name'),
+        ]);
 
         if ($reporter->ignore_reports) {
             return request()->json(['message' => 'REPORT_IGNORED']);
         }
 
         // Check database for targt
-        $target = $service->findOrCreate(
-            $request->input('target_id'),
-            $request->input('target_name')
-        );
+        $target = $service->findOrCreate([
+            'steamid'  => $request->input('target_id'),
+            'username' => $request->input('target_name'),
+        ]);
 
         if ($target->ignore_targets) {
             return request()->json(['message' => 'TARGET_IGNORED']);

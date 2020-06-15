@@ -7,14 +7,13 @@ use App\Classes\SteamID;
 class UserService
 {
     /**
-     * @param $rawId
-     * @param $username
+     * @param $options
      *
      * @return User|null
      */
-    public function findOrCreate($rawId, $username)
+    public function findOrCreate($options)
     {
-        $id = SteamID::normalizeSteamID64($rawId);
+        $id = SteamID::normalizeSteamID64($options['steamid']);
         $user = User::where('steamid', $id)->first();
 
         if (!is_null($user)) {
@@ -23,7 +22,7 @@ class UserService
 
         $user = new User;
 
-        $user->username = $username;
+        $user->fill($options);
         $user->steamid = $id;
 
         $user->save();

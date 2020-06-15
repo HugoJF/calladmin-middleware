@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\SteamID;
 use App\User;
+use App\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Invisnik\LaravelSteamAuth\SteamAuth;
@@ -33,6 +34,9 @@ class AuthController extends Controller
         $this->steam = $steam;
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function logout()
     {
         Auth::logout();
@@ -40,62 +44,48 @@ class AuthController extends Controller
         return redirect()->route('home');
     }
 
-    public function login(Request $request)
-    {
-        if ($this->steam->validate()) {
-            $info = $this->steam->getUserInfo();
-            if (!is_null($info)) {
-                $user = $this->findOrNewUser($info);
-
-                if ($user === null) {
-                    return 'Banned from system';
-                }
-
-                Auth::login($user, true);
-
-                $previous = $request->session()->pull('redirect');
-                if ($previous) {
-                    return redirect($previous);
-                } else {
-                    return redirect($this->redirectURL); // redirect to site
-                }
-            }
-        }
-
-        return $this->redirectToSteam();
-    }
-
     /**
-     * Getting user by info or created if not exists.
+     * @param UserService $service
+     * @param Request     $request
      *
-     * @param $info
-     *
-     * @return User
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    protected function findOrNewUser($info)
+    public function login(UserService $service, Request $request)
     {
-        $id = SteamID::normalizeSteamID64($info->steamID64);
-        $user = User::where('steamid', $id)->first();
-
-        if (!is_null($user)) {
-            return $user;
+        if (!$this->steam->validate()) {
+            return $this->redirectToSteam();
         }
 
-        $user = User::make([
+        $info = $this->steam->getUserInfo();
+
+        if (is_null($info)) {
+            return $this->redirectToSteam();
+        }
+
+        $user = $service->findOrCreate([
+            'steamid'  => $info->steamID64,
             'username' => $info->personaname,
             'avatar'   => $info->avatarfull,
         ]);
-        $user->steamid = $id;
 
-        $user->save();
+        if ($user === null) {
+            return response()->json(['message' => 'BANNED'], 401);
+        }
 
-        return $user;
+        auth()->login($user, true);
+
+        if ($previous = $request->session()->pull('redirect')) {
+            return redirect($previous);
+        }
+
+        return redirect($this->redirectURL); // redirect to site
     }
 
     /**
      * Redirect the user to the authentication page.
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function redirectToSteam(Request $request)
     {
