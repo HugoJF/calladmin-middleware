@@ -12,6 +12,7 @@ use App\Report;
 use App\ReportService;
 use App\Services\VoteService;
 use App\User;
+use App\UserService;
 use App\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,24 +64,24 @@ class ReportsController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(UserService $service, Request $request)
     {
-        // Store reporter information
-        $reporterId = SteamID::normalizeSteamID64($request->input('reporter_id'));
-        $reporterName = $request->input('reporter_name');
-
-        // Store target information
-        $targetId = SteamID::normalizeSteamID64($request->input('target_id'));
-        $targetName = $request->input('target_name');
-
         // Check database for reporter
-        $reporter = $this->findOrCreate($reporterId, $reporterName);
+        $reporter = $service->findOrCreate(
+            $request->input('reporter_id'),
+            $request->input('reporter_name')
+        );
+
         if ($reporter->ignore_reports) {
             return 'false';
         }
 
         // Check database for targt
-        $target = $this->findOrCreate($targetId, $targetName);
+        $target = $service->findOrCreate(
+            $request->input('target_id'),
+            $request->input('target_name')
+        );
+
         if ($target->ignore_targets) {
             return 'false';
         }
@@ -110,24 +111,6 @@ class ReportsController extends Controller
         event(new ReportCreated($report));
 
         return ['message' => 'Report created'];
-    }
-
-    private function findOrCreate($id, $username)
-    {
-        $user = User::where('steamid', $id)->first();
-
-        if (!is_null($user)) {
-            return $user;
-        }
-
-        $user = User::make();
-
-        $user->username = $username;
-        $user->steamid = $id;
-
-        $user->save();
-
-        return $user;
     }
 
     /**

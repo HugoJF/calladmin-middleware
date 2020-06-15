@@ -21,9 +21,9 @@ Route::prefix('v1')->group(function () {
 });
 
 Route::name('api.v2.reports.')->prefix('v2/reports')->group(function () {
-    Route::post('/', 'ApiReportsController@store')->name('create');
+    Route::post('/', 'ReportsController@store')->name('create');
 
-    Route::post('{report}/demo', 'ApiReportsController@demo')->name('demo');
+    Route::post('{report}/demo', 'ReportsController@demo')->name('demo');
 });
 
 Route::post('test-upload', function (\Illuminate\Http\Request $request) {
