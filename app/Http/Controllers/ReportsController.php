@@ -197,26 +197,20 @@ class ReportsController extends Controller
         DB::beginTransaction();
 
         try {
-            if (!$report->comments()->forceDelete()) {
-                throw new Exception('Failed to delete report comments');
-            }
-
-            if (!$report->delete()) {
-                throw new Exception('Failed to delete report');
-            }
-
-            flash()->success('Report deleted successfully!');
+            $report->comments()->forceDelete();
+            $report->delete();
         } catch (Exception $e) {
             report($e);
             DB::rollBack();
 
-            $message = $e->getMessage();
-            flash()->error("Report could not be deleted: $message");
+            flash()->error("Report could not be deleted");
 
             return back();
         }
 
         DB::commit();
+
+        flash()->success('Report deleted successfully!');
 
         return back();
     }
