@@ -5,20 +5,15 @@ namespace App\Http\Controllers;
 use App\Comment;
 use App\Events\CommentCreated;
 use App\Report;
+use App\Services\CommentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    public function store(Request $request, Report $report)
+    public function store(CommentService $service, Request $request, Report $report)
     {
-        $comment = Comment::make();
-
-        $comment->comment = $request->input('comment');
-        $comment->report()->associate($report);
-        $comment->user()->associate(Auth::user());
-
-        $comment->save();
+        $comment = $service->create($report, $request->input());
 
         event(new CommentCreated($comment));
 

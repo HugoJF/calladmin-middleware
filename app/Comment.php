@@ -9,6 +9,8 @@ class Comment extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = ['comment'];
+
     public function report()
     {
         return $this->belongsTo(Report::class);
