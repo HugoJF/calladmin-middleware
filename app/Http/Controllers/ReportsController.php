@@ -197,7 +197,7 @@ class ReportsController extends Controller
         DB::beginTransaction();
 
         try {
-            if (!$report->comments()->delete()) {
+            if (!$report->comments()->forceDelete()) {
                 throw new Exception('Failed to delete report comments');
             }
 
