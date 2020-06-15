@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\v2;
 
 use App\Classes\SteamID;
 use App\Events\ReportCreated;

@@ -20,19 +20,4 @@ Route::prefix('v1')->group(function () {
     Route::patch('/reports/{report}/attach-video', 'ReportsController@attachVideo');
 });
 
-Route::name('api.v2.reports.')->prefix('v2/reports')->group(function () {
-    Route::post('/', 'ReportsController@store')->name('create');
-
-    Route::post('{report}/demo', 'ReportsController@demo')->name('demo');
-});
-
-Route::post('test-upload', function (\Illuminate\Http\Request $request) {
-    $content = $request->getContent();
-
-    Storage::disk('local')->put(\Illuminate\Support\Str::random(16), $content);
-
-    return request()->json(['status' => 201], 201);
-});
-
 Route::post('reports', 'ReportsController@store')->name('store');
-

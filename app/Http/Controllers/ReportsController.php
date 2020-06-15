@@ -190,27 +190,6 @@ class ReportsController extends Controller
         return back();
     }
 
-    /**
-     * @param ReportService $service
-     * @param Request       $request
-     * @param Report        $report
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws MissingVideoUrlException
-     */
-    public function attachVideo(ReportService $service, Request $request, Report $report)
-    {
-        if (!$request->has('url'))
-            throw new MissingVideoUrlException();
-
-        $url = $request->input('url');
-
-        $service->attachVideo($report, $url);
-
-        flash()->success("Video ID <strong>$url</strong> attached!");
-
-        return back();
-    }
 
     public function delete(Report $report)
     {
@@ -223,41 +202,5 @@ class ReportsController extends Controller
         }
 
         return back();
-    }
-
-    public function missingVideo()
-    {
-        return Report::whereNull('ignored_at')
-                     ->whereNull('video_url')
-                     ->whereNull('decision')
-                     ->whereNull('decision')
-                     ->orderBy('created_at', 'ASC')
-                     ->get()
-                     ->each(function ($report) {
-                         $steam = new SteamID($report->target_steam_id);
-                         $report->target_steam_id_64 = $steam->ConvertToUInt64();
-                         $report->append('demoUrl');
-                     });
-    }
-
-    public function attachVideoApi(ReportService $service, Request $request, Report $report)
-    {
-        $service->attachVideo($report, $request->input('url'));
-
-        return $report;
-    }
-
-    public function attachChat(ReportService $service, Request $request, Report $report)
-    {
-        $service->attachChat($report, $request->all());
-
-        return ['success' => true];
-    }
-
-    public function attachPlayerData(ReportService $service, Request $request, Report $report)
-    {
-        $service->attachPlayerData($report, $request->all());
-
-        return ['success' => true];
     }
 }
