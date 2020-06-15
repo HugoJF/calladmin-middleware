@@ -34,7 +34,7 @@ class SearchForVideos extends Command
     {
         parent::__construct();
 
-        $this->minio = config('calladmin.minio');
+        $this->minio = config('calladmin.minio') . '/video';
     }
 
     /**

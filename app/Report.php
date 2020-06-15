@@ -45,10 +45,11 @@ class Report extends Model
         $total = Report::whereNotNull('decision')->count();
         $correct = Report::where('decision', 1)->count();
 
-        if ($total === 0)
+        if ($total === 0) {
             return 0;
-        else
+        } else {
             return $correct / $total;
+        }
     }
 
     public function target()
@@ -129,53 +130,15 @@ class Report extends Model
 
     public function getScoreAttribute()
     {
-        $score = $this->votes->reduce(function ($acc, $cur) {
+        return $this->votes->reduce(function ($acc, $cur) {
             return $acc + ($cur->type === true ? 1 : -1);
         }, 0);
-
-        return $score;
-    }
-
-    public function getDemoFilenameAttribute()
-    {
-        $d = $this->created_at;
-
-        $data = [
-            'Hour'       => $d->hour,
-            'Minutes'    => $d->minute,
-            'Seconds'    => $d->second,
-            'Day'        => $d->day,
-            'Month'      => $d->month,
-            'Year'       => $d->year,
-            'ReporterID' => $this->reporter_steam_id,
-            'TargetID'   => $this->target_steam_id,
-        ];
-
-        $format = '{%Hour%}-{%Minutes%}-{%Seconds%}_{%Day%}-{%Month%}-{%Year%}_{%ReporterID%}_{%TargetID%}';
-
-        $pattern = '/\{\%([A-Za-z0-9]+)\%\}/';
-
-        $fileName = preg_replace_callback($pattern, function ($matches) use ($data) {
-            $key = $matches[1];
-
-            if (array_key_exists($key, $data)) {
-                return $data[ $key ];
-            } else {
-                return $matches[0];
-            }
-        }, $format);
-
-        return preg_replace('/[^A-Za-z0-9]/', '_', $fileName);;
     }
 
     public function getDemoUrlAttribute()
     {
-        $url = config('constants.demoRepositoryUrl');
+        $url = config('calladmin.minio');
 
-        $ip = preg_replace('/[^A-Za-z0-9]/', '_', $this->server_ip . ':' . $this->server_port);
-
-        $name = $ip . '/' . $this->demoFilename . '.dem';
-
-        return $url . $name;
+        return "$url/demos/$this->id.dem";
     }
 }
