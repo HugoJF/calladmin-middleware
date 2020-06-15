@@ -7,18 +7,6 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
-/**
- * App\Report
- *
- * @property-read mixed     $demo_filename
- * @property-read \App\User $reporter
- * @property-read \App\User $target
- * @property Carbon         created_at
- * @method static \Illuminate\Database\Eloquent\Builder|Report newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Report newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Report query()
- * @mixin \Eloquent
- */
 class Report extends Model
 {
     use SearchableTrait;

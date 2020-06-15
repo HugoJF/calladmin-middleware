@@ -14,8 +14,10 @@ use App\Services\VoteService;
 use App\User;
 use App\UserService;
 use App\Vote;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
@@ -68,8 +70,8 @@ class ReportsController extends Controller
     {
         // Check database for reporter
         $reporter = $service->findOrCreate([
-            'steamid' => $request->input('reporter_id'),
-            'username' => $request->input('reporter_name')
+            'steamid'  => $request->input('reporter_id'),
+            'username' => $request->input('reporter_name'),
         ]);
 
         if ($reporter->ignore_reports) {
@@ -78,8 +80,8 @@ class ReportsController extends Controller
 
         // Check database for targt
         $target = $service->findOrCreate([
-            'steamid' => $request->input('target_id'),
-            'username' =>$request->input('target_name')
+            'steamid'  => $request->input('target_id'),
+            'username' => $request->input('target_name'),
         ]);
 
         if ($target->ignore_targets) {
@@ -190,16 +192,31 @@ class ReportsController extends Controller
         return back();
     }
 
-
     public function delete(Report $report)
     {
-        $deleted = $report->delete();
+        DB::beginTransaction();
 
-        if ($deleted) {
+        try {
+            if (!$report->comments()->delete()) {
+                throw new Exception('Failed to delete report comments');
+            }
+
+            if (!$report->delete()) {
+                throw new Exception('Failed to delete report');
+            }
+
             flash()->success('Report deleted successfully!');
-        } else {
-            flash()->success('Report could not be deleted!');
+        } catch (Exception $e) {
+            report($e);
+            DB::rollBack();
+
+            $message = $e->getMessage();
+            flash()->error("Report could not be deleted: $message");
+
+            return back();
         }
+
+        DB::commit();
 
         return back();
     }
