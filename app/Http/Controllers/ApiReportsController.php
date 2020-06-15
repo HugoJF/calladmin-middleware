@@ -67,6 +67,7 @@ class ApiReportsController extends Controller
         return response()->json([
             'id'       => $report->id,
             'message'  => 'CREATED',
+            'view_url' => route('reports.show', $report),
             'demo_url' => route('api.v2.reports.demo', $report),
         ], 201);
     }
