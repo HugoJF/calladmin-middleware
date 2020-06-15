@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class MyReportsController extends Controller
 {
-    public const CONFIRMATION_TEXT = 'Concordo em melhorar meus reports para ajudar toda a equipe dos servidores de_nerdTV';
-
     public function index(Request $request)
     {
         $reports = Auth::user()->reports()->paginate(5);
@@ -37,14 +35,14 @@ class MyReportsController extends Controller
 
     public function acked(Request $request, Report $report)
     {
-        if ($request->input('confirmation') !== MyReportsController::CONFIRMATION_TEXT) {
+        if ($request->input('confirmation') !== config('calladmin.confirmation_text')) {
             flash()->error('Por favor verifique seu texto de confirmação!');
 
             return back();
         }
 
-        $reporterId = SteamID::normalizeSteamID64($report->reporter_steam_id);
-        $authedId = SteamID::normalizeSteamID64(Auth::user()->steamid);
+        $reporterId = steamid64($report->reporter_steam_id);
+        $authedId = steamid64(auth()->user()->steamid);
 
         if ($reporterId !== $authedId) {
             flash()->error('Você não pode confirmar reports de outras pessoas');
@@ -52,7 +50,7 @@ class MyReportsController extends Controller
             return back();
         }
 
-        $report->acked_at = Carbon::now();
+        $report->acked_at = now();
 
         $report->save();
 
