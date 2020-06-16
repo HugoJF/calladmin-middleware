@@ -14,7 +14,7 @@ class CommentService
         $comment->fill($data);
 
         $comment->report()->associate($report);
-        $comment->user()->associate(Auth::user());
+        $comment->user()->associate(auth()->user());
 
         $comment->save();
 
