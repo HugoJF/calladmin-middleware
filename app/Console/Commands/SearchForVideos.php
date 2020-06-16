@@ -54,7 +54,7 @@ class SearchForVideos extends Command
 
         foreach ($reports as $report) {
             $this->info("Search video for report {$report->id}");
-            $url = $report->video_url;
+            $url = $report->minio_video_url;
 
             try {
                 $res = $client->request('HEAD', $url);
