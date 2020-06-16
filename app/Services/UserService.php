@@ -17,6 +17,9 @@ class UserService
         $user = User::where('steamid', $id)->first();
 
         if (!is_null($user)) {
+            $user->fill($options);
+            $user->save();
+            
             return $user;
         }
 
