@@ -19,7 +19,7 @@ class UserService
         if (!is_null($user)) {
             $user->fill($options);
             $user->save();
-            
+
             return $user;
         }
 
