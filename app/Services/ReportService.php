@@ -7,8 +7,6 @@ use App\Exceptions\InvalidDecisionException;
 use App\Http\Controllers\SourceBansService;
 use Exception;
 use hugojf\CsgoServerApi\Facades\CsgoApi;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 
 class ReportService
 {
@@ -57,7 +55,7 @@ class ReportService
      */
     public function ignoreReport(Report $report)
     {
-        $report->ignored_at = Carbon::now();
+        $report->ignored_at = now();
 
         return $report->save();
     }
@@ -74,6 +72,7 @@ class ReportService
     public function decide(Report $report, string $decision, $duration, $reason)
     {
         $decision = $this->translateDecision($decision);
+
         // TODO: make this an event
         if ($decision) {
             try {
@@ -98,8 +97,9 @@ class ReportService
     {
         $values = ['correct' => true, 'incorrect' => false];
 
-        if (!array_key_exists($decision, $values))
+        if (!array_key_exists($decision, $values)) {
             throw new InvalidDecisionException();
+        }
 
         return $values[ $decision ];
     }
@@ -117,9 +117,13 @@ class ReportService
         $url = route('reports.show', $report);
 
         // Insert ban
-        $sb->insertBan($report, Auth::user(), $duration, $reason, $url);
+        $sb->insertBan($report, auth()->user(), $duration, $reason, $url);
 
         // Kick players
-        CsgoApi::all()->execute("sm_kick \"#{$report->target->steamid}\" \"Kickado por decisão de report no CallAdmin-Middleware\"", 0, false)->send();
+        try {
+            CsgoApi::all()->execute("sm_kick \"#{$report->target->steamid}\" \"Kickado por decisão de report no CallAdmin-Middleware\"", 0, false)->send();
+        } catch (Exception $e) {
+            flash()->error('Failed to communicate with server when attempting to kick player.');
+        }
     }
 }

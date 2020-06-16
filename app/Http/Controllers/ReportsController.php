@@ -153,19 +153,21 @@ class ReportsController extends Controller
     {
         $decision = $service->translateDecision($request->input('decision'));
 
-        $isReporter = steamid64(Auth::user()->steamid) === steamid64($report->reporter_steam_id);
-        $isTarget = steamid64(Auth::user()->steamid) === steamid64($report->target_steam_id);
+        $isReporter = steamid64(auth()->user()->steamid) === steamid64($report->reporter_steam_id);
+        $isTarget = steamid64(auth()->user()->steamid) === steamid64($report->target_steam_id);
 
         // Check if user is actually involved
-        if ($isReporter || $isTarget)
+        if ($isReporter || $isTarget) {
             throw new InvolvedInReportException();
+        }
 
         // Check if report is already decided
-        if ($report->decided)
+        if ($report->decided) {
             throw new AlreadyDecidedException();
+        }
 
         /** @var Vote $vote */
-        $vote = $report->votes()->where('user_id', Auth::id())->first();
+        $vote = $report->votes()->where('user_id', auth()->id())->first();
 
         // Handle vote
         if ($vote && $vote->type === $decision) {
