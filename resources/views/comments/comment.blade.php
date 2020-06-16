@@ -1,5 +1,5 @@
 <div class="media text-muted py-2">
-    @if(!$comment->user->avatar)
+    @if($comment->user->avatar)
         <img class="mr-2 rounded" width="32" height="32" src="{{ $comment->user->avatar }}">
     @else
         <svg class="mr-2 rounded" enable-background="new 0 0 512 512" viewBox="0 0 512 512" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
