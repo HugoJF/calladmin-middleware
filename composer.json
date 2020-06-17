@@ -18,6 +18,7 @@
         "anlutro/l4-settings": "^0.7.3",
         "coraxster/flysystem-aws-s3-v3-minio": "^1.0",
         "fideloper/proxy": "^4.0",
+        "fruitcake/laravel-cors": "^2.0",
         "hugojf/csgo-server-api": "*",
         "invisnik/laravel-steam-auth": "4.*",
         "ixudra/curl": "^6.16",
