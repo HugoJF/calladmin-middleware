@@ -20,7 +20,7 @@ class ReportsController
                      ->get()
                      ->each(function ($report) {
                          $report->target_steam_id_64 = steamid64($report->target_steam_id);
-                         $report->append('demoUrl');
+                         $report->append('legacyDemoUrl');
                      });
     }
 

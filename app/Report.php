@@ -148,4 +148,50 @@ class Report extends Model
 
         return "$url/demos/$this->id.dem";
     }
+
+    /**
+     * @return string|string[]|null
+     * @deprecated
+     */
+    public function getDemoFilenameAttribute()
+    {
+        $d = $this->created_at;
+
+        $data = [
+            'Hour'       => $d->hour,
+            'Minutes'    => $d->minute,
+            'Seconds'    => $d->second,
+            'Day'        => $d->day,
+            'Month'      => $d->month,
+            'Year'       => $d->year,
+            'ReporterID' => $this->reporter_steam_id,
+            'TargetID'   => $this->target_steam_id,
+        ];
+
+        $format = '{%Hour%}-{%Minutes%}-{%Seconds%}_{%Day%}-{%Month%}-{%Year%}_{%ReporterID%}_{%TargetID%}';
+
+        $pattern = '/\{\%([A-Za-z0-9]+)\%\}/';
+
+        $fileName = preg_replace_callback($pattern, function ($matches) use ($data) {
+            $key = $matches[1];
+
+            if (array_key_exists($key, $data)) {
+                return $data[ $key ];
+            } else {
+                return $matches[0];
+            }
+        }, $format);
+
+        return preg_replace('/[^A-Za-z0-9]/', '_', $fileName);;
+    }
+
+    public function getLegacyDemoUrlAttribute()
+    {
+        $url = 'http://demos.epsilon.denerdtv.com';
+        $ip = preg_replace('/[^A-Za-z0-9]/', '_', $this->server_ip . ':' . $this->server_port);
+
+        $name = $ip . '/' . $this->demoFilename . '.dem';
+
+        return $url . $name;
+    }
 }
