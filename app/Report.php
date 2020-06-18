@@ -187,7 +187,7 @@ class Report extends Model
 
     public function getLegacyDemoUrlAttribute()
     {
-        $url = 'http://demos.epsilon.denerdtv.com';
+        $url = 'http://demos.epsilon.denerdtv.com/';
         $ip = preg_replace('/[^A-Za-z0-9]/', '_', $this->server_ip . ':' . $this->server_port);
 
         $name = $ip . '/' . $this->demoFilename . '.dem';
