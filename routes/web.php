@@ -13,6 +13,9 @@
 
 Route::get('/', 'ReportsController@index')->name('home');
 
+Route::get('new', function () {
+    return view('redesign');
+});
 Route::get('auth', 'AuthController@login')->name('login');
 Route::get('logout', 'AuthController@logout')->name('logout');
 Route::get('redirect-to-steam', 'AuthController@redirectToSteam')->name('redirect-to-steam');
