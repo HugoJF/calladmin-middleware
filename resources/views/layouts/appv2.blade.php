@@ -14,9 +14,9 @@
 
     @stack('head')
 </head>
-<body class="bg-gray-200 text-gray-900">
-<nav class="flex px-12 py-8 w-full items-center">
-    <div class="text-gray-900 text-4xl uppercase">
+<body class="bg-gray-900 text-gray-100">
+<nav class="flex px-12 py-8 mb-8 w-full items-center">
+    <div class="text-white text-4xl uppercase">
         <h1 class="flex">
             <span>Over</span>
             <span class="font-bold">watch</span>

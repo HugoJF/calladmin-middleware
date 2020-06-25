@@ -5,7 +5,7 @@
         <!-- Report -->
         <div class="w-3/4">
             <!-- Header -->
-            <div class="flex items-center">
+            <div class="mb-8 flex items-center">
                 <!-- Votes -->
                 <div class="flex flex-col mr-6 items-center justify-center text-4xl">
                     <i class="text-gray-700 fa fa-chevron-up" aria-hidden="true"></i>
@@ -16,53 +16,62 @@
                 <!-- Info -->
                 <div class="flex-grow">
                     <!-- Reason + Date -->
-                    <div class="flex justify-between mb-6">
-                        <div class="flex items-baseline">
-                            <h2 class="mr-4 text-2xl font-bold">passando call pra outro time</h2>
-                            <small class="text-gray-600">4 hours ago</small>
-                        </div>
+                    <div class="flex justify-between">
+                        <h2 class="mr-4 text-3xl font-medium">passando call pra outro time</h2>
 
                         <div class="flex">
                             <!-- Demo -->
-                            <div class="flex items-center justify-center px-3 py-1 mr-2 bg-blue-700 hover:bg-blue-600 rounded-md shadow-sm hover:shadow cursor-pointer">
+                            <div class="flex items-center justify-center px-3 py-1 mr-2 bg-blue-700 hover:bg-blue-600 shadow-sm hover:shadow cursor-pointer">
                                 <i class="mr-3 text-gray-200 text-lg fa fa-download" aria-hidden="true"></i>
                                 <span class="text-gray-100">Demo</span>
                             </div>
                             <!-- Correct -->
-                            <div class="flex items-center justify-center px-3 py-1 mr-2 bg-green-700 hover:bg-green-600 rounded-md shadow-sm hover:shadow cursor-pointer">
+                            <div class="flex items-center justify-center px-3 py-1 mr-2 bg-green-700 hover:bg-green-600 shadow-sm hover:shadow cursor-pointer">
                                 <i class="mr-3 text-gray-200 text-lg fa fa-thumbs-up" aria-hidden="true"></i>
                                 <span class="text-gray-100">Correct</span>
                             </div>
                             <!-- Incorrect -->
-                            <div class="flex items-center justify-center px-3 py-1 mr-2 bg-red-700 hover:bg-red-600 rounded-md shadow-sm hover:shadow cursor-pointer">
+                            <div class="flex items-center justify-center px-3 py-1 mr-2 bg-red-700 hover:bg-red-600 shadow-sm hover:shadow cursor-pointer">
                                 <i class="mr-3 text-gray-200 text-lg fa fa-thumbs-down" aria-hidden="true"></i>
                                 <span class="text-gray-100">Incorrect</span>
                             </div>
 
                             <!-- Ignore -->
-                            <div class="flex items-center justify-center px-3 py-1 mr-2 text-gray-600 hover:text-yellow-600 border border-gray-400 hover:border-yellow-400 cursor-pointer rounded-md shadow-sm">
+                            <div class="flex items-center justify-center px-3 py-1 mr-2 bg-gray-800 text-gray-500 hover:text-gray-400 cursor-pointer shadow-sm">
                                 <i class="text-xl fa fa-ban" aria-hidden="true"></i>
                             </div>
 
                             <!-- Delete -->
-                            <div class="flex items-center justify-center px-3 py-1 mr-2 text-gray-600 hover:text-red-600 border border-gray-400 hover:border-red-400 cursor-pointer rounded-md shadow-sm">
+                            <div class="flex items-center justify-center px-3 py-1 mr-2 bg-gray-800 text-gray-500 hover:text-gray-400 cursor-pointer shadow-sm">
                                 <i class="text-xl fa fa fa-trash-o" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Badges -->
+                    <div class="flex p-1 mb-4 text-sm text-gray-600 tracking-tight">
+                        <p class="flex items-center mr-4">
+                            <i class="mr-1 text-gray-400 fa fa-map-marker" aria-hidden="true"></i>
+                            <span class="text-xs">177.54.150.15:27001</span>
+                        </p>
+                        <p class="flex items-center">
+                            <i class="mr-1 text-gray-400 fa fa-clock-o" aria-hidden="true"></i>
+                            <span class="text-xs">7 hours ago</span>
+                        </p>
+                    </div>
+
                     <!-- Details -->
                     <div class="flex">
                         <!-- 1st column -->
-                        <div class="w-1/3">
+                        <div class="w-1/3 flex-grow">
                             <h3 class="text-xl font-medium">Reporter:</h3>
 
                             <!-- Player info -->
-                            <div class="flex">
-                                <span class="mr-2 text-gray-800">Moov</span>
-                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold rounded tracking-wide">R: 5/6</span>
-                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold rounded tracking-wide">V: 56/63</span>
-                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold rounded tracking-wide">T: 0/3</span>
+                            <div class="pl-2 flex">
+                                <span class="mr-2 text-gray-200">Moov</span>
+                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold tracking-wide">R: 5/6</span>
+                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold tracking-wide">V: 56/63</span>
+                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold tracking-wide">T: 0/3</span>
                             </div>
 
                             <!-- Status -->
@@ -72,22 +81,91 @@
                         </div>
 
                         <!-- 2nd column -->
-                        <div class="w-1/3">
+                        <div class="w-1/3 flex-grow">
                             <h3 class="text-xl font-medium">Target:</h3>
 
                             <!-- Player info -->
-                            <div class="flex">
-                                <span class="mr-2 text-gray-800">Frezan</span>
-                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold rounded tracking-wide">R: 2/3</span>
-                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold rounded tracking-wide">V: 22/36</span>
-                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold rounded tracking-wide">T: 0/1</span>
+                            <div class="pl-2 flex">
+                                <span class="mr-2 text-gray-200">Frezan</span>
+                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold tracking-wide">R: 2/3</span>
+                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold tracking-wide">V: 22/36</span>
+                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold tracking-wide">T: 0/1</span>
                             </div>
 
                             <!-- Server -->
-                            <div class="mt-6">
-                                <span class="text-xl font-medium font-mono">177.54.150.15:27004</span>
+                            <div class="mt-4">
+                                <div class="inline-block px-3 py-1 text-gray-200 bg-gray-800 text-2xl font-mono font-bold shadow-lg">177.54.150.15:27004</div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metadata -->
+            <div>
+                <div class="w-1/2">
+                    <h3 class="mb-2 text-2xl font-medium">Players</h3>
+                    <div class="px-4">
+                        <table class="w-full">
+                            <tbody>
+                            <tr class="border-b border-gray-800">
+                                <td class="flex items-center py-2 tracking-tighter select-all">
+                                    <div class="w-2 h-2 mr-3 bg-gray-700 rounded-full shadow"></div>
+                                    <code>STEAM_1:1:417968068</code>
+                                </td>
+                                <td>Ne$Ka</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="flex items-center py-2 tracking-tighter select-all">
+                                    <div class="w-2 h-2 mr-3 bg-gray-700 rounded-full shadow"></div>
+                                    <code>STEAM_1:0:50060552</code>
+                                </td>
+                                <td>zanVz</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="flex items-center py-2 tracking-tighter select-all">
+                                    <div class="w-2 h-2 mr-3 bg-blue-700 rounded-full shadow"></div>
+                                    <code>STEAM_1:1:81600535</code>
+                                </td>
+                                <td>mth e-e</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="flex items-center py-2 tracking-tighter select-all">
+                                    <div class="w-2 h-2 mr-3 bg-gray-700 rounded-full shadow"></div>
+                                    <code>STEAM_1:0:182989492</code>
+                                </td>
+                                <td>joaohgaml</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="flex items-center py-2 tracking-tighter select-all">
+                                    <div class="w-2 h-2 mr-3 bg-red-700 rounded-full shadow"></div>
+                                    <code>STEAM_1:0:442181909</code>
+                                </td>
+                                <td>advisory</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="flex items-center py-2 tracking-tighter select-all">
+                                    <div class="w-2 h-2 mr-3 bg-gray-700 rounded-full shadow"></div>
+                                    <code>STEAM_1:1:216418201</code>
+                                </td>
+                                <td>dgt serious?</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="flex items-center py-2 tracking-tighter select-all">
+                                    <div class="w-2 h-2 mr-3 bg-gray-700 rounded-full shadow"></div>
+                                    <code>STEAM_1:0:76017446</code>
+                                </td>
+                                <td>Gdm</td>
+                            </tr>
+                            <tr class="">
+                                <td class="flex items-center py-2 tracking-tighter select-all">
+                                    <div class="w-2 h-2 mr-3 bg-gray-700 rounded-full shadow"></div>
+                                    <code>STEAM_1:1:122362167</code>
+                                </td>
+                                <td>꧁ঔৣ☬✞daArkkkkk✞☬</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -102,7 +180,7 @@
             <!-- Comment box -->
             <div>
                 <!-- Form -->
-                <div class="px-4 flex items-center justify-center border border-gray-700 rounded">
+                <div class="px-4 mb-4 flex items-center justify-center bg-gray-800 border border-gray-700 rounded shadow-md">
                     <input class="py-3 mr-2 flex-grow w-full bg-transparent select-none outline-none" type="text">
                     <i class="text-xl fa fa-paper-plane" aria-hidden="true"></i>
                 </div>
