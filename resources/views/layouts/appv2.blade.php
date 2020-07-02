@@ -11,6 +11,7 @@
 
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="//fonts.googleapis.com/css?family=Exo&subset=latin" rel="stylesheet" type="text/css">
 
     @stack('head')
 </head>
@@ -18,7 +19,7 @@
 <nav class="flex px-12 py-8 mb-8 w-full items-center">
     <div class="text-white text-4xl uppercase">
         <h1 class="flex">
-            <span>Over</span>
+            <span class="text-gray-200">Over</span>
             <span class="font-bold">watch</span>
         </h1>
     </div>
