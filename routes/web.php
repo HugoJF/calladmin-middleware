@@ -14,7 +14,9 @@
 Route::get('/', 'ReportsController@index')->name('home');
 
 Route::get('new', function () {
-    return view('redesign');
+    $report = \App\Report::find(1973);
+
+    return view('redesign.reports.show', compact('report'));
 });
 Route::get('auth', 'AuthController@login')->name('login');
 Route::get('logout', 'AuthController@logout')->name('logout');
