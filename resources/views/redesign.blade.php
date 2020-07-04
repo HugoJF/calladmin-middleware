@@ -7,7 +7,7 @@
             <!-- Header -->
             <div class="mb-8 flex items-center">
                 <!-- Votes -->
-                <div class="flex flex-col mr-6 items-center justify-center text-4xl">
+                <div class="flex flex-col mr-6 items-center justify-center text-4xl hidden">
                     <i class="text-gray-400 fa fa-chevron-up" aria-hidden="true"></i>
                     <span>1</span>
                     <i class="text-gray-400 fa fa-chevron-down" aria-hidden="true"></i>
@@ -49,13 +49,13 @@
                     </div>
 
                     <!-- Badges -->
-                    <div class="flex p-1 mb-4 text-sm text-gray-400 tracking-tight">
-                        <p class="flex items-center mr-4">
-                            <i class="mr-1 text-gray-400 fa fa-map-marker" aria-hidden="true"></i>
+                    <div class="flex p-1 pl-4 mb-4 text-sm text-gray-400 tracking-tight">
+                        <p class="flex items-baseline mr-8">
+                            <i class="mr-2 text-gray-300 fa fa-map-marker" aria-hidden="true"></i>
                             <span class="text-sm">177.54.150.15:27001</span>
                         </p>
-                        <p class="flex items-center">
-                            <i class="mr-1 text-gray-400 fa fa-clock-o" aria-hidden="true"></i>
+                        <p class="flex items-baseline">
+                            <i class="mr-2 text-gray-300 fa fa-clock-o" aria-hidden="true"></i>
                             <span class="text-sm">7 hours ago</span>
                         </p>
                     </div>
@@ -67,11 +67,13 @@
                             <h3 class="text-xl font-medium">Reporter:</h3>
 
                             <!-- Player info -->
-                            <div class="pl-2 flex">
+                            <div class="pl-2 flex items-center">
+                                <div class="w-2 h-2 mr-3 bg-blue-700 rounded-full shadow"></div>
                                 <span class="mr-2 text-gray-200">Moov</span>
-                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold tracking-wide rounded">R: 5/6</span>
-                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold tracking-wide rounded">V: 56/63</span>
-                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold tracking-wide rounded">T: 0/3</span>
+                                <div class="mx-2 text-sm text-gray-400 font-mono tracking-tighter">STEAM_1:1:417968068</div>
+                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-medium tracking-wide rounded">R: 5 / 6</span>
+                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-medium tracking-wide rounded">V: 56 / 63</span>
+                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-medium tracking-wide rounded">T: 0 / 3</span>
                             </div>
 
                             <!-- Status -->
@@ -85,11 +87,13 @@
                             <h3 class="text-xl font-medium">Target:</h3>
 
                             <!-- Player info -->
-                            <div class="pl-2 flex">
-                                <span class="mr-2 text-gray-200">Frezan</span>
-                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold tracking-wide rounded">R: 2/3</span>
-                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold tracking-wide rounded">V: 22/36</span>
-                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-bold tracking-wide rounded">T: 0/1</span>
+                            <div class="pl-2 flex items-center">
+                                <div class="w-2 h-2 mr-3 bg-red-700 rounded-full shadow"></div>
+                                <span class="text-gray-200">Frezan</span>
+                                <div class="mx-2 text-sm text-gray-400 font-mono tracking-tighter">STEAM_1:1:417968068</div>
+                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-medium tracking-wide rounded">R: 2 / 3</span>
+                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-medium tracking-wide rounded">V: 22 / 36</span>
+                                <span class="py-1 px-2 mx-1 text-gray-100 bg-green-700 text-xs font-medium tracking-wide rounded">T: 0 / 1</span>
                             </div>
 
                             <!-- Server -->
@@ -104,9 +108,12 @@
             <!-- Metadata -->
             <div class="flex">
                 <!-- Players -->
-                <div class="w-1/2">
-                    <h3 class="mb-2 text-2xl font-medium">Players</h3>
-                    <div class="px-4">
+                <div class="pr-4 w-1/2">
+                    <div class="mb-4 flex items-center">
+                        <h3 class="mr-5 text-2xl font-medium">Players</h3>
+                        <div class="flex-grow border-b-2 border-gray-800 border-dashed"></div>
+                    </div>
+                    <div class="pl-4">
                         <table class="w-full">
                             <tbody>
                             <tr class="text-gray-400 border-b border-gray-800">
@@ -163,7 +170,7 @@
                                     <div class="w-2 h-2 mr-3 bg-gray-700 rounded-full shadow"></div>
                                     <code>STEAM_1:1:122362167</code>
                                 </td>
-                                <td>꧁ঔৣ☬✞daArkkkkk✞☬</td>
+                                <td>✞daArkkkkk✞☬</td>
                             </tr>
                             </tbody>
                         </table>
@@ -171,44 +178,47 @@
                 </div>
 
                 <!-- Chat messages -->
-                <div class="w-1/2">
-                    <h3 class="mb-2 text-2xl font-medium">Chat</h3>
+                <div class="pl-4 w-1/2">
+                    <div class="mb-4 flex items-center">
+                        <h3 class="mr-5 text-2xl font-medium">Chat</h3>
+                        <div class="flex-grow border-b-2 border-gray-800 border-dashed"></div>
+                    </div>
                     <ul class="pl-4 list-unstyled">
                         <li class="my-2 text-gray-400">
-                            <span class="text-gray-300 font-medium">advisory: </span> awp EL
+                            <span class="mr-1 text-gray-200 font-medium">advisory: </span> awp EL
                         </li>
                         <li class="my-2 text-gray-400">
-                            <span class="text-gray-300 font-medium">advisory: </span> vai tr alg humildade
+                            <span class="mr-1 text-gray-200 font-medium">advisory: </span> vai tr alg humildade
                         </li>
                         <li class="my-2 text-gray-400">
-                            <span class="text-gray-300 font-medium"> ꧁ঔৣ☬✞daArkkkkk✞☬: </span> [
+                            <span class="mr-1 text-gray-200 font-medium"> ✞daArkkkkk✞☬: </span> [
                         </li>
                         <li class="my-2 text-gray-400">
-                            <span class="text-gray-300 font-medium">꧁ঔৣ☬✞daArkkkkk✞☬:</span> nao
+                            <span class="mr-1 text-gray-200 font-medium">✞daArkkkkk✞☬:</span> nao
                         </li>
                         <li class="my-2 text-gray-400">
-                            <span class="text-gray-300 font-medium"> mth e-e:</span> mid
+                            <span class="mr-1 text-gray-200 font-medium"> mth e-e:</span> mid
                         </li>
                         <li class="my-2 text-gray-400">
-                            <span class="text-gray-300 font-medium"> advisory:</span> mid pra tr
+                            <span class="mr-1 text-gray-200 font-medium"> advisory:</span> mid pra tr
                         </li>
                         <li class="my-2 text-gray-400">
-                            <span class="text-gray-300 font-medium"> advisory:</span> carroça
+                            <span class="mr-1 text-gray-200 font-medium"> advisory:</span> carroça
                         </li>
                         <li class="my-2 text-gray-400">
-                            <span class="text-gray-300 font-medium">꧁ঔৣ☬✞daArkkkkk✞☬:</span> drop
+                            <span class="mr-1 text-gray-200 font-medium">✞daArkkkkk✞☬:</span> drop
                         </li>
                         <li class="my-2 text-gray-400">
-                            <span class="text-gray-300 font-medium">Ne$Ka:</span> !calladmin
+                            <span class="mr-1 text-gray-200 font-medium">Ne$Ka:</span> !calladmin
                         </li>
                         <li class="my-2 text-gray-400">
-                            <span class="text-gray-300 font-medium">꧁ঔৣ☬✞daArkkkkk✞☬:</span> drop
+                            <span class="mr-1 text-gray-200 font-medium">✞daArkkkkk✞☬:</span> drop
                         </li>
                         <li class="my-2 text-gray-400">
-                            <span class="text-gray-300 font-medium">꧁ঔৣ☬✞daArkkkkk✞☬:</span> drop fdp
+                            <span class="mr-1 text-gray-200 font-medium">✞daArkkkkk✞☬:</span> drop fdp
                         </li>
                         <li class="my-2 text-gray-400">
-                            <span class="text-gray-300 font-medium">꧁ঔৣ☬✞daArkkkkk✞☬:</span> o amarelo da trolando
+                            <span class="mr-1 text-gray-200 font-medium">✞daArkkkkk✞☬:</span> o amarelo da trolando
                         </li>
                     </ul>
                 </div>
@@ -223,12 +233,6 @@
 
             <!-- Comment box -->
             <div>
-                <!-- Form -->
-                <div class="px-4 mb-4 flex items-center justify-center border border-gray-700 rounded shadow">
-                    <input class="py-3 mr-2 flex-grow w-full bg-transparent select-none outline-none" type="text">
-                    <i class="text-xl fa fa-paper-plane" aria-hidden="true"></i>
-                </div>
-
                 <!-- Comments -->
                 <div>
                     <!-- Comment -->
@@ -240,6 +244,12 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Form -->
+                <form class="px-4 mt-4 flex items-center justify-center border border-gray-700 rounded shadow">
+                    <input class="py-3 mr-2 flex-grow w-full bg-transparent select-none outline-none" type="text">
+                    <button class="text-xl fa fa-paper-plane" aria-hidden="true"></button>
+                </form>
             </div>
         </div>
     </div>
